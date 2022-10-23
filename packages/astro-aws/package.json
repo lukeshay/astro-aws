@@ -1,40 +1,41 @@
 {
-  "name": "astro-aws",
-  "packageManager": "yarn@3.2.4",
-  "type": "module",
-  "keywords": [
-    "astro-adapter"
-  ],
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./lambda": {
-      "import": "./dist/lambda.js",
-      "types": "./dist/lambda.d.ts"
-    },
-    "./lambda.js": {
-      "import": "./dist/lambda.js",
-      "types": "./dist/lambda.d.ts"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "../../scripts/build-package.sh"
-  },
-  "dependencies": {
-    "@astrojs/webapi": "^1.1.0",
-    "astro": "^1.5.2",
-    "esbuild": "^0.15.12"
-  },
-  "devDependencies": {
-    "@tsconfig/node16": "^1.0.3",
-    "@types/aws-lambda": "^8.10.108",
-    "@types/node": "^18.11.3",
-    "aws-lambda": "^1.0.7",
-    "typescript": "^4.8.4"
-  }
+	"name": "astro-aws",
+	"version": "0.0.1",
+	"keywords": [
+		"astro-adapter"
+	],
+	"type": "module",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		},
+		"./lambda": {
+			"import": "./dist/lambda.js",
+			"types": "./dist/lambda.d.ts"
+		},
+		"./lambda.js": {
+			"import": "./dist/lambda.js",
+			"types": "./dist/lambda.d.ts"
+		}
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "../../scripts/build-package.sh"
+	},
+	"dependencies": {
+		"@astrojs/webapi": "^1.1.0",
+		"astro": "^1.5.2",
+		"esbuild": "^0.15.12"
+	},
+	"devDependencies": {
+		"@tsconfig/node16": "^1.0.3",
+		"@types/aws-lambda": "^8.10.108",
+		"@types/node": "^18.11.3",
+		"aws-lambda": "^1.0.7",
+		"typescript": "^4.8.4"
+	},
+	"packageManager": "yarn@3.2.4"
 }

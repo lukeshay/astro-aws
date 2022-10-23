@@ -7,8 +7,8 @@ import aws from "astro-aws";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [preact(), react(), tailwind()],
-  site: `https://im7onr7drrzm6t7m5ueso57peq0yljit.lambda-url.us-east-1.on.aws/`,
-  output: "server",
-  adapter: aws(),
+	integrations: [preact(), react(), tailwind()],
+	site: `https://im7onr7drrzm6t7m5ueso57peq0yljit.lambda-url.us-east-1.on.aws/`,
+	output: "server",
+	adapter: aws(),
 });

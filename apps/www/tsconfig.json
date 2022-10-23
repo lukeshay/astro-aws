@@ -1,8 +1,8 @@
 {
-  "extends": "astro/tsconfigs/strictest",
-  "compilerOptions": {
-    "jsx": "preserve",
-    "skipLibCheck": true,
-    "inlineSourceMap": true
-  }
+	"extends": "astro/tsconfigs/strictest",
+	"compilerOptions": {
+		"jsx": "preserve",
+		"skipLibCheck": true,
+		"inlineSourceMap": true
+	}
 }

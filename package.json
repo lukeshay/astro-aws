@@ -1,9 +1,18 @@
 {
-  "name": "root",
-  "packageManager": "yarn@3.2.4",
-  "version": "0.0.0",
-  "workspaces": [
-    "packages/*",
-    "apps/*"
-  ]
+	"name": "root",
+	"version": "0.0.0",
+	"workspaces": [
+		"packages/*",
+		"apps/*"
+	],
+	"scripts": {
+		"prettier": "prettier --check --ignore-path .gitignore .",
+		"prettier:fix": "yarn prettier --write"
+	},
+	"prettier": "@lshay/prettier-config",
+	"devDependencies": {
+		"@lshay/prettier-config": "^0.5.1",
+		"prettier": "^2.7.1"
+	},
+	"packageManager": "yarn@3.2.4"
 }

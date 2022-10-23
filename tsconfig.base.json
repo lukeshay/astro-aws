@@ -1,17 +1,17 @@
 {
-  "$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/tsconfig.json",
-  "extends": "@tsconfig/node16/tsconfig.json",
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "module": "ES2020",
-    "moduleResolution": "Node",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "strict": true,
-    "target": "ES2020",
-    "types": ["node"]
-  },
-  "ts-node": {
-    "transpileOnly": true
-  }
+	"$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/tsconfig.json",
+	"extends": "@tsconfig/node16/tsconfig.json",
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"experimentalDecorators": true,
+		"module": "ES2020",
+		"moduleResolution": "Node",
+		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"strict": true,
+		"target": "ES2020",
+		"types": ["node"]
+	},
+	"ts-node": {
+		"transpileOnly": true
+	}
 }
