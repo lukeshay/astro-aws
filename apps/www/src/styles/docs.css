@@ -24,9 +24,9 @@ h6 {
 }
 
 .docs pre {
-	@apply rounded bg-base-300 p-4 text-sm !important;
+	@apply bg-base-300 rounded p-4 text-sm !important;
 }
 
 .docs ol {
-	@apply list-decimal list-inside;
+	@apply list-inside list-decimal;
 }

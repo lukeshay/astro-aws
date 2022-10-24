@@ -102,7 +102,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@algolia/client-search@npm:4.14.2, @algolia/client-search@npm:^4.13.1":
+"@algolia/client-search@npm:4.14.2, @algolia/client-search@npm:^4.14.2":
   version: 4.14.2
   resolution: "@algolia/client-search@npm:4.14.2"
   dependencies:
@@ -198,11 +198,11 @@ __metadata:
   resolution: "@astro-aws/infra@workspace:apps/infra"
   dependencies:
     "@astro-aws/www": "workspace:^"
-    "@types/node": ^18
-    aws-cdk: 2.46.0
-    aws-cdk-lib: 2.46.0
-    constructs: ^10.1.131
-    eslint: ^8.25.0
+    "@types/node": ^16.0.0
+    aws-cdk: 2.47.0
+    aws-cdk-lib: 2.47.0
+    constructs: ^10.1.138
+    eslint: ^8.26.0
     prettier: ^2.7.1
     rimraf: ^3.0.2
     typescript: ^4.8.4
@@ -215,30 +215,30 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@astro-aws/www@workspace:apps/www"
   dependencies:
-    "@algolia/client-search": ^4.13.1
+    "@algolia/client-search": ^4.14.2
     "@astro-aws/adapter": "workspace:^"
     "@astrojs/mdx": ^0.11.4
     "@astrojs/netlify": ^1.2.0
     "@astrojs/preact": ^1.2.0
     "@astrojs/react": ^1.2.1
     "@astrojs/tailwind": ^2.1.1
-    "@docsearch/css": ^3.1.0
-    "@docsearch/react": ^3.1.0
+    "@docsearch/css": ^3.2.2
+    "@docsearch/react": ^3.2.2
     "@heroicons/react": ^2.0.12
     "@types/node": ^16.0.0
-    "@types/react": ^17.0.45
-    "@types/react-dom": ^18.0.0
+    "@types/react": ^18.0.22
+    "@types/react-dom": ^18.0.7
     astro: ^1.5.2
     astro-link: ^1.1.1
     astro-seo: ^0.6.0
     daisyui: ^2.33.0
     eslint: ^8.26.0
-    preact: ^10.7.3
+    preact: ^10.11.2
     prettier: ^2.7.1
-    react: ^18.1.0
-    react-dom: ^18.1.0
+    react: ^18.2.0
+    react-dom: ^18.2.0
     rimraf: ^3.0.2
-    tailwindcss: ^3.0.24
+    tailwindcss: ^3.2.1
   languageName: unknown
   linkType: soft
 
@@ -819,14 +819,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@docsearch/css@npm:3.2.2, @docsearch/css@npm:^3.1.0":
+"@docsearch/css@npm:3.2.2, @docsearch/css@npm:^3.2.2":
   version: 3.2.2
   resolution: "@docsearch/css@npm:3.2.2"
   checksum: 8e0555249047c0313466ffe149c9ab7d091485649b4267dc22899b1e7a94cd8deef9b9e8d75997e66e289d16a8b0cb86f05212ab750b25741cdd03ba2aab1e3e
   languageName: node
   linkType: hard
 
-"@docsearch/react@npm:^3.1.0":
+"@docsearch/react@npm:^3.2.2":
   version: 3.2.2
   resolution: "@docsearch/react@npm:3.2.2"
   dependencies:
@@ -1399,7 +1399,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^18":
+"@types/node@npm:*":
   version: 18.11.4
   resolution: "@types/node@npm:18.11.4"
   checksum: 1de782b4eef4a5115396ae62137f248390ee5d1d9e9eeb49599714554cce1328af43da31bc28e7bab5a0ef859538a584a907b26163a59b42bc87b8317dc00bb8
@@ -1434,12 +1434,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^18.0.0":
-  version: 18.0.6
-  resolution: "@types/react-dom@npm:18.0.6"
+"@types/react-dom@npm:^18.0.7":
+  version: 18.0.7
+  resolution: "@types/react-dom@npm:18.0.7"
   dependencies:
     "@types/react": "*"
-  checksum: db571047af1a567631758700b9f7d143e566df939cfe5fbf7535347cc0c726a1cdbb5e3f8566d076e54cf708b6c1166689de194a9ba09ee35efc9e1d45911685
+  checksum: 4fd47dd114d61e7228637de9bee685b81ea18b89b220a67662b05ebe74f69aad7cd929ebe69e8fd572cc8e0e9adf9bba1ea5586cfd37eb9045778851e78bcd66
   languageName: node
   linkType: hard
 
@@ -1454,14 +1454,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^17.0.45":
-  version: 17.0.50
-  resolution: "@types/react@npm:17.0.50"
+"@types/react@npm:^18.0.22":
+  version: 18.0.22
+  resolution: "@types/react@npm:18.0.22"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: b5629dff7c2f3e9fcba95a19b2b3bfd78d7cacc33ba5fc26413dba653d34afcac3b93ddabe563e8062382688a1eac7db68e93739bb8e712d27637a03aaafbbb8
+  checksum: e9e294c1b5467c502936f964be68e7284ec6a5d40c703e7429037d9b39ba5f9b0299d303dde06d0468e4e79957ac71ab5ab3ee8252bf6ff3cc09c2ee03695789
   languageName: node
   linkType: hard
 
@@ -2111,9 +2111,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-cdk-lib@npm:2.46.0":
-  version: 2.46.0
-  resolution: "aws-cdk-lib@npm:2.46.0"
+"aws-cdk-lib@npm:2.47.0":
+  version: 2.47.0
+  resolution: "aws-cdk-lib@npm:2.47.0"
   dependencies:
     "@balena/dockerignore": ^1.0.2
     case: 1.6.3
@@ -2126,13 +2126,13 @@ __metadata:
     yaml: 1.10.2
   peerDependencies:
     constructs: ^10.0.0
-  checksum: 2f096ee40073f38fe4e7ba00f7e8757e1258865421c90361501f9a51551740ceada34b91999249586219b9b8b9ca876015b3d72471defd1624d000e1ad7d511e
+  checksum: bfa05154bbd1d918ff3fd13d0183458e652240ba055ab859a1b254795ab706e894b02fb552e64efae129851fd2dddbd2df83d20bfb915e3cbf0d3a67e18dcc13
   languageName: node
   linkType: hard
 
-"aws-cdk@npm:2.46.0":
-  version: 2.46.0
-  resolution: "aws-cdk@npm:2.46.0"
+"aws-cdk@npm:2.47.0":
+  version: 2.47.0
+  resolution: "aws-cdk@npm:2.47.0"
   dependencies:
     fsevents: 2.3.2
   dependenciesMeta:
@@ -2140,7 +2140,7 @@ __metadata:
       optional: true
   bin:
     cdk: bin/cdk
-  checksum: 0eb3438087377f901c392865f5269319aadee566ee778b2f6c46eef54bf084dd5beba332cd43e13e9b34740f9a42221314b8e1308e1db6018207d8cdd28507df
+  checksum: 0a708da3e220ad335540cb39610fa976a92f3cff34e5d1c08af4d6ef8b703f25a2e981a53472e94efcfffbc91ecc5230b00866a8a809970d402f7ea72aa5f1cf
   languageName: node
   linkType: hard
 
@@ -2651,7 +2651,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"constructs@npm:^10.1.131":
+"constructs@npm:^10.1.138":
   version: 10.1.138
   resolution: "constructs@npm:10.1.138"
   checksum: 2e0f8d20943fe7a7ae1a4afdbff290d7c4e6fa415211ea32ec2947e66f45cbb0412c06155f432ce207d824c13edeb4b77839668da297a96a24251bb5bdba7d20
@@ -3937,7 +3937,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.25.0, eslint@npm:^8.26.0":
+"eslint@npm:^8.26.0":
   version: 8.26.0
   resolution: "eslint@npm:8.26.0"
   dependencies:
@@ -7346,7 +7346,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"preact@npm:^10.7.3":
+"preact@npm:^10.11.2":
   version: 10.11.2
   resolution: "preact@npm:10.11.2"
   checksum: 92b4087a4048595e43fc5c005e9a1f3c890ec83657689de9b40b1894e26f8c2b6b071c63e08941a44044d1612532f8313483b62e3d6e1aa3c39bde27614ed790
@@ -7535,7 +7535,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^18.1.0":
+"react-dom@npm:^18.2.0":
   version: 18.2.0
   resolution: "react-dom@npm:18.2.0"
   dependencies:
@@ -7554,7 +7554,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18.1.0":
+"react@npm:^18.2.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
   dependencies:
@@ -8595,7 +8595,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^3, tailwindcss@npm:^3.0.24":
+"tailwindcss@npm:^3, tailwindcss@npm:^3.2.1":
   version: 3.2.1
   resolution: "tailwindcss@npm:3.2.1"
   dependencies:

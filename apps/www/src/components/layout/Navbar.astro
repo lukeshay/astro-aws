@@ -11,7 +11,9 @@ const { links, showLogo = false } = Astro.props;
 const wrapperClass = showLogo ? "justify-between" : "";
 ---
 
-<div class={`${wrapperClass} inset-x-0 w-full fixed top-0 z-20 flex flex-row items-center bg-base-100 bg-opacity-95 backdrop-blur-md pr-8`}>
+<div
+	class={`${wrapperClass} inset-x-0 w-full fixed top-0 z-20 flex flex-row items-center bg-base-100 bg-opacity-95 backdrop-blur-md pr-8`}
+>
 	<div class="flex-1 pl-10">
 		{showLogo && <Logo />}
 	</div>
