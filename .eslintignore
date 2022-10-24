@@ -1,6 +1,4 @@
 .yarn/*
-!.yarn/plugins
-!.yarn/releases
 
 .cdk.staging
 .DS_Store

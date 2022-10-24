@@ -1,33 +1,62 @@
 {
-	"name": "@example/docs",
-	"version": "0.0.1",
+	"name": "@astro-aws/www",
 	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "ssh://git@github.com/lukeshay/astro-aws.git",
+		"directory": "apps/www"
+	},
+	"license": "MIT",
 	"type": "module",
+	"files": [
+		"dist/lambda"
+	],
 	"scripts": {
 		"astro": "astro",
-		"build": "astro build",
+		"build": "./scripts/copy-package-readmes.sh && astro build",
 		"check": "astro check && tsc",
+		"clean": "rimraf dist",
 		"dev": "astro dev",
+		"package": "zip -j dist/lambda.zip dist/lambda/*",
 		"preview": "astro preview",
+		"release": "yarn clean && yarn build && yarn package",
 		"start": "astro dev"
+	},
+	"eslintConfig": {
+		"extends": [
+			"../../.eslintrc.cjs"
+		],
+		"root": false
 	},
 	"dependencies": {
 		"@algolia/client-search": "^4.13.1",
+		"@astro-aws/adapter": "workspace:^",
+		"@astrojs/mdx": "^0.11.4",
 		"@astrojs/netlify": "^1.2.0",
 		"@astrojs/preact": "^1.2.0",
 		"@astrojs/react": "^1.2.1",
 		"@astrojs/tailwind": "^2.1.1",
 		"@docsearch/css": "^3.1.0",
 		"@docsearch/react": "^3.1.0",
-		"@types/node": "^18.0.0",
+		"@heroicons/react": "^2.0.12",
+		"@types/node": "^16.0.0",
 		"@types/react": "^17.0.45",
 		"@types/react-dom": "^18.0.0",
 		"astro": "^1.5.2",
-		"astro-aws": "workspace:^",
+		"astro-link": "^1.1.1",
+		"astro-seo": "^0.6.0",
 		"daisyui": "^2.33.0",
 		"preact": "^10.7.3",
 		"react": "^18.1.0",
 		"react-dom": "^18.1.0",
+		"rimraf": "^3.0.2",
 		"tailwindcss": "^3.0.24"
+	},
+	"devDependencies": {
+		"eslint": "^8.26.0",
+		"prettier": "^2.7.1"
+	},
+	"engines": {
+		"node": ">=16.0.0"
 	}
 }

@@ -1,0 +1,55 @@
+---
+import "../styles/docs.css";
+import Navbar from "../components/layout/Navbar.astro";
+import BaseLayout from "./BaseLayout.astro";
+import Sidnav from "../components/layout/Sidnav.astro";
+import type { Link } from "../components/layout/Sidnav.astro";
+
+const { frontmatter } = Astro.props;
+const docs = await Astro.glob("../pages/docs/**/*.md*");
+
+const sectionOrder = {
+	"Start Here": 0,
+	Packages: 1,
+} as const;
+
+type Section = keyof typeof sectionOrder;
+
+const sections: Record<Section, Link[]> = {
+	"Start Here": [],
+	Packages: [],
+};
+
+docs
+	.sort((a, b) => {
+		const aSection = a.frontmatter.section as Section;
+		const bSection = b.frontmatter.section as Section;
+
+		const aOrder = sectionOrder[aSection] ?? 999;
+		const bOrder = sectionOrder[bSection] ?? 999;
+		return aOrder - bOrder;
+	})
+	.forEach((doc) => {
+		const section = doc.frontmatter.section as Section;
+
+		sections[section].push({
+			href: doc.url,
+			text: doc.frontmatter.title,
+		});
+	});
+---
+
+<BaseLayout {...Astro.props} title={frontmatter.title}>
+	<Sidnav sections={sections} />
+	<Navbar
+		links={[
+			{ href: "/", text: "Home" },
+			{ href: "/docs", text: "Documentation" },
+		]}
+	/>
+	<div class="relative mx-72 px-12 mt-20 flex flex-row justify-center">
+		<div class="max-w-2xl w-full docs pb-24">
+			<slot />
+		</div>
+	</div>
+</BaseLayout>

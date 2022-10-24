@@ -1,1 +1,4 @@
-{}
+{
+	"$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/tsconfig.json",
+	"extends": "./tsconfig.base.json"
+}

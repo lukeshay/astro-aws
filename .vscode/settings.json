@@ -1,0 +1,6 @@
+{
+	"cSpell.words": ["astro"],
+	"files.associations": {
+		"*.mdx": "markdown"
+	}
+}

@@ -1,15 +1,13 @@
 import { polyfill } from "@astrojs/webapi";
-import type { Handler, CloudFrontRequestHandler } from "aws-lambda";
+import type { Handler } from "aws-lambda";
 import { SSRManifest } from "astro";
 import { App } from "astro/app";
+
+import type { Args } from "./args.js";
 
 polyfill(globalThis, {
 	exclude: "window document",
 });
-
-export interface Args {
-	binaryMediaTypes?: string[];
-}
 
 function parseContentType(header?: string) {
 	return header?.split(";")[0] ?? "";
@@ -17,10 +15,9 @@ function parseContentType(header?: string) {
 
 const clientAddressSymbol = Symbol.for("astro.clientAddress");
 
-export const createExports = (manifest: SSRManifest, args: Args) => {
+export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args) => {
 	const app = new App(manifest);
 
-	const binaryMediaTypes = args.binaryMediaTypes ?? [];
 	const knownBinaryMediaTypes = new Set([
 		"audio/3gpp",
 		"audio/3gpp2",
@@ -35,12 +32,13 @@ export const createExports = (manifest: SSRManifest, args: Args) => {
 		"image/avif",
 		"image/bmp",
 		"image/gif",
-		"image/vnd.microsoft.icon",
 		"image/heif",
+		"image/ico",
 		"image/jpeg",
 		"image/png",
 		"image/svg+xml",
 		"image/tiff",
+		"image/vnd.microsoft.icon",
 		"image/webp",
 		"video/3gpp",
 		"video/3gpp2",
@@ -48,9 +46,9 @@ export const createExports = (manifest: SSRManifest, args: Args) => {
 		"video/mp4",
 		"video/mpeg",
 		"video/ogg",
-		"video/x-msvideo",
 		"video/webm",
-		...binaryMediaTypes,
+		"video/x-msvideo",
+		...(binaryMediaTypes ?? []),
 	]);
 
 	const handler: Handler = async (event) => {

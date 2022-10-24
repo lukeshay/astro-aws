@@ -1,9 +1,17 @@
 {
-	"name": "astro-aws",
+	"name": "@astro-aws/adapter",
 	"version": "0.0.1",
 	"keywords": [
-		"astro-adapter"
+		"astro-adapter",
+		"aws",
+		"aws-lambda"
 	],
+	"repository": {
+		"type": "git",
+		"url": "ssh://git@github.com/lukeshay/astro-aws.git",
+		"directory": "packages/astro-aws-adapter"
+	},
+	"license": "MIT",
 	"type": "module",
 	"exports": {
 		".": {
@@ -23,7 +31,14 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "../../scripts/build-package.sh"
+		"build": "../../scripts/build-package.sh",
+		"clean": "rimraf dist"
+	},
+	"eslintConfig": {
+		"extends": [
+			"../../.eslintrc.cjs"
+		],
+		"root": false
 	},
 	"dependencies": {
 		"@astrojs/webapi": "^1.1.0",
@@ -33,9 +48,14 @@
 	"devDependencies": {
 		"@tsconfig/node16": "^1.0.3",
 		"@types/aws-lambda": "^8.10.108",
-		"@types/node": "^18.11.3",
+		"@types/node": "^16.0.0",
 		"aws-lambda": "^1.0.7",
+		"eslint": "^8.26.0",
+		"prettier": "^2.7.1",
+		"rimraf": "^3.0.2",
 		"typescript": "^4.8.4"
 	},
-	"packageManager": "yarn@3.2.4"
+	"engines": {
+		"node": ">=16.0.0"
+	}
 }

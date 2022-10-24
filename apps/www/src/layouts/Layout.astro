@@ -1,0 +1,19 @@
+---
+import Navbar from "../components/layout/Navbar.astro";
+import BaseLayout from "./BaseLayout.astro";
+
+export type { Props } from "../components/layout/Navbar.astro";
+---
+
+<BaseLayout {...Astro.props}>
+	<Navbar
+		showLogo
+		links={[
+			{ href: "/", text: "Home" },
+			{ href: "/docs", text: "Documentation" },
+		]}
+	/>
+	<div class="relative mt-20">
+		<slot />
+	</div>
+</BaseLayout>

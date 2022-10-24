@@ -1,0 +1,56 @@
+---
+import Logo from "../Logo.astro";
+import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+
+export type Link = {
+	text: string;
+	href: string;
+};
+
+export type Props = {
+	sections: Record<string, { text: string; href: string }[]>;
+};
+
+const { sections } = Astro.props;
+
+const chevronClass = "w-5 h-5 pl-2 stroke-[4]";
+---
+
+<div class="fixed inset-y-0 z-50 w-72 py-1 px-10">
+	<Logo />
+	<div class="space-y-4 mt-6">
+		{
+			Object.entries(sections).map(([section, links]) => (
+				<div class="section">
+					<button class="flex flex-row items-center">
+						<h3 class="font-semibold p-0">{section}</h3>
+						<ChevronDownIcon className={`${chevronClass} chevron-down-icon`} />
+						<ChevronRightIcon className={`hidden ${chevronClass} chevron-right-icon`} />
+					</button>
+					<ul class="menu menu-compact menu-vertical">
+						{links.map(({ href, text }) => (
+							<li>
+								<a href={href}>{text}</a>
+							</li>
+						))}
+					</ul>
+				</div>
+			))
+		}
+	</div>
+</div>
+<script>
+	document.querySelectorAll(".section").forEach((section) => {
+		const button = section.querySelector("button")!;
+
+		button.addEventListener("click", () => {
+			const menu = section.querySelector("ul")!;
+			const chevronDown = section.querySelector(".chevron-down-icon")!;
+			const chevronRight = section.querySelector(".chevron-right-icon")!;
+
+			menu.classList.toggle("hidden");
+			chevronDown.classList.toggle("hidden");
+			chevronRight.classList.toggle("hidden");
+		});
+	});
+</script>
