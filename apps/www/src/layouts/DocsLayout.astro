@@ -1,11 +1,10 @@
 ---
-import "../styles/docs.css";
-import Navbar from "../components/layout/Navbar.astro";
+import "../styles/docs.scss";
 import BaseLayout from "./BaseLayout.astro";
-import Sidnav from "../components/layout/Sidnav.astro";
-import type { Link } from "../components/layout/Sidnav.astro";
+import type { Link } from "../components/layout/LeftSidenav.astro";
+import RightSideNav from "../components/layout/RightSideNav.astro";
 
-const { frontmatter } = Astro.props;
+const { frontmatter, headings } = Astro.props;
 const docs = await Astro.glob("../pages/docs/**/*.md*");
 
 const sectionOrder = {
@@ -39,17 +38,33 @@ docs
 	});
 ---
 
-<BaseLayout {...Astro.props} title={frontmatter.title}>
-	<Sidnav sections={sections} />
-	<Navbar
-		links={[
-			{ href: "/", text: "Home" },
-			{ href: "/docs", text: "Documentation" },
-		]}
-	/>
+<BaseLayout sections={sections} title={frontmatter.title} description={frontmatter.description}>
+	<RightSideNav headings={headings} url={frontmatter.url} />
 	<div class="relative mx-72 px-12 mt-20 flex flex-row justify-center">
 		<div class="max-w-2xl w-full docs pb-24">
 			<slot />
 		</div>
 	</div>
 </BaseLayout>
+<script>
+	import { createClipboardDocumentIcon } from "../components/html/icons/24/outline/create-clipboard-document-icon.js";
+
+	document.querySelectorAll("pre.astro-code").forEach((pre) => {
+		pre.classList.add("relative");
+
+		const code = pre.querySelector("code")!;
+		const copyButton = document.createElement("button");
+
+		copyButton.classList.add("absolute", "top-2", "right-2", "btn", "btn-ghost", "btn-compact");
+		copyButton.setAttribute("type", "button");
+		copyButton.setAttribute("aria-label", "Copy to clipboard");
+		copyButton.setAttribute("title", "Copy to clipboard");
+
+		copyButton.innerHTML = createClipboardDocumentIcon({ class: "w-6 h-6" });
+
+		copyButton.addEventListener("click", () => {
+			navigator.clipboard.writeText(code.innerText);
+		});
+		pre.appendChild(copyButton);
+	});
+</script>

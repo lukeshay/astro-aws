@@ -7,8 +7,12 @@ export type Link = {
 	href: string;
 };
 
+// not having parentheses around this is causing build issues
+// prettier-ignore
+export type Sections = (Record<string, { text: string; href: string }[]>);
+
 export type Props = {
-	sections: Record<string, { text: string; href: string }[]>;
+	sections: Sections;
 };
 
 const { sections } = Astro.props;
@@ -16,9 +20,9 @@ const { sections } = Astro.props;
 const chevronClass = "w-5 h-5 pl-2 stroke-[4]";
 ---
 
-<div class="fixed inset-y-0 z-50 w-72 py-1 px-10">
+<div class="fixed inset-y-0 z-50 w-72 py-3 px-10">
 	<Logo />
-	<div class="space-y-4 mt-6">
+	<div class="space-y-4 mt-12">
 		{
 			Object.entries(sections).map(([section, links]) => (
 				<div class="section">
@@ -29,8 +33,10 @@ const chevronClass = "w-5 h-5 pl-2 stroke-[4]";
 					</button>
 					<ul class="menu menu-compact menu-vertical">
 						{links.map(({ href, text }) => (
-							<li>
-								<a href={href}>{text}</a>
+							<li class="text-base-content text-sm text-opacity-75">
+								<a href={href} class="-mx-1 p-1">
+									{text}
+								</a>
 							</li>
 						))}
 					</ul>

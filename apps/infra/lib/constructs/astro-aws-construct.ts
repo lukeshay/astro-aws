@@ -29,7 +29,9 @@ export type AstroAwsConstructProps = {
 };
 
 export class AstroAWSConstruct extends Construct {
-	constructor(scope: Construct, id: string, props: AstroAwsConstructProps) {
+	public readonly distribution: Distribution;
+
+	public constructor(scope: Construct, id: string, props: AstroAwsConstructProps) {
 		super(scope, id);
 
 		const { assetsBucketProps = {}, distributionProps = {}, lambdaProps = {}, websitePath } = props;
@@ -106,5 +108,7 @@ export class AstroAWSConstruct extends Construct {
 			distributionPaths: ["/*"],
 			sources: [Source.asset(join(distPath, "client"))],
 		});
+
+		this.distribution = distribution;
 	}
 }

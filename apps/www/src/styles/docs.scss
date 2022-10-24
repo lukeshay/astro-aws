@@ -1,0 +1,59 @@
+.docs {
+	@apply space-y-2;
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		@apply pt-8;
+	}
+
+	h1,
+	h2 {
+		@apply pb-4;
+	}
+
+	h3,
+	h4 {
+		@apply pb-3;
+	}
+
+	h5,
+	h6 {
+		@apply pb-2;
+	}
+
+	h1 {
+		@apply text-5xl font-black;
+	}
+
+	h2 {
+		@apply text-3xl font-bold;
+	}
+
+	h3 {
+		@apply text-xl font-bold;
+	}
+
+	h4 {
+		@apply text-lg font-semibold;
+	}
+
+	h5 {
+		@apply text-lg font-medium;
+	}
+
+	h6 {
+		@apply text-lg font-normal;
+	}
+
+	pre {
+		@apply bg-base-300 rounded-lg p-8 text-sm #{!important};
+	}
+
+	ol {
+		@apply list-inside list-decimal;
+	}
+}

@@ -221,6 +221,7 @@ __metadata:
     "@astrojs/netlify": ^1.2.0
     "@astrojs/preact": ^1.2.0
     "@astrojs/react": ^1.2.1
+    "@astrojs/sitemap": ^1.0.0
     "@astrojs/tailwind": ^2.1.1
     "@docsearch/css": ^3.2.2
     "@docsearch/react": ^3.2.2
@@ -237,7 +238,9 @@ __metadata:
     prettier: ^2.7.1
     react: ^18.2.0
     react-dom: ^18.2.0
+    remark-toc: ^8.0.1
     rimraf: ^3.0.2
+    sass: ^1.55.0
     tailwindcss: ^3.2.1
   languageName: unknown
   linkType: soft
@@ -397,6 +400,16 @@ __metadata:
     react: ^17.0.2 || ^18.0.0
     react-dom: ^17.0.2 || ^18.0.0
   checksum: 6e5d37821c4128d26447605371c9fe466303154386303fda94b4e1011d5232db894d815cf5b9663c5a8fcb9d8ec42edf14a72610214849ac23a6c65883f1c780
+  languageName: node
+  linkType: hard
+
+"@astrojs/sitemap@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@astrojs/sitemap@npm:1.0.0"
+  dependencies:
+    sitemap: ^7.1.1
+    zod: ^3.17.3
+  checksum: b278d2b1902041aa059ffc2381468df539d8ad5eb940bf1d5d1c5302aa76f14a1d23e4e512c83ed5101cbef5258a1c39265cd696721d6ee3f4e3a1a6365011d6
   languageName: node
   linkType: hard
 
@@ -1313,6 +1326,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/extend@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "@types/extend@npm:3.0.1"
+  checksum: 1ef199a1386be8744d4642eb5f599588829d9e82c55d399f1437d3543b9343203e6724231235793cb434410afb2d10bfbf18ea28f943d10c2246542c9e5c6203
+  languageName: node
+  linkType: hard
+
+"@types/github-slugger@npm:^1.0.0":
+  version: 1.3.0
+  resolution: "@types/github-slugger@npm:1.3.0"
+  checksum: 6561f26814d7c6bf619b1abfba07930ddc2f71e1e1d58a03c20852fd4086ec17f8ee98a44a8ac77ba917c0ff7052cd3fe74071fba59bd526dff8a3a980e2e528
+  languageName: node
+  linkType: hard
+
 "@types/glob@npm:^7.1.1":
   version: 7.2.0
   resolution: "@types/glob@npm:7.2.0"
@@ -1413,6 +1440,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^17.0.5":
+  version: 17.0.45
+  resolution: "@types/node@npm:17.0.45"
+  checksum: aa04366b9103b7d6cfd6b2ef64182e0eaa7d4462c3f817618486ea0422984c51fc69fd0d436eae6c9e696ddfdbec9ccaa27a917f7c2e8c75c5d57827fe3d95e8
+  languageName: node
+  linkType: hard
+
 "@types/normalize-package-data@npm:^2.4.0":
   version: 2.4.1
   resolution: "@types/normalize-package-data@npm:2.4.1"
@@ -1469,6 +1503,15 @@ __metadata:
   version: 1.20.2
   resolution: "@types/resolve@npm:1.20.2"
   checksum: 61c2cad2499ffc8eab36e3b773945d337d848d3ac6b7b0a87c805ba814bc838ef2f262fc0f109bfd8d2e0898ff8bd80ad1025f9ff64f1f71d3d4294c9f14e5f6
+  languageName: node
+  linkType: hard
+
+"@types/sax@npm:^1.2.1":
+  version: 1.2.4
+  resolution: "@types/sax@npm:1.2.4"
+  dependencies:
+    "@types/node": "*"
+  checksum: 2aa50cbf1d1f0cf8541ef1787f94c7442e58e63900afd3b45c354e4140ed5efc5cf26fca8eb9df9970a74c7ea582293ae2083271bd046dedf4c3cc2689a40892
   languageName: node
   linkType: hard
 
@@ -1885,7 +1928,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"arg@npm:^5.0.2":
+"arg@npm:^5.0.0, arg@npm:^5.0.2":
   version: 5.0.2
   resolution: "arg@npm:5.0.2"
   checksum: 6c69ada1a9943d332d9e5382393e897c500908d91d5cb735a01120d5f71daf1b339b7b8980cbeaba8fd1afc68e658a739746179e4315a26e8a28951ff9930078
@@ -2469,7 +2512,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^3.5.3":
+"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.5.3":
   version: 3.5.3
   resolution: "chokidar@npm:3.5.3"
   dependencies:
@@ -4489,7 +4532,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"github-slugger@npm:^1.4.0":
+"github-slugger@npm:^1.0.0, github-slugger@npm:^1.4.0":
   version: 1.4.0
   resolution: "github-slugger@npm:1.4.0"
   checksum: 4f52e7a21f5c6a4c5328f01fe4fe13ae8881fea78bfe31f9e72c4038f97e3e70d52fb85aa7633a52c501dc2486874474d9abd22aa61cbe9b113099a495551c6b
@@ -4985,6 +5028,13 @@ __metadata:
   version: 5.2.0
   resolution: "ignore@npm:5.2.0"
   checksum: 6b1f926792d614f64c6c83da3a1f9c83f6196c2839aa41e1e32dd7b8d174cef2e329d75caabb62cb61ce9dc432f75e67d07d122a037312db7caa73166a1bdb77
+  languageName: node
+  linkType: hard
+
+"immutable@npm:^4.0.0":
+  version: 4.1.0
+  resolution: "immutable@npm:4.1.0"
+  checksum: b9bc1f14fb18eb382d48339c064b24a1f97ae4cf43102e0906c0a6e186a27afcd18b55ca4a0b63c98eefb58143e2b5ebc7755a5fb4da4a7ad84b7a6096ac5b13
   languageName: node
   linkType: hard
 
@@ -6049,6 +6099,22 @@ __metadata:
   version: 3.1.0
   resolution: "mdast-util-to-string@npm:3.1.0"
   checksum: f42ddd4e22f2215a75715b92ea6e3149c4ba356e7781d7b94fc86ded1c79cec3f986afeecef3a4a80068c9b224a6520099783a12146b957de24f020a3e47dd29
+  languageName: node
+  linkType: hard
+
+"mdast-util-toc@npm:^6.0.0":
+  version: 6.1.0
+  resolution: "mdast-util-toc@npm:6.1.0"
+  dependencies:
+    "@types/extend": ^3.0.0
+    "@types/github-slugger": ^1.0.0
+    "@types/mdast": ^3.0.0
+    extend: ^3.0.0
+    github-slugger: ^1.0.0
+    mdast-util-to-string: ^3.1.0
+    unist-util-is: ^5.0.0
+    unist-util-visit: ^3.0.0
+  checksum: 795bad4c149b1e96c2ddfcab6ae2da97588c60a2e786c541e1a767e4c54872765e7f54df8abc99925cde5ad2be368e1983b336cebc73c4e29b46a953c54ff06a
   languageName: node
   linkType: hard
 
@@ -7775,6 +7841,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"remark-toc@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "remark-toc@npm:8.0.1"
+  dependencies:
+    "@types/mdast": ^3.0.0
+    mdast-util-toc: ^6.0.0
+    unified: ^10.0.0
+  checksum: 4a8d6dbde402c9eece0fc8774c1d639fa5cd8d4ba75a7c2ff848f239d60f52e0d055467bbc11b7871508f0ecac13ec8013a89d4131f0b242bc08fb6fec7de517
+  languageName: node
+  linkType: hard
+
 "reselect@npm:^4.0.0":
   version: 4.1.6
   resolution: "reselect@npm:4.1.6"
@@ -8048,6 +8125,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sass@npm:^1.55.0":
+  version: 1.55.0
+  resolution: "sass@npm:1.55.0"
+  dependencies:
+    chokidar: ">=3.0.0 <4.0.0"
+    immutable: ^4.0.0
+    source-map-js: ">=0.6.2 <2.0.0"
+  bin:
+    sass: sass.js
+  checksum: 7d769ed08efce4e6134e0f3dc11c4f07e32c413ac8eb43c5855f2686890fdcbd80da34165c91fb4ba407f478ca108e171574b5a60cb9814a5ed09d80f6014f96
+  languageName: node
+  linkType: hard
+
 "sax@npm:1.2.1":
   version: 1.2.1
   resolution: "sax@npm:1.2.1"
@@ -8055,7 +8145,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sax@npm:>=0.6.0":
+"sax@npm:>=0.6.0, sax@npm:^1.2.4":
   version: 1.2.4
   resolution: "sax@npm:1.2.4"
   checksum: d3df7d32b897a2c2f28e941f732c71ba90e27c24f62ee918bd4d9a8cfb3553f2f81e5493c7f0be94a11c1911b643a9108f231dd6f60df3fa9586b5d2e3e9e1fe
@@ -8225,6 +8315,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sitemap@npm:^7.1.1":
+  version: 7.1.1
+  resolution: "sitemap@npm:7.1.1"
+  dependencies:
+    "@types/node": ^17.0.5
+    "@types/sax": ^1.2.1
+    arg: ^5.0.0
+    sax: ^1.2.4
+  bin:
+    sitemap: dist/cli.js
+  checksum: 87a6d21b0d4a33b8c611d3bb8543d02b813c0ebfce014213ef31849b5c1439005644f19ad1593ec89815f6101355f468c9a02c251d09aa03f6fddd17e23c4be4
+  languageName: node
+  linkType: hard
+
 "slash@npm:^3.0.0":
   version: 3.0.0
   resolution: "slash@npm:3.0.0"
@@ -8290,7 +8394,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-js@npm:^1.0.2":
+"source-map-js@npm:>=0.6.2 <2.0.0, source-map-js@npm:^1.0.2":
   version: 1.0.2
   resolution: "source-map-js@npm:1.0.2"
   checksum: c049a7fc4deb9a7e9b481ae3d424cc793cb4845daa690bc5a05d428bf41bf231ced49b4cf0c9e77f9d42fdb3d20d6187619fc586605f5eabe995a316da8d377c
@@ -8989,6 +9093,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"unist-util-visit-parents@npm:^4.0.0":
+  version: 4.1.1
+  resolution: "unist-util-visit-parents@npm:4.1.1"
+  dependencies:
+    "@types/unist": ^2.0.0
+    unist-util-is: ^5.0.0
+  checksum: 49d78984a6dd858a989f849d2b4330c8a04d1ee99c0e9920a5e37668cf847dab95db77a3bf0c8aaeb3e66abeae12e2d454949ec401614efef377d8f82d215662
+  languageName: node
+  linkType: hard
+
 "unist-util-visit-parents@npm:^5.0.0, unist-util-visit-parents@npm:^5.1.1":
   version: 5.1.1
   resolution: "unist-util-visit-parents@npm:5.1.1"
@@ -8996,6 +9110,17 @@ __metadata:
     "@types/unist": ^2.0.0
     unist-util-is: ^5.0.0
   checksum: c699d18f5b26461dee37612b84c243fd5457c98f4c0540d9ba8bee05062aece5f3b4fb1af6b07423ce6750d8926e8c01fc2b1a4de1e54925ef6795c177ed8e18
+  languageName: node
+  linkType: hard
+
+"unist-util-visit@npm:^3.0.0":
+  version: 3.1.0
+  resolution: "unist-util-visit@npm:3.1.0"
+  dependencies:
+    "@types/unist": ^2.0.0
+    unist-util-is: ^5.0.0
+    unist-util-visit-parents: ^4.0.0
+  checksum: c37dbc0c5509f85f3abdf46d927b3dd11e6c419159771b1f1a5ce446d36ac993d04b087e28bc6173a172e0fbe9d77e997f120029b2b449766ebe55b6f6e0cc2c
   languageName: node
   linkType: hard
 

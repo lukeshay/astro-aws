@@ -4,11 +4,17 @@ import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import aws from "@astro-aws/adapter";
 import mdx from "@astrojs/mdx";
+import sitemap from "@astrojs/sitemap";
+import remarkToc from "remark-toc";
 
 // https://astro.build/config
 export default defineConfig({
 	adapter: aws(),
-	integrations: [preact(), react(), tailwind(), mdx()],
+	integrations: [preact(), react(), tailwind(), mdx(), sitemap()],
+	markdown: {
+		extendDefaultPlugins: true,
+		remarkPlugins: [remarkToc],
+	},
 	output: "server",
-	site: `https://im7onr7drrzm6t7m5ueso57peq0yljit.lambda-url.us-east-1.on.aws/`,
+	site: `https://astro-aws.lshay.dev/`,
 });
