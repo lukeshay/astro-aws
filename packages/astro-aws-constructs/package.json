@@ -1,25 +1,27 @@
 {
-	"name": "@astro-aws/infra",
+	"name": "@astro-aws/constructs",
 	"version": "0.0.1",
-	"private": true,
+	"keywords": [
+		"astro-adapter",
+		"aws",
+		"aws-lambda",
+		"aws-cdk"
+	],
 	"repository": {
 		"type": "git",
 		"url": "ssh://git@github.com/lukeshay/astro-aws.git",
-		"directory": "apps/infra"
+		"directory": "packages/astro-aws-constructs"
 	},
 	"license": "MIT",
 	"type": "module",
-	"bin": "dist/bin/infra.js",
+	"exports": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"files": [
 		"dist"
 	],
 	"scripts": {
-		"build": "yarn clean && tsc -p tsconfig.build.json",
-		"clean": "rimraf dist cdk.out",
-		"deploy": "cdk deploy --all --require-approval never",
-		"synth": "cdk synth",
-		"tc": "tsc --noEmit",
-		"test": "vitest run --passWithNoTests"
+		"build": "../../scripts/build-package.sh",
+		"clean": "rimraf dist"
 	},
 	"eslintConfig": {
 		"extends": [
@@ -27,17 +29,18 @@
 		],
 		"root": false
 	},
-	"dependencies": {
-		"@astro-aws/constructs": "workspace:^",
-		"@astro-aws/www": "workspace:^",
+	"devDependencies": {
 		"@types/node": "^16.0.0",
-		"aws-cdk": "^2.47.0",
 		"aws-cdk-lib": "^2.47.0",
 		"constructs": "^10.1.139",
 		"eslint": "^8.26.0",
 		"prettier": "^2.7.1",
 		"rimraf": "^3.0.2",
 		"typescript": "^4.8.4"
+	},
+	"peerDependencies": {
+		"aws-cdk-lib": "^2.40.0",
+		"constructs": "^10.1.0"
 	},
 	"engines": {
 		"node": ">=16.0.0"

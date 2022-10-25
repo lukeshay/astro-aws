@@ -46,7 +46,6 @@
 		"esbuild": "^0.15.12"
 	},
 	"devDependencies": {
-		"@tsconfig/node16": "^1.0.3",
 		"@types/aws-lambda": "^8.10.108",
 		"@types/node": "^16.0.0",
 		"aws-lambda": "^1.0.7",

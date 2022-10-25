@@ -18,16 +18,24 @@
 		"prettier:fix": "yarn prettier --write"
 	},
 	"prettier": "@lshay/prettier-config",
-	"devDependencies": {
+	"dependencies": {
+		"@changesets/changelog-github": "^0.4.7",
+		"@changesets/cli": "^2.25.0",
 		"@lshay/eslint-config": "^0.2.0",
 		"@lshay/prettier-config": "^0.5.1",
 		"eslint": "^8.26.0",
 		"prettier": "^2.7.1",
 		"prettier-plugin-astro": "^0.6.0",
+		"prettier-plugin-jsdoc": "^0.4.2",
 		"prettier-plugin-sh": "^0.12.8"
 	},
 	"packageManager": "yarn@3.2.4",
 	"engines": {
 		"node": ">=16.0.0"
+	},
+	"eslintConfig": {
+		"extends": [
+			"../../.eslintrc.cjs"
+		]
 	}
 }

@@ -39,6 +39,4 @@ gen_enforced_field(WorkspaceCwd, 'repository.directory', WorkspaceCwd).
 
 % Validate other fields
 gen_enforced_field(WorkspaceCwd, 'license', 'MIT').
-gen_enforced_field(WorkspaceCwd, 'devDependencies.prettier').
-gen_enforced_field(WorkspaceCwd, 'devDependencies.eslint').
 gen_enforced_field(WorkspaceCwd, 'eslintConfig.extends', ['../../.eslintrc.cjs']).

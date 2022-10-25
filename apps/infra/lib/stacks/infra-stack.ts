@@ -11,8 +11,7 @@ import { Architecture } from "aws-cdk-lib/aws-lambda";
 import { AaaaRecord, ARecord, HostedZone, RecordTarget } from "aws-cdk-lib/aws-route53";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 import { Construct } from "constructs";
-
-import { AstroAWSConstruct } from "../constructs/astro-aws-construct";
+import { AstroAWSConstruct } from "@astro-aws/constructs";
 
 export type InfraStackProps = StackProps & {
 	hostedZoneId: string;
