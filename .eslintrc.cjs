@@ -7,15 +7,21 @@ module.exports = {
 	extends: "@lshay/eslint-config",
 	root: true,
 	rules: {
+		"import/no-useless-path-segments": "off",
 		"no-console": "off",
 	},
 	settings: {
 		"import/parsers": {
-			"@typescript-eslint/parser": [".ts", ".tsx"],
+			"@typescript-eslint/parser": [".ts", ".tsx", ".js", ".jsx"],
 		},
 		"import/resolver": {
 			typescript: {
-				project: ["packages/*/tsconfig.json", "apps/*/tsconfig.json"],
+				project: [
+					"apps/*/jsconfig.json",
+					"apps/*/tsconfig.json",
+					"packages/*/jsconfig.json",
+					"packages/*/tsconfig.json",
+				],
 			},
 		},
 	},

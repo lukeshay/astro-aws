@@ -3,31 +3,30 @@ import { dirname, join, resolve } from "node:path";
 import { existsSync } from "node:fs";
 import { cwd } from "node:process";
 
+import type { Options } from "@swc/core";
+import { transformFile } from "@swc/core";
 import { Command } from "commander";
 import { globby } from "globby";
-import { transformFile } from "@swc/core";
 import ts from "typescript";
 
 const buildPackageCommand = new Command("package");
 
-const emitDeclaration = (fileName, options) => {
-	const createdFiles = {};
-	// eslint-disable-next-line import/no-named-as-default-member
+const emitDeclaration = (fileName: string, options: ts.CompilerOptions) => {
+	const createdFiles: Record<string, string> = {};
 	const host = ts.createCompilerHost(options);
 
-	host.writeFile = (fileName2, contents) => {
+	host.writeFile = (fileName2: string, contents: string) => {
 		createdFiles[fileName2] = contents;
 	};
 
-	// eslint-disable-next-line import/no-named-as-default-member
 	const tsProgram = ts.createProgram([fileName], options, host);
 
 	tsProgram.emit();
 
-	return createdFiles[fileName.replace(".t", ".d.t")];
+	return createdFiles[fileName.replace(".t", ".d.t")] as unknown as string;
 };
 
-const findTsConfig = (currentDir) =>
+const findTsConfig = (currentDir: string) =>
 	resolve(
 		existsSync(`${currentDir}/tsconfig.build.json`)
 			? `${currentDir}/tsconfig.build.json`
@@ -36,7 +35,7 @@ const findTsConfig = (currentDir) =>
 			: `${currentDir}/../../tsconfig.base.json`,
 	);
 
-const findSwcConfig = (currentDir) =>
+const findSwcConfig = (currentDir: string) =>
 	existsSync(`${currentDir}/.swcrc`)
 		? resolve(`${currentDir}/tsconfig.build.json`)
 		: existsSync(`${currentDir}/../../.swcrc`)
@@ -50,11 +49,11 @@ buildPackageCommand.action(async () => {
 	console.log("Building files:", files);
 
 	const rawTsConfig = await readFile(findTsConfig(currentDir), "utf-8");
-	const tsConfig = JSON.parse(rawTsConfig);
+	const tsConfig = JSON.parse(rawTsConfig) as ts.CompilerOptions;
 	const swcConfigPath = findSwcConfig(currentDir);
 
-	const swcConfig = swcConfigPath
-		? JSON.parse(await readFile(swcConfigPath, "utf-8"))
+	const swcConfig: Options = swcConfigPath
+		? (JSON.parse(await readFile(swcConfigPath, "utf-8")) as Options)
 		: {
 				jsc: {
 					parser: {
