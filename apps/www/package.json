@@ -17,7 +17,6 @@
 		"check": "astro check && tsc",
 		"clean": "rimraf dist",
 		"dev": "astro dev",
-		"package": "zip -j dist/lambda.zip dist/lambda/*",
 		"preview": "astro preview",
 		"release": "yarn clean && yarn build && yarn package",
 		"start": "astro dev"

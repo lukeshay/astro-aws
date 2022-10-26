@@ -1,5 +1,6 @@
 import * as cdk from "aws-cdk-lib";
-import { Duration, StackProps } from "aws-cdk-lib";
+import type { StackProps } from "aws-cdk-lib";
+import { Duration } from "aws-cdk-lib";
 import { DnsValidatedCertificate } from "aws-cdk-lib/aws-certificatemanager";
 import {
 	CacheCookieBehavior,
@@ -10,7 +11,7 @@ import {
 import { Architecture } from "aws-cdk-lib/aws-lambda";
 import { AaaaRecord, ARecord, HostedZone, RecordTarget } from "aws-cdk-lib/aws-route53";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
-import { Construct } from "constructs";
+import type { Construct } from "constructs";
 import { AstroAWSConstruct } from "@astro-aws/constructs";
 
 export type InfraStackProps = StackProps & {
@@ -19,7 +20,7 @@ export type InfraStackProps = StackProps & {
 };
 
 export class InfraStack extends cdk.Stack {
-	constructor(scope: Construct, id: string, props: InfraStackProps) {
+	public constructor(scope: Construct, id: string, props: InfraStackProps) {
 		super(scope, id, props);
 
 		const { hostedZoneId, hostedZoneName } = props;
@@ -35,11 +36,6 @@ export class InfraStack extends cdk.Stack {
 		});
 
 		const astroAWSConstruct = new AstroAWSConstruct(this, "AstroAWSConstruct", {
-			websitePath: "../www",
-			lambdaProps: {
-				architecture: Architecture.ARM_64,
-				memorySize: 1024,
-			},
 			distributionProps: {
 				certificate,
 				defaultBehavior: {
@@ -57,6 +53,11 @@ export class InfraStack extends cdk.Stack {
 				},
 				domainNames: [hostedZoneName],
 			},
+			lambdaProps: {
+				architecture: Architecture.ARM_64,
+				memorySize: 1024,
+			},
+			websitePath: "../www",
 		});
 
 		new ARecord(this, "ARecord", {

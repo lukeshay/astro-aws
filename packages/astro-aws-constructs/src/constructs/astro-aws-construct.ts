@@ -1,9 +1,9 @@
 import { FunctionUrlAuthType } from "aws-cdk-lib/aws-lambda";
-import { Construct } from "constructs";
+import type { Construct } from "constructs";
+import type { DistributionProps } from "aws-cdk-lib/aws-cloudfront";
 import {
 	CachePolicy,
 	Distribution,
-	DistributionProps,
 	OriginAccessIdentity,
 	OriginRequestPolicy,
 	ResponseHeadersPolicy,
@@ -13,8 +13,8 @@ import { HttpOrigin, OriginGroup, S3Origin } from "aws-cdk-lib/aws-cloudfront-or
 import { CanonicalUserPrincipal, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Fn } from "aws-cdk-lib";
 
-import { AstroAWSBareConstruct } from "./astro-aws-bare-construct";
-import type { AstroAWSBareConstructProps } from "./astro-aws-bare-construct";
+import { AstroAWSBareConstruct } from "./astro-aws-bare-construct.js";
+import type { AstroAWSBareConstructProps } from "./astro-aws-bare-construct.js";
 
 export type AstroAWSConstructProps = Omit<AstroAWSBareConstructProps, "skipDeployment"> & {
 	distributionProps?: Omit<DistributionProps, "defaultBehavior"> & {
@@ -35,7 +35,10 @@ export class AstroAWSConstruct extends AstroAWSBareConstruct {
 	public readonly distribution: Distribution;
 
 	public constructor(scope: Construct, id: string, props: AstroAWSConstructProps) {
-		super(scope, id, { ...props, skipDeployment: true });
+		super(scope, id, {
+			...props,
+			skipDeployment: true,
+		});
 
 		const { distributionProps = {} } = props;
 
@@ -60,15 +63,15 @@ export class AstroAWSConstruct extends AstroAWSBareConstruct {
 			...distributionProps,
 			defaultBehavior: {
 				cachePolicy: CachePolicy.CACHING_OPTIMIZED,
+				compress: true,
 				originRequestPolicy: OriginRequestPolicy.USER_AGENT_REFERER_HEADERS,
 				responseHeadersPolicy: ResponseHeadersPolicy.CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT_AND_SECURITY_HEADERS,
 				viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-				compress: true,
 				...distributionProps.defaultBehavior,
 				origin: new OriginGroup({
-					primaryOrigin: new HttpOrigin(Fn.parseDomainName(lambdaFunctionUrl.url)),
 					fallbackOrigin: new S3Origin(this.assetsBucket, { originAccessIdentity }),
 					fallbackStatusCodes: [404],
+					primaryOrigin: new HttpOrigin(Fn.parseDomainName(lambdaFunctionUrl.url)),
 				}),
 			},
 		});

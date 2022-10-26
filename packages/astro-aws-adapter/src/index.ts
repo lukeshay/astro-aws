@@ -8,24 +8,23 @@ import { bundleEntry } from "./shared.js";
 import { ADAPTER_NAME } from "./constants.js";
 import { warn } from "./log.js";
 
-export const getAdapter = (args: Args = {}): AstroAdapter => {
-	return {
-		name: ADAPTER_NAME,
-		serverEntrypoint: `${ADAPTER_NAME}/lambda.js`,
-		exports: ["handler"],
-		args,
-	};
-};
-
-const getBuildPath = (root: string | URL, path?: string) => {
-	const distURL = new URL("./dist/", root);
+const getBuildPath = (root: URL | string, path?: string) => {
+	const distURL = new URL("dist/", root);
 
 	return path ? new URL(path, distURL) : distURL;
 };
 
+export const getAdapter = (args: Args = {}): AstroAdapter => ({
+	args,
+	exports: ["handler"],
+	name: ADAPTER_NAME,
+	serverEntrypoint: `${ADAPTER_NAME}/lambda.js`,
+});
+
 export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 	let astroConfig: AstroConfig;
 
+	/* eslint-disable sort-keys */
 	return {
 		name: "@astro-aws/adapter",
 		hooks: {
@@ -52,7 +51,14 @@ export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 			"astro:build:done": async ({ routes }) => {
 				await writeFile(
 					fileURLToPath(getBuildPath(astroConfig.root, "./routes.json")),
-					JSON.stringify(routes, null, 2),
+					JSON.stringify(routes, undefined, 2),
+				);
+
+				const invalidationPaths = routes.map((route) => route.route);
+
+				await writeFile(
+					fileURLToPath(getBuildPath(astroConfig.root, "./invalidationPaths.json")),
+					JSON.stringify(invalidationPaths, undefined, 2),
 				);
 
 				await bundleEntry(
@@ -62,6 +68,7 @@ export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 			},
 		},
 	};
+	/* eslint-enable sort-keys */
 };
 
 export default astroAWSFunctions;

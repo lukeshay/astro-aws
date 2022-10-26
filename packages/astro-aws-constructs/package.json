@@ -20,7 +20,7 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "../../scripts/build-package.sh",
+		"build": "aac build package",
 		"clean": "rimraf dist"
 	},
 	"eslintConfig": {
@@ -30,12 +30,12 @@
 		"root": false
 	},
 	"devDependencies": {
+		"@astro-aws/cli": "workspace:^",
 		"@types/node": "^16.0.0",
 		"aws-cdk-lib": "^2.47.0",
 		"constructs": "^10.1.139",
 		"eslint": "^8.26.0",
 		"prettier": "^2.7.1",
-		"rimraf": "^3.0.2",
 		"typescript": "^4.8.4"
 	},
 	"peerDependencies": {

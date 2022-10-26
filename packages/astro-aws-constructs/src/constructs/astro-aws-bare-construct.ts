@@ -8,12 +8,12 @@ import { RemovalPolicy } from "aws-cdk-lib";
 import type { BucketDeploymentProps } from "aws-cdk-lib/aws-s3-deployment";
 import type { BucketProps } from "aws-cdk-lib/aws-s3";
 import type { FunctionProps } from "aws-cdk-lib/aws-lambda";
-import { Distribution } from "aws-cdk-lib/aws-cloudfront";
+import type { Distribution } from "aws-cdk-lib/aws-cloudfront";
 
 export type AstroAWSBareConstructProps = {
 	assetsBucketDeploymentProps?: Omit<BucketDeploymentProps, "destinationBucket" | "sources">;
 	assetsBucketProps?: BucketProps;
-	lambdaProps?: Omit<FunctionProps, "code" | "runtime" | "handler">;
+	lambdaProps?: Omit<FunctionProps, "code" | "handler" | "runtime">;
 	websitePath?: string;
 	skipDeployment?: boolean;
 };
@@ -29,9 +29,12 @@ export class AstroAWSBareConstruct extends Construct {
 	protected readonly distPath: string;
 	public readonly assetsBucket: Bucket;
 	public readonly lambda: Function;
+	private readonly props: AstroAWSBareConstructProps;
 
-	public constructor(scope: Construct, id: string, private props: AstroAWSBareConstructProps) {
+	public constructor(scope: Construct, id: string, props: AstroAWSBareConstructProps) {
 		super(scope, id);
+
+		this.props = props;
 
 		const { assetsBucketProps = {}, lambdaProps = {}, websitePath, skipDeployment } = props;
 

@@ -28,3 +28,4 @@ copy_readme() {
 }
 
 copy_readme "adapter"
+copy_readme "constructs"
