@@ -1,49 +1,24 @@
 import { writeFile, mkdir, rm, readFile } from "node:fs/promises";
-import { dirname, join, resolve } from "node:path";
-import { existsSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { cwd } from "node:process";
 
 import type { Options } from "@swc/core";
 import { transformFile } from "@swc/core";
 import { Command } from "commander";
 import { globby } from "globby";
-import ts from "typescript";
+import type ts from "typescript";
+
+import { emitTsDeclaration, findTsConfig } from "../../utils/ts-util.js";
+import { findSwcConfig } from "../../utils/swc-util.js";
 
 const buildPackageCommand = new Command("package");
 
-const emitDeclaration = (fileName: string, options: ts.CompilerOptions) => {
-	const createdFiles: Record<string, string> = {};
-	const host = ts.createCompilerHost(options);
-
-	host.writeFile = (fileName2: string, contents: string) => {
-		createdFiles[fileName2] = contents;
-	};
-
-	const tsProgram = ts.createProgram([fileName], options, host);
-
-	tsProgram.emit();
-
-	return createdFiles[fileName.replace(".t", ".d.t")] as unknown as string;
-};
-
-const findTsConfig = (currentDir: string) =>
-	resolve(
-		existsSync(`${currentDir}/tsconfig.build.json`)
-			? `${currentDir}/tsconfig.build.json`
-			: existsSync(`${currentDir}/tsconfig.json`)
-			? `${currentDir}/tsconfig.json`
-			: `${currentDir}/../../tsconfig.base.json`,
-	);
-
-const findSwcConfig = (currentDir: string) =>
-	existsSync(`${currentDir}/.swcrc`)
-		? resolve(`${currentDir}/tsconfig.build.json`)
-		: existsSync(`${currentDir}/../../.swcrc`)
-		? resolve(`${currentDir}/../../.swcrc`)
-		: undefined;
+buildPackageCommand.description(
+	"Builds the TypeScript files in the src directory and outputs them to the dist directory.",
+);
 
 buildPackageCommand.action(async () => {
-	const files = await globby(["src/**/*"]);
+	const files = await globby(["src/**/*.ts", "src/**/*.tsx"]);
 	const currentDir = cwd();
 
 	console.log("Building files:", files);
@@ -76,7 +51,7 @@ buildPackageCommand.action(async () => {
 			.map(async (file) => {
 				const output = await transformFile(file, swcConfig);
 
-				const typeDefs = emitDeclaration(file, {
+				const typeDefs = emitTsDeclaration(file, {
 					...tsConfig,
 					declaration: true,
 					emitDeclarationOnly: true,
