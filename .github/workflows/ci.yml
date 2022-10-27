@@ -35,6 +35,8 @@ jobs:
                     - yarn changeset status --since=main
         steps:
             - uses: actions/checkout@v3
+              with:
+                  fetch_depth: 100
             - uses: actions/setup-node@v3
               with:
                   node-version: "16"
