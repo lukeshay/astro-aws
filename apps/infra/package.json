@@ -1,6 +1,5 @@
 {
 	"name": "@astro-aws/infra",
-	"version": "0.0.1",
 	"private": true,
 	"homepage": "https://astro-aws.lshay.dev/",
 	"repository": {
