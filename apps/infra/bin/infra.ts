@@ -1,11 +1,13 @@
-#!/usr/bin/env node
 import * as cdk from "aws-cdk-lib";
+import { Tags } from "aws-cdk-lib";
 
-import { InfraStack } from "../lib/stacks/infra-stack";
+import { AstroAWSStack } from "../lib/stacks/astro-aws-stack.js";
 
 const app = new cdk.App();
 
-new InfraStack(app, "InfraStack", {
-	hostedZoneId: "Z087719511RJWBDA42276",
-	hostedZoneName: "astro-aws.lshay.dev",
+const stack = new AstroAWSStack(app, "AstroAWSStack", {
+	domainName: "astro-aws.lshay.dev",
 });
+
+Tags.of(app).add("Project", "AstroAWS");
+Tags.of(stack).add("Project", "AstroAWS");

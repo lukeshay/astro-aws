@@ -1,6 +1,10 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call */
+import { Buffer } from "node:buffer";
+
 import { polyfill } from "@astrojs/webapi";
 import type { Handler } from "aws-lambda";
-import { SSRManifest } from "astro";
+import type { SSRManifest } from "astro";
 import { App } from "astro/app";
 
 import type { Args } from "./args.js";
@@ -9,9 +13,7 @@ polyfill(globalThis, {
 	exclude: "window document",
 });
 
-function parseContentType(header?: string) {
-	return header?.split(";")[0] ?? "";
-}
+const parseContentType = (header?: string) => header?.split(";")[0] ?? "";
 
 const clientAddressSymbol = Symbol.for("astro.clientAddress");
 
@@ -52,39 +54,45 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 	]);
 
 	const handler: Handler = async (event) => {
-		console.log(JSON.stringify(event, null, 2));
+		console.log(JSON.stringify(event, undefined, 2));
 
 		const {
 			httpMethod,
-			headers,
 			body: requestBody,
 			isBase64Encoded,
 			rawPath,
 			requestContext: { domainName },
 		} = event;
 
+		const headers = new Headers(event.headers as Record<string, string>);
+
 		const init: RequestInit = {
-			method: httpMethod,
-			headers: new Headers(headers as any),
+			headers,
+			method: httpMethod as string,
 		};
 
 		if (httpMethod !== "GET" && httpMethod !== "HEAD") {
 			const encoding = isBase64Encoded ? "base64" : "utf-8";
-			init.body = typeof requestBody === "string" ? Buffer.from(requestBody, encoding) : requestBody;
+
+			init.body = typeof requestBody === "string" ? Buffer.from(requestBody, encoding) : (requestBody as string);
 		}
 
-		const request = new Request(new URL(rawPath, `https://${domainName ?? headers["host"] ?? "fake.com"}`), init);
+		const request = new Request(
+			new URL(rawPath as string, `https://${(domainName as string | undefined) ?? headers.get("host") ?? "fake.com"}`),
+			init,
+		);
 
-		let routeData = app.match(request, { matchNotFound: true });
+		const routeData = app.match(request, { matchNotFound: true });
 
 		if (!routeData) {
 			return {
-				statusCode: 404,
 				body: "Not found",
+				statusCode: 404,
 			};
 		}
 
-		const ip = headers["x-forwarded-for"];
+		const ip = headers.get("x-forwarded-for");
+
 		Reflect.set(request, clientAddressSymbol, ip);
 
 		const response: Response = await app.render(request, routeData);
@@ -94,18 +102,20 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 		const responseIsBase64Encoded = knownBinaryMediaTypes.has(responseContentType);
 
 		let responseBody: string;
+
 		if (responseIsBase64Encoded) {
 			const ab = await response.arrayBuffer();
+
 			responseBody = Buffer.from(ab).toString("base64");
 		} else {
 			responseBody = await response.text();
 		}
 
 		const fnResponse: any = {
-			statusCode: response.status,
-			headers: responseHeaders,
 			body: responseBody,
+			headers: responseHeaders,
 			isBase64Encoded: responseIsBase64Encoded,
+			statusCode: response.status,
 		};
 
 		// Special-case set-cookie which has to be set an different way :/
@@ -121,6 +131,7 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 			};
 
 			const rawPacked = (response.headers as HeadersWithRaw).raw();
+
 			if ("set-cookie" in rawPacked) {
 				fnResponse.multiValueHeaders = {
 					"set-cookie": rawPacked["set-cookie"],
@@ -129,15 +140,17 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 		}
 
 		// Apply cookies set via Astro.cookies.set/delete
-		if (app.setCookieHeaders) {
-			const setCookieHeaders = Array.from(app.setCookieHeaders(response));
-			fnResponse.multiValueHeaders = fnResponse.multiValueHeaders || {};
-			if (!fnResponse.multiValueHeaders["set-cookie"]) {
-				fnResponse.multiValueHeaders["set-cookie"] = [];
-			}
-			fnResponse.multiValueHeaders["set-cookie"].push(...setCookieHeaders);
+		const setCookieHeaders = [...app.setCookieHeaders(response)];
+
+		fnResponse.multiValueHeaders = fnResponse.multiValueHeaders || {};
+
+		if (!fnResponse.multiValueHeaders["set-cookie"]) {
+			fnResponse.multiValueHeaders["set-cookie"] = [];
 		}
 
+		fnResponse.multiValueHeaders["set-cookie"].push(...setCookieHeaders);
+
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 		return fnResponse;
 	};
 

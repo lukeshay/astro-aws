@@ -1,0 +1,48 @@
+{
+	"name": "@astro-aws/constructs",
+	"version": "0.0.1",
+	"keywords": [
+		"astro-adapter",
+		"aws",
+		"aws-lambda",
+		"aws-cdk"
+	],
+	"homepage": "https://astro-aws.lshay.dev/",
+	"repository": {
+		"type": "git",
+		"url": "ssh://git@github.com/lukeshay/astro-aws.git",
+		"directory": "packages/astro-aws-constructs"
+	},
+	"license": "MIT",
+	"type": "module",
+	"exports": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "aac build package"
+	},
+	"eslintConfig": {
+		"extends": [
+			"../../.eslintrc.cjs"
+		],
+		"root": false
+	},
+	"devDependencies": {
+		"@astro-aws/cli": "workspace:^",
+		"@types/node": "^16.0.0",
+		"aws-cdk-lib": "^2.47.0",
+		"constructs": "^10.1.139",
+		"eslint": "^8.26.0",
+		"prettier": "^2.7.1",
+		"typescript": "^4.8.4"
+	},
+	"peerDependencies": {
+		"aws-cdk-lib": "^2.40.0",
+		"constructs": "^10.1.0"
+	},
+	"engines": {
+		"node": ">=16.0.0"
+	}
+}

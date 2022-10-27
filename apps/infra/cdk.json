@@ -1,19 +1,5 @@
 {
 	"app": "node --enable-source-maps --es-module-specifier-resolution node dist/bin/infra.js",
-	"watch": {
-		"include": ["**"],
-		"exclude": [
-			"README.md",
-			"cdk*.json",
-			"**/*.d.ts",
-			"**/*.js",
-			"tsconfig.json",
-			"package*.json",
-			"yarn.lock",
-			"node_modules",
-			"test"
-		]
-	},
 	"context": {
 		"@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId": true,
 		"@aws-cdk/core:stackRelativeExports": true,
@@ -33,5 +19,19 @@
 		"@aws-cdk/aws-apigateway:disableCloudWatchRole": true,
 		"@aws-cdk/core:enablePartitionLiterals": true,
 		"@aws-cdk/core:target-partitions": ["aws", "aws-cn"]
+	},
+	"watch": {
+		"include": ["**"],
+		"exclude": [
+			"README.md",
+			"cdk*.json",
+			"**/*.d.ts",
+			"**/*.js",
+			"tsconfig.json",
+			"package*.json",
+			"yarn.lock",
+			"node_modules",
+			"test"
+		]
 	}
 }

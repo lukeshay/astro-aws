@@ -41,9 +41,9 @@ docs
 <BaseLayout sections={sections} title={frontmatter.title} description={frontmatter.description}>
 	<RightSideNav headings={headings} url={frontmatter.url} />
 	<div class="relative mx-72 px-12 mt-20 flex flex-row justify-center">
-		<div class="max-w-2xl w-full docs pb-24">
+		<section class="max-w-2xl w-full docs pb-24">
 			<slot />
-		</div>
+		</section>
 	</div>
 </BaseLayout>
 <script>

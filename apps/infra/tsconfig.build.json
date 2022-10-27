@@ -1,8 +1,8 @@
 {
-	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
 		"outDir": "dist",
 		"inlineSourceMap": true
 	},
+	"extends": "../../tsconfig.base.json",
 	"include": ["lib/**/*", "bin/**/*"]
 }

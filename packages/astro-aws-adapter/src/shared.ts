@@ -7,8 +7,10 @@ export const bundleEntry = async (entryFile: string, outDir: string) => {
 		external: ["aws-sdk"],
 		format: "cjs",
 		outdir: outDir,
+		outExtension: {
+			".js": ".cjs",
+		},
 		platform: "node",
 		target: "node16",
-		outExtension: { ".js": ".cjs" },
 	});
 };
