@@ -16,7 +16,7 @@ jobs:
             - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
-                  node-version: "16.18.0"
+                  node-version: "16"
                   cache: "yarn"
             - run: yarn install --mode=skip-build
               env:
@@ -27,8 +27,8 @@ jobs:
         strategy:
             matrix:
                 script:
-                    - yarn build --exclude apps/* && yarn lint
-                    - yarn build --exclude apps/* && yarn prettier
+                    - yarn build --exclude apps/www --exclude apps/infra && yarn lint
+                    - yarn build --exclude apps/www --exclude apps/infra && yarn prettier
                     - yarn build --since-branch=main
                     - yarn test
                     - yarn constraints
@@ -37,6 +37,6 @@ jobs:
             - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
-                  node-version: "16.18.0"
+                  node-version: "16"
                   cache: "yarn"
             - run: yarn install --mode=skip-build && ${{ matrix.script }}
