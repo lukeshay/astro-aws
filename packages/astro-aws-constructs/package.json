@@ -7,6 +7,7 @@
 		"aws-lambda",
 		"aws-cdk"
 	],
+	"homepage": "https://astro-aws.lshay.dev/",
 	"repository": {
 		"type": "git",
 		"url": "ssh://git@github.com/lukeshay/astro-aws.git",
@@ -20,8 +21,7 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "aac build package",
-		"clean": "rimraf dist"
+		"build": "aac build package"
 	},
 	"eslintConfig": {
 		"extends": [

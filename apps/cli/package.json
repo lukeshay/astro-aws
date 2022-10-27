@@ -1,6 +1,7 @@
 {
 	"name": "@astro-aws/cli",
 	"private": true,
+	"homepage": "https://astro-aws.lshay.dev/",
 	"repository": {
 		"type": "git",
 		"url": "ssh://git@github.com/lukeshay/astro-aws.git",
@@ -15,8 +16,7 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "ts-node-esm ./src/index.ts build package",
-		"tc": "tsc --noEmit"
+		"build": "ts-node-esm ./src/index.ts build package"
 	},
 	"eslintConfig": {
 		"extends": [

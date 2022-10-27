@@ -27,8 +27,8 @@ jobs:
         strategy:
             matrix:
                 script:
-                    - yarn build --exclude apps/* && yarn run lint
-                    - yarn build --exclude apps/* && yarn run prettier
+                    - yarn build --exclude apps/* && yarn lint
+                    - yarn build --exclude apps/* && yarn prettier
                     - yarn build --since-branch=main
                     - yarn test
                     - yarn constraints

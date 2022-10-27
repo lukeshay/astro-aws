@@ -2,6 +2,7 @@
 	"name": "@astro-aws/infra",
 	"version": "0.0.1",
 	"private": true,
+	"homepage": "https://astro-aws.lshay.dev/",
 	"repository": {
 		"type": "git",
 		"url": "ssh://git@github.com/lukeshay/astro-aws.git",
@@ -17,9 +18,7 @@
 		"build": "yarn clean && tsc -p tsconfig.build.json",
 		"clean": "rimraf dist cdk.out",
 		"deploy": "cdk deploy --all --require-approval never",
-		"synth": "cdk synth",
-		"tc": "tsc --noEmit",
-		"test": "vitest run --passWithNoTests"
+		"synth": "cdk synth"
 	},
 	"eslintConfig": {
 		"extends": [
