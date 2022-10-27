@@ -36,10 +36,33 @@ jobs:
         steps:
             - uses: actions/checkout@v3
               with:
-                  fetch_depth: 100
+                  fetch-depth: 100
             - uses: actions/setup-node@v3
               with:
                   node-version: "16"
                   cache: "yarn"
             - run: git fetch origin main:main
             - run: yarn install --mode=skip-build && ${{ matrix.script }}
+    changeset:
+        runs-on: ubuntu-22.04
+        needs: prepare-yarn-cache
+        steps:
+            - uses: actions/checkout@v2
+            - name: Get changed files in the .changeset folder
+              id: changed-files
+              uses: tj-actions/changed-files@v29
+              with:
+                  files: |
+                      .changeset/**/*.md
+            - name: Check if any changesets contain minor changes
+              id: find-changeset
+              if: steps.set-blocks.outputs.blocks == ''
+              run: |
+                  echo "Checking for changesets marked as minor"
+                  echo '::set-output name=found::false'
+                  for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+                      echo '::set-output name=found::true'
+                  done
+            - name: Add label
+              if: steps.find-changeset.outputs.found == 'false'
+              run: exit 1
