@@ -14,9 +14,9 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "yarn clean && tsc -p tsconfig.build.json",
-		"clean": "rimraf dist cdk.out",
+		"build": "scripts build --skip-tsc",
 		"deploy": "cdk deploy --all --require-approval never",
+		"invalidate": "./scripts/invalidate-cloudfront-cache.sh",
 		"synth": "cdk synth"
 	},
 	"eslintConfig": {
@@ -34,13 +34,13 @@
 		"constructs": "^10.1.139",
 		"eslint": "^8.26.0",
 		"prettier": "^2.7.1",
-		"rimraf": "^3.0.2",
 		"typescript": "^4.8.4"
 	},
 	"devDependencies": {
+		"@astro-aws/scripts": "workspace:^",
 		"eslint-config-get-off-my-lawn": "^7.1.0"
 	},
 	"engines": {
-		"node": ">=16.0.0"
+		"node": "14.x || 16.x"
 	}
 }

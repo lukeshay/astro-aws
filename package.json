@@ -10,7 +10,8 @@
 	"license": "MIT",
 	"workspaces": [
 		"packages/*",
-		"apps/*"
+		"apps/*",
+		"scripts"
 	],
 	"scripts": {
 		"lint": "eslint .",
@@ -42,6 +43,6 @@
 	},
 	"packageManager": "yarn@3.2.4",
 	"engines": {
-		"node": ">=16.0.0"
+		"node": "14.x || 16.x"
 	}
 }

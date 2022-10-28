@@ -21,7 +21,7 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "aac build package"
+		"build": "scripts build"
 	},
 	"eslintConfig": {
 		"extends": [
@@ -30,7 +30,7 @@
 		"root": false
 	},
 	"devDependencies": {
-		"@astro-aws/cli": "workspace:^",
+		"@astro-aws/scripts": "workspace:^",
 		"@types/node": "^16.0.0",
 		"aws-cdk-lib": "^2.47.0",
 		"constructs": "^10.1.139",
@@ -43,7 +43,7 @@
 		"constructs": "^10.1.0"
 	},
 	"engines": {
-		"node": ">=16.0.0"
+		"node": "14.x || 16.x"
 	},
 	"publishConfig": {
 		"access": "public"

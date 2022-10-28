@@ -33,13 +33,16 @@ jobs:
                     - yarn test
                     - yarn constraints
                     - yarn changeset status --since=main
+                node_version:
+                    - 14
+                    - 16
         steps:
             - uses: actions/checkout@v3
               with:
                   fetch-depth: 100
             - uses: actions/setup-node@v3
               with:
-                  node-version: "16"
+                  node-version: ${{ matrix.node_version }}
                   cache: "yarn"
             - run: git fetch origin main:main
             - run: yarn install --mode=skip-build && ${{ matrix.script }}

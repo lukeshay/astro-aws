@@ -1,22 +1,24 @@
 {
-	"name": "@astro-aws/cli",
+	"name": "@astro-aws/scripts",
 	"private": true,
 	"homepage": "https://astro-aws.lshay.dev/",
 	"repository": {
 		"type": "git",
 		"url": "ssh://git@github.com/lukeshay/astro-aws.git",
-		"directory": "apps/cli"
+		"directory": "scripts"
 	},
 	"license": "MIT",
 	"type": "module",
 	"bin": {
-		"aac": "./bin.js"
+		"aac": "./bin.js",
+		"scripts": "./bin.js"
 	},
 	"files": [
-		"dist"
+		"dist",
+		"bin.js"
 	],
 	"scripts": {
-		"build": "ts-node-esm ./src/index.ts build package"
+		"build": "ts-node-esm ./src/index.ts build"
 	},
 	"eslintConfig": {
 		"extends": [
@@ -25,8 +27,8 @@
 		"root": false
 	},
 	"dependencies": {
-		"@swc/core": "^1.3.10",
 		"commander": "^9.4.1",
+		"esbuild": "^0.15.12",
 		"globby": "^13.1.2"
 	},
 	"devDependencies": {
@@ -39,6 +41,6 @@
 		"typescript": "^4.8.4"
 	},
 	"engines": {
-		"node": ">=16.0.0"
+		"node": "14.x || 16.x"
 	}
 }
