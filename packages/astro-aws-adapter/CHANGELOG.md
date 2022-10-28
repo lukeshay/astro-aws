@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.0.2
+
+### Patch Changes
+
+- Fixed import in log.js
+
 ## 0.0.1
 
 ### Patch Changes
