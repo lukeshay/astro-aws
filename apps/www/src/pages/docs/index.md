@@ -14,21 +14,21 @@ Astro AWS is an [Astro](https://astro.build/) SSR adapter for AWS Lambda.
 
 Create a new Astro project using the `create-astro` CLI then add the Astro AWS adapter.
 
-#### Using NPM
+### Using NPM
 
 ```sh
 npm create astro@latest
 npx astro add @astro-aws/adapter
 ```
 
-#### Using Yarn
+### Using Yarn
 
 ```
 yarn create astro@latest
 yarn astro add @astro-aws/adapter
 ```
 
-#### Using PNPM
+### Using PNPM
 
 ```
 pnpm create astro@latest

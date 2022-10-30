@@ -49,8 +49,13 @@
 		@apply text-lg font-normal;
 	}
 
+	p > code {
+		@apply bg-base-300 text-base-content -mx-0.5 rounded px-1 font-mono font-medium italic text-opacity-75 #{!important};
+		font-size: 0.875rem; // 14px
+	}
+
 	pre {
-		@apply bg-base-300 rounded-lg p-8 text-sm #{!important};
+		@apply bg-base-300 text-base-content rounded-lg px-8 py-6 text-sm text-opacity-75 #{!important};
 	}
 
 	ol {

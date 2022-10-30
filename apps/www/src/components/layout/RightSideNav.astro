@@ -12,10 +12,7 @@ export type Props = {
 
 const depthPadding = {
 	2: "pl-0",
-	3: "pl-2",
-	4: "pl-4",
-	5: "pl-6",
-	6: "pl-8",
+	3: "pl-4",
 } as const;
 
 const { headings, url } = Astro.props;
@@ -26,7 +23,7 @@ const { headings, url } = Astro.props;
 	<ul class="menu menu-compact menu-vertical">
 		{
 			headings
-				.filter(({ depth }) => depth > 1)
+				.filter(({ depth }) => Object.keys(depthPadding).includes(String(depth)))
 				.map(({ depth, slug, text }) => (
 					<li class={`${depthPadding[depth as keyof typeof depthPadding]} text-base-content text-sm text-opacity-75`}>
 						<a href={`${url}#${slug}`} class="-mx-0.5 p-0.5">
