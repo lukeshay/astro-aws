@@ -2,6 +2,7 @@ import { FunctionUrlAuthType } from "aws-cdk-lib/aws-lambda";
 import type { Construct } from "constructs";
 import type { DistributionProps } from "aws-cdk-lib/aws-cloudfront";
 import {
+	AllowedMethods,
 	CachePolicy,
 	Distribution,
 	OriginAccessIdentity,
@@ -58,10 +59,23 @@ export class AstroAWSConstruct extends AstroAWSBareConstruct {
 		);
 
 		const lambdaFunctionUrl = this.lambda.addFunctionUrl({ authType: FunctionUrlAuthType.NONE });
+		const lambdaOrigin = new HttpOrigin(Fn.parseDomainName(lambdaFunctionUrl.url));
 
 		const distribution = new Distribution(this, "Distribution", {
 			...distributionProps,
+			additionalBehaviors: {
+				"/api/*": {
+					allowedMethods: AllowedMethods.ALLOW_ALL,
+					compress: true,
+					origin: lambdaOrigin,
+					originRequestPolicy: OriginRequestPolicy.USER_AGENT_REFERER_HEADERS,
+					responseHeadersPolicy: ResponseHeadersPolicy.CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT_AND_SECURITY_HEADERS,
+					viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+				},
+				...distributionProps.additionalBehaviors,
+			},
 			defaultBehavior: {
+				allowedMethods: AllowedMethods.ALLOW_GET_HEAD,
 				cachePolicy: CachePolicy.CACHING_OPTIMIZED,
 				compress: true,
 				originRequestPolicy: OriginRequestPolicy.USER_AGENT_REFERER_HEADERS,
@@ -71,7 +85,7 @@ export class AstroAWSConstruct extends AstroAWSBareConstruct {
 				origin: new OriginGroup({
 					fallbackOrigin: new S3Origin(this.assetsBucket, { originAccessIdentity }),
 					fallbackStatusCodes: [404],
-					primaryOrigin: new HttpOrigin(Fn.parseDomainName(lambdaFunctionUrl.url)),
+					primaryOrigin: lambdaOrigin,
 				}),
 			},
 		});

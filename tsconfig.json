@@ -1,4 +1,11 @@
 {
 	"$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/tsconfig.json",
+	"compilerOptions": {
+		"baseUrl": "./",
+		"paths": {
+			"@astro-aws/adapter": ["./packages/astro-aws-adapter/src/index.ts"],
+			"@astro-aws/constructs": ["./packages/astro-aws-constructs/src/index.ts"]
+		}
+	},
 	"extends": "./tsconfig.base.json"
 }

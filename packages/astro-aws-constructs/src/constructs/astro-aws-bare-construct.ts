@@ -2,7 +2,7 @@ import { dirname, join, resolve } from "node:path";
 
 import { BlockPublicAccess, BucketEncryption, Bucket } from "aws-cdk-lib/aws-s3";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
-import { Code, Function, Runtime } from "aws-cdk-lib/aws-lambda";
+import { Code, Function, Runtime,  } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import { RemovalPolicy } from "aws-cdk-lib";
 import type { BucketDeploymentProps } from "aws-cdk-lib/aws-s3-deployment";
@@ -51,10 +51,10 @@ export class AstroAWSBareConstruct extends Construct {
 		});
 
 		const lambda = new Function(this, "Lambda", {
+			runtime: Runtime.NODEJS_16_X,
 			...lambdaProps,
 			code: Code.fromAsset(join(distPath, "lambda")),
 			handler: "entry.handler",
-			runtime: Runtime.NODEJS_16_X,
 		});
 
 		this.assetsBucket = assetsBucket;

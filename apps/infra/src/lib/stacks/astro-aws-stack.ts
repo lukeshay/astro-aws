@@ -1,6 +1,6 @@
 import * as cdk from "aws-cdk-lib";
-import { CfnOutput, StackProps } from "aws-cdk-lib";
-import { Duration } from "aws-cdk-lib";
+import type { StackProps } from "aws-cdk-lib";
+import { CfnOutput, Duration } from "aws-cdk-lib";
 import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import {
 	CacheCookieBehavior,
@@ -13,7 +13,7 @@ import type { Construct } from "constructs";
 import { AstroAWSConstruct } from "@astro-aws/constructs";
 
 export type AstroAWSProps = StackProps & {
-	domainName: string;
+	domainName?: string;
 	env: StackProps["env"];
 };
 
@@ -23,9 +23,13 @@ export class AstroAWSStack extends cdk.Stack {
 
 		const { domainName } = props;
 
-		const certificate = new Certificate(this, "Certificate", {
-			domainName,
-		});
+		let certificate: Certificate | undefined;
+
+		if (domainName) {
+			certificate = new Certificate(this, "Certificate", {
+				domainName,
+			});
+		}
 
 		const astroAwsConstruct = new AstroAWSConstruct(this, "AstroAWSConstruct", {
 			distributionProps: {
@@ -43,7 +47,7 @@ export class AstroAWSStack extends cdk.Stack {
 						queryStringBehavior: CacheQueryStringBehavior.all(),
 					}),
 				},
-				domainNames: [domainName],
+				domainNames: domainName ? [domainName] : [],
 			},
 			lambdaProps: {
 				architecture: Architecture.ARM_64,

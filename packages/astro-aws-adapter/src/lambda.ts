@@ -17,6 +17,34 @@ const parseContentType = (header?: string) => header?.split(";")[0] ?? "";
 
 const clientAddressSymbol = Symbol.for("astro.clientAddress");
 
+type Event = {
+	version: string;
+	routeKey: string;
+	rawPath: string;
+	rawQueryString: string;
+	headers: Record<string, string>;
+	body?: string;
+	requestContext: {
+		accountId: string;
+		apiId: string;
+		domainName: string;
+		domainPrefix: string;
+		http: {
+			method: string;
+			path: string;
+			protocol: string;
+			sourceIp: string;
+			userAgent: string;
+		};
+		requestId: string;
+		routeKey: string;
+		stage: string;
+		time: string;
+		timeEpoch: number;
+	};
+	isBase64Encoded: boolean;
+};
+
 export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args) => {
 	const app = new App(manifest);
 
@@ -53,35 +81,32 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 		...(binaryMediaTypes ?? []),
 	]);
 
-	const handler: Handler = async (event) => {
+	const handler: Handler<Event> = async (event) => {
 		console.log(JSON.stringify(event, undefined, 2));
 
 		const {
-			httpMethod,
 			body: requestBody,
 			isBase64Encoded,
 			rawPath,
-			requestContext: { domainName },
+			requestContext: {
+				domainName,
+				http: { method },
+			},
+			headers: eventHeaders,
 		} = event;
-
-		const headers = new Headers(event.headers as Record<string, string>);
-
+		const headers = new Headers(eventHeaders);
 		const init: RequestInit = {
 			headers,
-			method: httpMethod as string,
+			method,
 		};
 
-		if (httpMethod !== "GET" && httpMethod !== "HEAD") {
+		if (method !== "GET" && method !== "HEAD") {
 			const encoding = isBase64Encoded ? "base64" : "utf-8";
 
-			init.body = typeof requestBody === "string" ? Buffer.from(requestBody, encoding) : (requestBody as string);
+			init.body = typeof requestBody === "string" ? Buffer.from(requestBody, encoding) : requestBody;
 		}
 
-		const request = new Request(
-			new URL(rawPath as string, `https://${(domainName as string | undefined) ?? headers.get("host") ?? "fake.com"}`),
-			init,
-		);
-
+		const request = new Request(new URL(rawPath, headers.get("referer") ?? `https://${domainName}`), init);
 		const routeData = app.match(request, { matchNotFound: true });
 
 		if (!routeData) {
@@ -97,7 +122,6 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 
 		const response: Response = await app.render(request, routeData);
 		const responseHeaders = Object.fromEntries(response.headers.entries());
-
 		const responseContentType = parseContentType(responseHeaders["content-type"]);
 		const responseIsBase64Encoded = knownBinaryMediaTypes.has(responseContentType);
 

@@ -22,7 +22,7 @@
 	},
 	"eslintConfig": {
 		"extends": [
-			"../../.eslintrc.cjs"
+			"../.eslintrc.cjs"
 		],
 		"root": false
 	},

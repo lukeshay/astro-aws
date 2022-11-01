@@ -1,15 +1,17 @@
-import { build, BuildOptions } from "esbuild";
+import type { BuildOptions } from "esbuild";
+import { build } from "esbuild";
 import { globby } from "globby";
 
+import type { PackageJson } from "./pkg-util.js";
 import { findTsConfig } from "./ts-util.js";
 
 const DEFAULT_CONFIG: BuildOptions = {
 	minify: false,
+	outdir: "dist",
 	platform: "node",
 	sourcemap: false,
 	sourcesContent: false,
 	target: "node14",
-	outdir: "dist",
 };
 
 export type CreateConfigOptions = {
@@ -18,9 +20,9 @@ export type CreateConfigOptions = {
 };
 
 export const createEsBuildConfig = async (
-	pkgJson: Record<string, string | number | boolean | undefined>,
+	pkgJson: PackageJson,
 	options: CreateConfigOptions,
-) => {
+): Promise<BuildOptions> => {
 	const { type = "module", version } = pkgJson;
 	const { bundle, fileGlob } = options;
 	const format = type === "module" ? "esm" : "cjs";
@@ -40,10 +42,8 @@ export const createEsBuildConfig = async (
 		entryPoints,
 		format,
 		tsconfig: findTsConfig(),
-	} as BuildOptions;
+	};
 };
 
-export const runEsBuild = async (
-	pkgJson: Record<string, string | number | boolean | undefined>,
-	options: CreateConfigOptions,
-) => build(await createEsBuildConfig(pkgJson, options));
+export const runEsBuild = async (pkgJson: PackageJson, options: CreateConfigOptions) =>
+	build(await createEsBuildConfig(pkgJson, options));

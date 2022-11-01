@@ -9,7 +9,9 @@ import remarkToc from "remark-toc";
 
 // https://astro.build/config
 export default defineConfig({
-	adapter: aws(),
+	adapter: aws({
+		esm: true,
+	}),
 	integrations: [preact(), react(), tailwind(), mdx(), sitemap()],
 	markdown: {
 		extendDefaultPlugins: true,
