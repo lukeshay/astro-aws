@@ -2,13 +2,12 @@ import { dirname, join, resolve } from "node:path";
 
 import { BlockPublicAccess, BucketEncryption, Bucket } from "aws-cdk-lib/aws-s3";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
-import { Code, Function, Runtime,  } from "aws-cdk-lib/aws-lambda";
+import { Code, Function, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import { RemovalPolicy } from "aws-cdk-lib";
 import type { BucketDeploymentProps } from "aws-cdk-lib/aws-s3-deployment";
 import type { BucketProps } from "aws-cdk-lib/aws-s3";
 import type { FunctionProps } from "aws-cdk-lib/aws-lambda";
-import type { Distribution } from "aws-cdk-lib/aws-cloudfront";
 
 export type AstroAWSBareConstructProps = {
 	assetsBucketDeploymentProps?: Omit<BucketDeploymentProps, "destinationBucket" | "sources">;
@@ -26,10 +25,10 @@ export type AstroAWSBareConstructProps = {
  * **NOTE:** This will not work unless you route requests to the Lambda function and fallback to the S3 bucket.
  */
 export class AstroAWSBareConstruct extends Construct {
-	protected readonly distPath: string;
-	public readonly assetsBucket: Bucket;
-	public readonly lambda: Function;
 	private readonly props: AstroAWSBareConstructProps;
+	public readonly assetsBucket: Bucket;
+	public readonly distPath: string;
+	public readonly lambda: Function;
 
 	public constructor(scope: Construct, id: string, props: AstroAWSBareConstructProps) {
 		super(scope, id);
@@ -66,18 +65,14 @@ export class AstroAWSBareConstruct extends Construct {
 		}
 	}
 
-	protected createBucketDeployment(distribution?: Distribution) {
-		const props = {
+	public createBucketDeployment(props?: Partial<Omit<BucketDeploymentProps, "destinationBucket">>) {
+		const finalProps = {
 			...this.props.assetsBucketDeploymentProps,
+			...props,
 			destinationBucket: this.assetsBucket,
-			sources: [Source.asset(join(this.distPath, "client"))],
+			sources: [Source.asset(join(this.distPath, "client")), ...(props?.sources ?? [])],
 		};
 
-		if (distribution) {
-			props.distribution = distribution;
-			props.distributionPaths = ["/*"];
-		}
-
-		return new BucketDeployment(this, "AssetsBucketDeployment", props);
+		return new BucketDeployment(this, "AssetsBucketDeployment", finalProps);
 	}
 }

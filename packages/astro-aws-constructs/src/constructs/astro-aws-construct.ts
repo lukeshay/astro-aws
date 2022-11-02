@@ -17,7 +17,7 @@ import { Fn } from "aws-cdk-lib";
 import { AstroAWSBareConstruct } from "./astro-aws-bare-construct.js";
 import type { AstroAWSBareConstructProps } from "./astro-aws-bare-construct.js";
 
-export type AstroAWSConstructProps = Omit<AstroAWSBareConstructProps, "skipDeployment"> & {
+export type AstroAWSConstructProps = AstroAWSBareConstructProps & {
 	distributionProps?: Omit<DistributionProps, "defaultBehavior"> & {
 		defaultBehavior?: Omit<DistributionProps["defaultBehavior"], "origin">;
 	};
@@ -41,7 +41,7 @@ export class AstroAWSConstruct extends AstroAWSBareConstruct {
 			skipDeployment: true,
 		});
 
-		const { distributionProps = {} } = props;
+		const { distributionProps = {}, skipDeployment } = props;
 
 		const originAccessIdentity = new OriginAccessIdentity(this, "CloudfrontOAI", {
 			comment: `OAI for ${id}`,
@@ -92,6 +92,11 @@ export class AstroAWSConstruct extends AstroAWSBareConstruct {
 
 		this.distribution = distribution;
 
-		this.createBucketDeployment(distribution);
+		if (!skipDeployment) {
+			this.createBucketDeployment({
+				distribution,
+				distributionPaths: ["/*"],
+			});
+		}
 	}
 }

@@ -9,7 +9,9 @@
 	},
 	"license": "MIT",
 	"type": "module",
-	"bin": "dist/bin/infra.js",
+	"bin": {
+		"astro-aws-cdk": "dist/bin/infra.js"
+	},
 	"files": [
 		"dist"
 	],
