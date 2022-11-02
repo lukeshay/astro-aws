@@ -40,4 +40,4 @@ gen_enforced_field(WorkspaceCwd, 'repository.directory', WorkspaceCwd).
 % Validate other fields
 gen_enforced_field(WorkspaceCwd, 'homepage', 'https://astro-aws.lshay.dev/').
 gen_enforced_field(WorkspaceCwd, 'license', 'MIT').
-gen_enforced_field(WorkspaceCwd, 'eslintConfig.extends', ['../../.eslintrc.cjs']).
+gen_enforced_field(WorkspaceCwd, 'eslintConfig.extends', ['../../.eslintrc.cjs'] || ['../.eslintrc.cjs']).

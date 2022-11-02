@@ -1,5 +1,13 @@
 # @astro-aws/adapter
 
+## 0.0.3
+
+### Patch Changes
+
+- [`bc7b57a`](https://github.com/lukeshay/astro-aws/commit/bc7b57a3539e638ecb43ebbfdeee877092db6b81) Thanks [@lukeshay](https://github.com/lukeshay)! - Allow override of certain ESBuild options
+
+- [`d4e13a0`](https://github.com/lukeshay/astro-aws/commit/d4e13a060f30702d50e3cd2d3d076549b6aa4da9) Thanks [@lukeshay](https://github.com/lukeshay)! - Added support for ESM lambda
+
 ## 0.0.2
 
 ### Patch Changes
