@@ -1,3 +1,4 @@
+import type { FunctionUrlOptions } from "aws-cdk-lib/aws-lambda";
 import { FunctionUrlAuthType } from "aws-cdk-lib/aws-lambda";
 import type { Construct } from "constructs";
 import type { DistributionProps } from "aws-cdk-lib/aws-cloudfront";
@@ -10,6 +11,7 @@ import {
 	ResponseHeadersPolicy,
 	ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront";
+import type { HttpOriginProps, S3OriginProps } from "aws-cdk-lib/aws-cloudfront-origins";
 import { HttpOrigin, OriginGroup, S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
 import { CanonicalUserPrincipal, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Fn } from "aws-cdk-lib";
@@ -21,6 +23,9 @@ export type AstroAWSConstructProps = AstroAWSBareConstructProps & {
 	distributionProps?: Omit<DistributionProps, "defaultBehavior"> & {
 		defaultBehavior?: Omit<DistributionProps["defaultBehavior"], "origin">;
 	};
+	lambdaFunctionUrlOptions?: FunctionUrlOptions;
+	lambdaOriginProps?: HttpOriginProps;
+	assetsBucketOriginProps?: S3OriginProps;
 };
 
 /**
@@ -41,7 +46,13 @@ export class AstroAWSConstruct extends AstroAWSBareConstruct {
 			skipDeployment: true,
 		});
 
-		const { distributionProps = {}, skipDeployment } = props;
+		const {
+			distributionProps = {},
+			skipDeployment,
+			lambdaFunctionUrlOptions = {},
+			lambdaOriginProps,
+			assetsBucketOriginProps = {},
+		} = props;
 
 		const originAccessIdentity = new OriginAccessIdentity(this, "CloudfrontOAI", {
 			comment: `OAI for ${id}`,
@@ -58,8 +69,11 @@ export class AstroAWSConstruct extends AstroAWSBareConstruct {
 			}),
 		);
 
-		const lambdaFunctionUrl = this.lambda.addFunctionUrl({ authType: FunctionUrlAuthType.NONE });
-		const lambdaOrigin = new HttpOrigin(Fn.parseDomainName(lambdaFunctionUrl.url));
+		const lambdaFunctionUrl = this.lambda.addFunctionUrl({
+			authType: FunctionUrlAuthType.NONE,
+			...lambdaFunctionUrlOptions,
+		});
+		const lambdaOrigin = new HttpOrigin(Fn.parseDomainName(lambdaFunctionUrl.url), lambdaOriginProps);
 
 		const distribution = new Distribution(this, "Distribution", {
 			...distributionProps,
@@ -83,7 +97,10 @@ export class AstroAWSConstruct extends AstroAWSBareConstruct {
 				viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 				...distributionProps.defaultBehavior,
 				origin: new OriginGroup({
-					fallbackOrigin: new S3Origin(this.assetsBucket, { originAccessIdentity }),
+					fallbackOrigin: new S3Origin(this.assetsBucket, {
+						...assetsBucketOriginProps,
+						originAccessIdentity,
+					}),
 					fallbackStatusCodes: [404],
 					primaryOrigin: lambdaOrigin,
 				}),
