@@ -30,10 +30,10 @@ export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 		hooks: {
 			"astro:config:setup": ({ config, updateConfig }) => {
 				updateConfig({
-					outDir: getBuildPath(config.root),
+					outDir: getBuildPath(config.outDir),
 					build: {
-						client: getBuildPath(config.root, "./client/"),
-						server: getBuildPath(config.root, "./server/"),
+						client: getBuildPath(config.outDir, "./client/"),
+						server: getBuildPath(config.outDir, "./server/"),
 						serverEntry: "entry.mjs",
 					},
 				});
@@ -50,14 +50,14 @@ export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 			},
 			"astro:build:done": async ({ routes }) => {
 				await writeFile(
-					fileURLToPath(getBuildPath(astroConfig.root, "./routes.json")),
+					fileURLToPath(getBuildPath(astroConfig.outDir, "./routes.json")),
 					JSON.stringify(routes, undefined, 2),
 				);
 
 				const invalidationPaths = routes.map((route) => route.route);
 
 				await writeFile(
-					fileURLToPath(getBuildPath(astroConfig.root, "./invalidationPaths.json")),
+					fileURLToPath(getBuildPath(astroConfig.outDir, "./invalidationPaths.json")),
 					JSON.stringify(invalidationPaths, undefined, 2),
 				);
 
