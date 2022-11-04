@@ -1,5 +1,11 @@
 # @astro-aws/constructs
 
+## 0.0.3
+
+### Patch Changes
+
+- [`dee988a`](https://github.com/lukeshay/astro-aws/commit/dee988a8c32edc15a62a17e3a053b9a333bf2f80) Thanks [@lukeshay](https://github.com/lukeshay)! - Allow more configuration of resources
+
 ## 0.0.2
 
 ### Patch Changes

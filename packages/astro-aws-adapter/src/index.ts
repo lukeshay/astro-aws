@@ -8,11 +8,7 @@ import { bundleEntry } from "./shared.js";
 import { ADAPTER_NAME } from "./constants.js";
 import { warn } from "./log.js";
 
-const getBuildPath = (root: URL | string, path?: string) => {
-	const distURL = new URL("dist/", root);
-
-	return path ? new URL(path, distURL) : distURL;
-};
+const getBuildPath = (root: URL | string, path?: string) => new URL(path ?? ".", root);
 
 export const getAdapter = (args: Args = {}): AstroAdapter => ({
 	args,
@@ -30,7 +26,6 @@ export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 		hooks: {
 			"astro:config:setup": ({ config, updateConfig }) => {
 				updateConfig({
-					outDir: getBuildPath(config.outDir),
 					build: {
 						client: getBuildPath(config.outDir, "./client/"),
 						server: getBuildPath(config.outDir, "./server/"),

@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.0.4
+
+### Patch Changes
+
+- [`36ef4ce`](https://github.com/lukeshay/astro-aws/commit/36ef4ce54a834509c53f2ba5f768c66e974d21a4) Thanks [@lukeshay](https://github.com/lukeshay)! - User outDir instead of root
+
 ## 0.0.3
 
 ### Patch Changes
