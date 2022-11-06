@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.0.6-next.5
+
+### Patch Changes
+
+- Use correct event and response
+
 ## 0.0.6-next.4
 
 ### Patch Changes

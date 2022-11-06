@@ -4,7 +4,8 @@
 		"hungry-grapes-boil",
 		"mighty-countries-roll",
 		"nervous-actors-beg",
-		"twenty-ducks-heal"
+		"twenty-ducks-heal",
+		"yellow-parrots-battle"
 	],
 	"initialVersions": {
 		"@astro-aws/adapter": "0.0.5",

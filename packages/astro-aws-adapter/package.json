@@ -1,6 +1,6 @@
 {
 	"name": "@astro-aws/adapter",
-	"version": "0.0.6-next.4",
+	"version": "0.0.6-next.5",
 	"keywords": [
 		"astro-adapter",
 		"aws",

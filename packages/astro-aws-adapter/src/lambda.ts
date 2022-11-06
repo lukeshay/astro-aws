@@ -1,5 +1,3 @@
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any */
 import { Buffer } from "node:buffer";
 
 import { polyfill } from "@astrojs/webapi";
@@ -22,12 +20,24 @@ type Event = {
 	routeKey: string;
 	rawPath: string;
 	rawQueryString: string;
+	cookies?: string[];
 	headers: Record<string, string>;
-	body?: string;
 	queryStringParameters?: Record<string, string>;
 	requestContext: {
 		accountId: string;
 		apiId: string;
+		authentication?: string;
+		authorizer?: {
+			iam: {
+				accessKey: string;
+				accountId: string;
+				callerId: string;
+				cognitoIdentity?: string;
+				principalOrgId?: string;
+				userArn: string;
+				userId: string;
+			};
+		};
 		domainName: string;
 		domainPrefix: string;
 		http: {
@@ -43,7 +53,18 @@ type Event = {
 		time: string;
 		timeEpoch: number;
 	};
+	body?: string;
+	pathParameters?: string;
 	isBase64Encoded: boolean;
+	stageVariables?: string;
+};
+
+type FnResponse = {
+	statusCode: number;
+	headers?: Record<string, string>;
+	body: string;
+	cookies?: string[];
+	isBase64Encoded?: boolean;
 };
 
 export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args) => {
@@ -82,22 +103,26 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 		...(binaryMediaTypes ?? []),
 	]);
 
-	const handler: Handler<Event> = async (event) => {
+	const handler: Handler<Event, FnResponse> = async (event) => {
 		console.log("request", JSON.stringify(event, undefined, 2));
 
 		const {
 			body: requestBody,
+			cookies,
+			headers: eventHeaders,
 			isBase64Encoded,
-			rawPath,
 			queryStringParameters = {},
+			rawPath,
 			requestContext: {
 				domainName,
 				http: { method },
 			},
-			headers: eventHeaders,
 		} = event;
 
 		const headers = new Headers(eventHeaders);
+
+		headers.set("cookies", cookies?.join("; ") ?? "");
+
 		const init: RequestInit = {
 			headers,
 			method,
@@ -145,20 +170,16 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 			responseBody = await response.text();
 		}
 
-		const fnResponse: any = {
+		const fnResponse: FnResponse = {
 			body: responseBody,
+			cookies: [...app.setCookieHeaders(response)],
 			headers: responseHeaders,
 			isBase64Encoded: responseIsBase64Encoded,
 			statusCode: response.status,
 		};
 
-		fnResponse.headers["set-cookie"] = [fnResponse.headers["set-cookie"], ...app.setCookieHeaders(response)]
-			.filter(Boolean)
-			.join("; ");
-
 		console.log("response", JSON.stringify(fnResponse, undefined, 2));
 
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 		return fnResponse;
 	};
 
