@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.0.6-next.2
+
+### Patch Changes
+
+- Fix the multiValueHeaders
+
 ## 0.0.6-next.1
 
 ### Patch Changes

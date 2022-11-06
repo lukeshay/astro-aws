@@ -152,7 +152,10 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 			statusCode: response.status,
 		};
 
-		fnResponse.multiValueHeaders["set-cookie"] = [...app.setCookieHeaders(response)];
+		fnResponse.multiValueHeaders = {
+			...(fnResponse.multiValueHeaders as Record<string, string[]> | undefined),
+			"set-cookie": [...app.setCookieHeaders(response)],
+		};
 
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 		return fnResponse;
