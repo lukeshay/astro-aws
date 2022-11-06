@@ -88,12 +88,14 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 			body: requestBody,
 			isBase64Encoded,
 			rawPath,
+			rawQueryString,
 			requestContext: {
 				domainName,
 				http: { method },
 			},
 			headers: eventHeaders,
 		} = event;
+
 		const headers = new Headers(eventHeaders);
 		const init: RequestInit = {
 			headers,
@@ -106,7 +108,10 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 			init.body = typeof requestBody === "string" ? Buffer.from(requestBody, encoding) : requestBody;
 		}
 
-		const request = new Request(new URL(rawPath, headers.get("referer") ?? `https://${domainName}`), init);
+		const request = new Request(
+			new URL(`${rawPath}?${rawQueryString}`, headers.get("referer") ?? `https://${domainName}`),
+			init,
+		);
 		const routeData = app.match(request, { matchNotFound: true });
 
 		if (!routeData) {
