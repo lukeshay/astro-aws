@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.0.5
+
+### Patch Changes
+
+- [`b323e36`](https://github.com/lukeshay/astro-aws/commit/b323e366601f101a45f84e1a3a41179b4e393655) Thanks [@lukeshay](https://github.com/lukeshay)! - Pass through query strings
+
 ## 0.0.4
 
 ### Patch Changes
