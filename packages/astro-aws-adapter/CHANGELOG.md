@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.0.6-next.1
+
+### Patch Changes
+
+- More simple set cookie header
+
 ## 0.0.6-next.0
 
 ### Patch Changes
