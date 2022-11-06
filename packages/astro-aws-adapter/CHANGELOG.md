@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.0.6-next.0
+
+### Patch Changes
+
+- Loop through query params
+
 ## 0.0.5
 
 ### Patch Changes

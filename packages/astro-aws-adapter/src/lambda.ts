@@ -24,6 +24,7 @@ type Event = {
 	rawQueryString: string;
 	headers: Record<string, string>;
 	body?: string;
+	queryStringParameters?: Record<string, string>;
 	requestContext: {
 		accountId: string;
 		apiId: string;
@@ -88,7 +89,7 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 			body: requestBody,
 			isBase64Encoded,
 			rawPath,
-			rawQueryString,
+			queryStringParameters = {},
 			requestContext: {
 				domainName,
 				http: { method },
@@ -100,6 +101,7 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 		const init: RequestInit = {
 			headers,
 			method,
+			referrer: headers.get("referer") ?? `https://${domainName}`,
 		};
 
 		if (method !== "GET" && method !== "HEAD") {
@@ -108,10 +110,13 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 			init.body = typeof requestBody === "string" ? Buffer.from(requestBody, encoding) : requestBody;
 		}
 
-		const request = new Request(
-			new URL(`${rawPath}?${rawQueryString}`, headers.get("referer") ?? `https://${domainName}`),
-			init,
-		);
+		const url = new URL(rawPath, init.referrer);
+
+		Object.entries(queryStringParameters).forEach(([key, value]) => {
+			url.searchParams.set(key, value);
+		});
+
+		const request = new Request(url, init);
 		const routeData = app.match(request, { matchNotFound: true });
 
 		if (!routeData) {
