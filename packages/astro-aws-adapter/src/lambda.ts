@@ -83,7 +83,7 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 	]);
 
 	const handler: Handler<Event> = async (event) => {
-		console.log(JSON.stringify(event, undefined, 2));
+		console.log("request", JSON.stringify(event, undefined, 2));
 
 		const {
 			body: requestBody,
@@ -156,6 +156,8 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 			...(fnResponse.multiValueHeaders as Record<string, string[]> | undefined),
 			"set-cookie": [...app.setCookieHeaders(response)],
 		};
+
+		console.log("response", JSON.stringify(fnResponse, undefined, 2));
 
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 		return fnResponse;

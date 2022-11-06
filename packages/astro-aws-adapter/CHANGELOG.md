@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.0.6-next.3
+
+### Patch Changes
+
+- Log response
+
 ## 0.0.6-next.2
 
 ### Patch Changes
