@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.0.6-next.4
+
+### Patch Changes
+
+- Use regular set cookie header
+
 ## 0.0.6-next.3
 
 ### Patch Changes

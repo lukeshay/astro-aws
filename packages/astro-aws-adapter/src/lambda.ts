@@ -152,10 +152,9 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 			statusCode: response.status,
 		};
 
-		fnResponse.multiValueHeaders = {
-			...(fnResponse.multiValueHeaders as Record<string, string[]> | undefined),
-			"set-cookie": [...app.setCookieHeaders(response)],
-		};
+		fnResponse.headers["set-cookie"] = [fnResponse.headers["set-cookie"], ...app.setCookieHeaders(response)]
+			.filter(Boolean)
+			.join("; ");
 
 		console.log("response", JSON.stringify(fnResponse, undefined, 2));
 

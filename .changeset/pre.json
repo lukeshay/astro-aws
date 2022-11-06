@@ -1,5 +1,11 @@
 {
-	"changesets": ["forty-squids-clean", "hungry-grapes-boil", "mighty-countries-roll", "twenty-ducks-heal"],
+	"changesets": [
+		"forty-squids-clean",
+		"hungry-grapes-boil",
+		"mighty-countries-roll",
+		"nervous-actors-beg",
+		"twenty-ducks-heal"
+	],
 	"initialVersions": {
 		"@astro-aws/adapter": "0.0.5",
 		"@astro-aws/constructs": "0.0.3",
