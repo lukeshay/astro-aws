@@ -1,5 +1,11 @@
 # @astro-aws/constructs
 
+## 0.0.4-next.0
+
+### Patch Changes
+
+- Allow configuration of /api behavior
+
 ## 0.0.3
 
 ### Patch Changes

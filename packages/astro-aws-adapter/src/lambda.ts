@@ -1,7 +1,7 @@
 import { Buffer } from "node:buffer";
 
 import { polyfill } from "@astrojs/webapi";
-import type { Handler } from "aws-lambda";
+import type { APIGatewayProxyHandlerV2 } from "aws-lambda";
 import type { SSRManifest } from "astro";
 import { App } from "astro/app";
 
@@ -14,58 +14,6 @@ polyfill(globalThis, {
 const parseContentType = (header?: string) => header?.split(";")[0] ?? "";
 
 const clientAddressSymbol = Symbol.for("astro.clientAddress");
-
-type Event = {
-	version: string;
-	routeKey: string;
-	rawPath: string;
-	rawQueryString: string;
-	cookies?: string[];
-	headers: Record<string, string>;
-	queryStringParameters?: Record<string, string>;
-	requestContext: {
-		accountId: string;
-		apiId: string;
-		authentication?: string;
-		authorizer?: {
-			iam: {
-				accessKey: string;
-				accountId: string;
-				callerId: string;
-				cognitoIdentity?: string;
-				principalOrgId?: string;
-				userArn: string;
-				userId: string;
-			};
-		};
-		domainName: string;
-		domainPrefix: string;
-		http: {
-			method: string;
-			path: string;
-			protocol: string;
-			sourceIp: string;
-			userAgent: string;
-		};
-		requestId: string;
-		routeKey: string;
-		stage: string;
-		time: string;
-		timeEpoch: number;
-	};
-	body?: string;
-	pathParameters?: string;
-	isBase64Encoded: boolean;
-	stageVariables?: string;
-};
-
-type FnResponse = {
-	statusCode: number;
-	headers?: Record<string, string>;
-	body: string;
-	cookies?: string[];
-	isBase64Encoded?: boolean;
-};
 
 export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args) => {
 	const app = new App(manifest);
@@ -103,7 +51,7 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 		...(binaryMediaTypes ?? []),
 	]);
 
-	const handler: Handler<Event, FnResponse> = async (event) => {
+	const handler: APIGatewayProxyHandlerV2 = async (event) => {
 		console.log("request", JSON.stringify(event, undefined, 2));
 
 		const {
@@ -119,26 +67,28 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 			},
 		} = event;
 
-		const headers = new Headers(eventHeaders);
+		const headers = new Headers(eventHeaders as HeadersInit);
 
 		headers.set("cookies", cookies?.join("; ") ?? "");
 
 		const init: RequestInit = {
 			headers,
 			method,
-			referrer: headers.get("referer") ?? `https://${domainName}`,
+			referrer: headers.get("referrer") ?? `https://${domainName}`,
 		};
 
-		if (method !== "GET" && method !== "HEAD") {
+		if (method !== "GET" && method !== "HEAD" && requestBody) {
 			const encoding = isBase64Encoded ? "base64" : "utf-8";
 
-			init.body = typeof requestBody === "string" ? Buffer.from(requestBody, encoding) : requestBody;
+			init.body = Buffer.from(requestBody, encoding);
 		}
 
 		const url = new URL(rawPath, init.referrer);
 
 		Object.entries(queryStringParameters).forEach(([key, value]) => {
-			url.searchParams.set(key, value);
+			if (value) {
+				url.searchParams.set(key, value);
+			}
 		});
 
 		const request = new Request(url, init);
@@ -170,7 +120,7 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 			responseBody = await response.text();
 		}
 
-		const fnResponse: FnResponse = {
+		const fnResponse = {
 			body: responseBody,
 			cookies: [...app.setCookieHeaders(response)],
 			headers: responseHeaders,
