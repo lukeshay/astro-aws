@@ -15,7 +15,10 @@ const parseContentType = (header?: string) => header?.split(";")[0] ?? "";
 
 const clientAddressSymbol = Symbol.for("astro.clientAddress");
 
-export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args) => {
+export const createExports = (
+	manifest: SSRManifest,
+	{ binaryMediaTypes, logFnResponse, logRequest, logResponse, logFnRequest }: Args,
+) => {
 	const app = new App(manifest);
 
 	const knownBinaryMediaTypes = new Set([
@@ -52,7 +55,7 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 	]);
 
 	const handler: APIGatewayProxyHandlerV2 = async (event) => {
-		console.log("request", JSON.stringify(event, undefined, 2));
+		if (logFnRequest) console.log("function request", JSON.stringify(event, undefined, 2));
 
 		const {
 			body: requestBody,
@@ -92,6 +95,9 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 		});
 
 		const request = new Request(url, init);
+
+		if (logRequest) console.log("request", JSON.stringify(request, undefined, 2));
+
 		const routeData = app.match(request, { matchNotFound: true });
 
 		if (!routeData) {
@@ -109,6 +115,8 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 		const responseHeaders = Object.fromEntries(response.headers.entries());
 		const responseContentType = parseContentType(responseHeaders["content-type"]);
 		const responseIsBase64Encoded = knownBinaryMediaTypes.has(responseContentType);
+
+		if (logResponse) console.log("response", JSON.stringify(response, undefined, 2));
 
 		let responseBody: string;
 
@@ -128,7 +136,7 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 			statusCode: response.status,
 		};
 
-		console.log("response", JSON.stringify(fnResponse, undefined, 2));
+		if (logFnResponse) console.log("function response", JSON.stringify(fnResponse, undefined, 2));
 
 		return fnResponse;
 	};

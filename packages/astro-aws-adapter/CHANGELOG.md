@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.0.6-next.6
+
+### Patch Changes
+
+- Require logging to be enabled
+
 ## 0.0.6-next.5
 
 ### Patch Changes
