@@ -118,15 +118,8 @@ export const createExports = (
 
 		if (logResponse) console.log("response", JSON.stringify(response, undefined, 2));
 
-		let responseBody: string;
-
-		if (responseIsBase64Encoded) {
-			const ab = await response.arrayBuffer();
-
-			responseBody = Buffer.from(ab).toString("base64");
-		} else {
-			responseBody = await response.text();
-		}
+		const ab = await response.arrayBuffer();
+		const responseBody = Buffer.from(ab).toString(responseIsBase64Encoded ? "base64" : "utf-8");
 
 		const fnResponse = {
 			body: responseBody,

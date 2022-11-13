@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.0.6-next.7
+
+### Patch Changes
+
+- Use array buffer
+
 ## 0.0.6-next.6
 
 ### Patch Changes
