@@ -12,7 +12,5 @@ echo "AWS_ARGS: ${AWS_ARGS}"
 echo "AWS_ACCOUNT: ${AWS_ACCOUNT}"
 echo "AWS_REGION: ${AWS_REGION}"
 
-yarn build -r
-yarn synth
-yarn deploy "AstroAWSStack-${ENVIRONMENT}-${AWS_ACCOUNT}-${AWS_REGION}" ${AWS_ARGS}
+yarn cdk deploy --require-approval never "AstroAWSStack-${ENVIRONMENT}-${AWS_ACCOUNT}-${AWS_REGION}" ${AWS_ARGS}
 ./scripts/invalidate-cloudfront-cache.sh "${@}"

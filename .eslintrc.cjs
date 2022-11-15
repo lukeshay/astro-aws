@@ -4,7 +4,7 @@ require("@rushstack/eslint-patch/modern-module-resolution");
  * @type {import("eslint").Linter.Config}
  */
 module.exports = {
-	extends: "@lshay/eslint-config",
+	extends: ["@lshay/eslint-config"],
 	root: true,
 	rules: {
 		"import/no-useless-path-segments": "off",

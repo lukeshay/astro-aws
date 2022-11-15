@@ -6,6 +6,4 @@ export type Args = {
 	esm?: boolean;
 	logFnRequest?: boolean;
 	logFnResponse?: boolean;
-	logRequest?: boolean;
-	logResponse?: boolean;
 };

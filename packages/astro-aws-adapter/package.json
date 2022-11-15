@@ -42,16 +42,16 @@
 	},
 	"dependencies": {
 		"@astrojs/webapi": "^1.1.1",
-		"astro": "^1.6.2",
-		"esbuild": "^0.15.12",
-		"merge-anything": "^5.0.4"
+		"astro": "^1.6.7",
+		"esbuild": "^0.15.13",
+		"merge-anything": "^5.1.1"
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
 		"@types/aws-lambda": "^8.10.108",
-		"@types/node": "^14.0.0",
+		"@types/node": "^18.11.9",
 		"aws-lambda": "^1.0.7",
-		"eslint": "^8.26.0",
+		"eslint": "^8.27.0",
 		"prettier": "^2.7.1",
 		"typescript": "^4.8.4"
 	},

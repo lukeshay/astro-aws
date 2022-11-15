@@ -15,10 +15,7 @@ const parseContentType = (header?: string) => header?.split(";")[0] ?? "";
 
 const clientAddressSymbol = Symbol.for("astro.clientAddress");
 
-export const createExports = (
-	manifest: SSRManifest,
-	{ binaryMediaTypes, logFnResponse, logRequest, logResponse, logFnRequest }: Args,
-) => {
+export const createExports = (manifest: SSRManifest, { binaryMediaTypes, logFnResponse, logFnRequest }: Args) => {
 	const app = new App(manifest);
 
 	const knownBinaryMediaTypes = new Set([
@@ -95,9 +92,6 @@ export const createExports = (
 		});
 
 		const request = new Request(url, init);
-
-		if (logRequest) console.log("request", JSON.stringify(request, undefined, 2));
-
 		const routeData = app.match(request, { matchNotFound: true });
 
 		if (!routeData) {
@@ -111,13 +105,10 @@ export const createExports = (
 
 		Reflect.set(request, clientAddressSymbol, ip);
 
-		const response: Response = await app.render(request, routeData);
+		const response = await app.render(request, routeData);
 		const responseHeaders = Object.fromEntries(response.headers.entries());
 		const responseContentType = parseContentType(responseHeaders["content-type"]);
 		const responseIsBase64Encoded = knownBinaryMediaTypes.has(responseContentType);
-
-		if (logResponse) console.log("response", JSON.stringify(response, undefined, 2));
-
 		const ab = await response.arrayBuffer();
 		const responseBody = Buffer.from(ab).toString(responseIsBase64Encoded ? "base64" : "utf-8");
 
