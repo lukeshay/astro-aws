@@ -5,8 +5,7 @@
 
 .cdk.staging
 .DS_Store
-.env
-.env.production
+.env*
 .netlify
 .turbo/
 cdk.out/
