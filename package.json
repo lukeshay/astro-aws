@@ -15,21 +15,23 @@
 		"scripts"
 	],
 	"scripts": {
-		"build": "turbo run build --filter",
-		"build:all": "turbo run build",
+		"build": "turbo run build",
+		"build:one": "turbo run build --filter",
 		"clear-cache": "rimraf **/.turbo ./pompous",
-		"deploy": "turbo run deploy --filter",
-		"deploy:all": "turbo run deploy",
-		"dev": "turbo run dev --filter",
-		"dev:all": "turbo run dev",
+		"deploy": "turbo run deploy",
+		"deploy:one": "turbo run deploy --filter",
+		"dev": "turbo run dev",
+		"dev:one": "turbo run dev --filter",
 		"lint": "eslint .",
 		"lint:fix": "yarn lint --fix",
 		"prettier": "prettier --check .",
 		"prettier:fix": "yarn prettier --write",
 		"release:cut": "git add . && git commit -m 'new release' && yarn changeset publish && git push && git push --follow-tags",
 		"release:prepare": "yarn build -r && yarn changeset version && yarn prettier:fix",
-		"synth": "turbo run synth --filter",
-		"synth:all": "turbo run synth"
+		"synth": "turbo run synth",
+		"synth:one": "turbo run synth --filter",
+		"test": "turbo run test",
+		"test:one": "turbo run test --filter"
 	},
 	"prettier": "@lshay/prettier-config",
 	"eslintConfig": {

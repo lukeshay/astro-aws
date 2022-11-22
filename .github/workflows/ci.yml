@@ -40,8 +40,12 @@ jobs:
                   node-version: ${{ matrix.node_version }}
                   cache: "yarn"
             - run: yarn install --mode=skip-build
-            - run: yarn build:all
-            - run: yarn test:all
+            - run: yarn build
+            - run: yarn test
             - run: yarn lint
             - run: yarn prettier
-            - run: yarn synth:all
+            - run: yarn synth
+            - uses: actions/upload-artifact@v3
+              with:
+                  name: cdk-templates
+                  path: apps/infra/cdk.out
