@@ -1,6 +1,8 @@
+import { Buffer } from "node:buffer";
+
 import { polyfill } from "@astrojs/webapi";
-import type { Handler } from "aws-lambda";
-import { SSRManifest } from "astro";
+import type { APIGatewayProxyHandlerV2 } from "aws-lambda";
+import type { SSRManifest } from "astro";
 import { App } from "astro/app";
 
 import type { Args } from "./args.js";
@@ -9,13 +11,11 @@ polyfill(globalThis, {
 	exclude: "window document",
 });
 
-function parseContentType(header?: string) {
-	return header?.split(";")[0] ?? "";
-}
+const parseContentType = (header?: string) => header?.split(";")[0] ?? "";
 
 const clientAddressSymbol = Symbol.for("astro.clientAddress");
 
-export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args) => {
+export const createExports = (manifest: SSRManifest, { binaryMediaTypes, logFnResponse, logFnRequest }: Args) => {
 	const app = new App(manifest);
 
 	const knownBinaryMediaTypes = new Set([
@@ -51,92 +51,76 @@ export const createExports = (manifest: SSRManifest, { binaryMediaTypes }: Args)
 		...(binaryMediaTypes ?? []),
 	]);
 
-	const handler: Handler = async (event) => {
-		console.log(JSON.stringify(event, null, 2));
+	const handler: APIGatewayProxyHandlerV2 = async (event) => {
+		if (logFnRequest) console.log("function request", JSON.stringify(event, undefined, 2));
 
 		const {
-			httpMethod,
-			headers,
 			body: requestBody,
+			cookies,
+			headers: eventHeaders,
 			isBase64Encoded,
+			queryStringParameters = {},
 			rawPath,
-			requestContext: { domainName },
+			requestContext: {
+				domainName,
+				http: { method },
+			},
 		} = event;
 
+		const headers = new Headers(eventHeaders as HeadersInit);
+
+		headers.set("cookies", cookies?.join("; ") ?? "");
+
 		const init: RequestInit = {
-			method: httpMethod,
-			headers: new Headers(headers as any),
+			headers,
+			method,
+			referrer: headers.get("referrer") ?? `https://${domainName}`,
 		};
 
-		if (httpMethod !== "GET" && httpMethod !== "HEAD") {
+		if (method !== "GET" && method !== "HEAD" && requestBody) {
 			const encoding = isBase64Encoded ? "base64" : "utf-8";
-			init.body = typeof requestBody === "string" ? Buffer.from(requestBody, encoding) : requestBody;
+
+			init.body = Buffer.from(requestBody, encoding);
 		}
 
-		const request = new Request(new URL(rawPath, `https://${domainName ?? headers["host"] ?? "fake.com"}`), init);
+		const url = new URL(rawPath, init.referrer);
 
-		let routeData = app.match(request, { matchNotFound: true });
+		Object.entries(queryStringParameters).forEach(([key, value]) => {
+			if (value) {
+				url.searchParams.set(key, value);
+			}
+		});
+
+		const request = new Request(url, init);
+		const routeData = app.match(request, { matchNotFound: true });
 
 		if (!routeData) {
 			return {
-				statusCode: 404,
 				body: "Not found",
+				statusCode: 404,
 			};
 		}
 
-		const ip = headers["x-forwarded-for"];
+		const ip = headers.get("x-forwarded-for");
+
 		Reflect.set(request, clientAddressSymbol, ip);
 
-		const response: Response = await app.render(request, routeData);
+		const response = await app.render(request, routeData);
 		const responseHeaders = Object.fromEntries(response.headers.entries());
-
 		const responseContentType = parseContentType(responseHeaders["content-type"]);
 		const responseIsBase64Encoded = knownBinaryMediaTypes.has(responseContentType);
+		const ab = await response.arrayBuffer();
+		const responseBody = Buffer.from(ab).toString(responseIsBase64Encoded ? "base64" : "utf-8");
 
-		let responseBody: string;
-		if (responseIsBase64Encoded) {
-			const ab = await response.arrayBuffer();
-			responseBody = Buffer.from(ab).toString("base64");
-		} else {
-			responseBody = await response.text();
-		}
-
-		const fnResponse: any = {
-			statusCode: response.status,
-			headers: responseHeaders,
+		const fnResponse = {
 			body: responseBody,
+			cookies: [...app.setCookieHeaders(response)],
+			headers: responseHeaders,
 			isBase64Encoded: responseIsBase64Encoded,
+			statusCode: response.status,
 		};
 
-		// Special-case set-cookie which has to be set an different way :/
-		// The fetch API does not have a way to get multiples of a single header, but instead concatenates
-		// them. There are non-standard ways to do it, and node-fetch gives us headers.raw()
-		// See https://github.com/whatwg/fetch/issues/973 for discussion
-		if (response.headers.has("set-cookie") && "raw" in response.headers) {
-			// Node fetch allows you to get the raw headers, which includes multiples of the same type.
-			// This is needed because Set-Cookie *must* be called for each cookie, and can't be
-			// concatenated together.
-			type HeadersWithRaw = Headers & {
-				raw: () => Record<string, string[]>;
-			};
-
-			const rawPacked = (response.headers as HeadersWithRaw).raw();
-			if ("set-cookie" in rawPacked) {
-				fnResponse.multiValueHeaders = {
-					"set-cookie": rawPacked["set-cookie"],
-				};
-			}
-		}
-
-		// Apply cookies set via Astro.cookies.set/delete
-		if (app.setCookieHeaders) {
-			const setCookieHeaders = Array.from(app.setCookieHeaders(response));
-			fnResponse.multiValueHeaders = fnResponse.multiValueHeaders || {};
-			if (!fnResponse.multiValueHeaders["set-cookie"]) {
-				fnResponse.multiValueHeaders["set-cookie"] = [];
-			}
-			fnResponse.multiValueHeaders["set-cookie"].push(...setCookieHeaders);
-		}
+		if (logFnResponse) console.log("function response", JSON.stringify(fnResponse, undefined, 2));
 
 		return fnResponse;
 	};

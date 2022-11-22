@@ -1,0 +1,121 @@
+import type { FunctionUrlOptions } from "aws-cdk-lib/aws-lambda";
+import { FunctionUrlAuthType } from "aws-cdk-lib/aws-lambda";
+import type { Construct } from "constructs";
+import type { BehaviorOptions, DistributionProps } from "aws-cdk-lib/aws-cloudfront";
+import {
+	AllowedMethods,
+	CachePolicy,
+	Distribution,
+	OriginAccessIdentity,
+	OriginRequestPolicy,
+	ResponseHeadersPolicy,
+	ViewerProtocolPolicy,
+} from "aws-cdk-lib/aws-cloudfront";
+import type { HttpOriginProps, S3OriginProps } from "aws-cdk-lib/aws-cloudfront-origins";
+import { HttpOrigin, OriginGroup, S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
+import { CanonicalUserPrincipal, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Fn } from "aws-cdk-lib";
+
+import { AstroAWSBareConstruct } from "./astro-aws-bare-construct.js";
+import type { AstroAWSBareConstructProps } from "./astro-aws-bare-construct.js";
+
+export type AstroAWSConstructProps = AstroAWSBareConstructProps & {
+	distributionProps?: Omit<DistributionProps, "defaultBehavior"> & {
+		defaultBehavior?: Omit<DistributionProps["defaultBehavior"], "origin">;
+		apiBehavior?: Omit<BehaviorOptions, "origin">;
+	};
+	lambdaFunctionUrlOptions?: FunctionUrlOptions;
+	lambdaOriginProps?: HttpOriginProps;
+	assetsBucketOriginProps?: S3OriginProps;
+};
+
+/**
+ * Constructs the required AWS resources to deploy an Astro website. The resources are:
+ * - S3 bucket to host the website assets
+ * - Lambda function to handle the requests
+ * - CloudFront distribution to serve the website
+ * - Origin access identity to restrict access to the S3 bucket
+ *
+ * This works by routing requests to the Lambda function. If the Lambda function returns a 404 response, the Cloudfront distribution falls back to the S3 bucket.
+ */
+export class AstroAWSConstruct extends AstroAWSBareConstruct {
+	public readonly distribution: Distribution;
+
+	public constructor(scope: Construct, id: string, props: AstroAWSConstructProps) {
+		super(scope, id, {
+			...props,
+			skipDeployment: true,
+		});
+
+		const {
+			distributionProps = {},
+			skipDeployment,
+			lambdaFunctionUrlOptions = {},
+			lambdaOriginProps,
+			assetsBucketOriginProps = {},
+		} = props;
+
+		const originAccessIdentity = new OriginAccessIdentity(this, "CloudfrontOAI", {
+			comment: `OAI for ${id}`,
+		});
+
+		this.assetsBucket.addToResourcePolicy(
+			new PolicyStatement({
+				actions: ["s3:GetObject"],
+				principals: [
+					new CanonicalUserPrincipal(originAccessIdentity.cloudFrontOriginAccessIdentityS3CanonicalUserId)
+						.grantPrincipal,
+				],
+				resources: [this.assetsBucket.arnForObjects("*")],
+			}),
+		);
+
+		const lambdaFunctionUrl = this.lambda.addFunctionUrl({
+			authType: FunctionUrlAuthType.NONE,
+			...lambdaFunctionUrlOptions,
+		});
+		const lambdaOrigin = new HttpOrigin(Fn.parseDomainName(lambdaFunctionUrl.url), lambdaOriginProps);
+
+		const distribution = new Distribution(this, "Distribution", {
+			...distributionProps,
+			additionalBehaviors: {
+				"/api/*": {
+					allowedMethods: AllowedMethods.ALLOW_ALL,
+					compress: true,
+					origin: lambdaOrigin,
+					originRequestPolicy: OriginRequestPolicy.USER_AGENT_REFERER_HEADERS,
+					responseHeadersPolicy: ResponseHeadersPolicy.CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT_AND_SECURITY_HEADERS,
+					viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+					...distributionProps.apiBehavior,
+				},
+				...distributionProps.additionalBehaviors,
+			},
+			defaultBehavior: {
+				allowedMethods: AllowedMethods.ALLOW_GET_HEAD,
+				cachePolicy: CachePolicy.CACHING_OPTIMIZED,
+				compress: true,
+				originRequestPolicy: OriginRequestPolicy.USER_AGENT_REFERER_HEADERS,
+				responseHeadersPolicy: ResponseHeadersPolicy.CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT_AND_SECURITY_HEADERS,
+				viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+				...distributionProps.defaultBehavior,
+				origin: new OriginGroup({
+					fallbackOrigin: new S3Origin(this.assetsBucket, {
+						...assetsBucketOriginProps,
+						originAccessIdentity,
+					}),
+					fallbackStatusCodes: [404],
+					primaryOrigin: lambdaOrigin,
+				}),
+			},
+		});
+
+		this.distribution = distribution;
+
+		if (!skipDeployment) {
+			this.createBucketDeployment({
+				distribution,
+				distributionPaths: ["/*"],
+			});
+		}
+	}
+}

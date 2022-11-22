@@ -1,0 +1,51 @@
+{
+	"extensions": {
+		"recommendations": [
+			"astro-build.astro-vscode",
+			"arcanis.vscode-zipfs",
+			"dbaeumer.vscode-eslint",
+			"esbenp.prettier-vscode"
+		],
+		"unwantedRecommendations": []
+	},
+	"folders": [
+		{
+			"path": ".",
+			"name": "root"
+		},
+		{
+			"path": "apps/infra",
+			"name": "🚀 @astro-aws/infra"
+		},
+		{
+			"path": "apps/www",
+			"name": "🚀 @astro-aws/www"
+		},
+		{
+			"path": "packages/astro-aws-adapter",
+			"name": "📦 @astro-aws/adapter"
+		},
+		{
+			"path": "packages/astro-aws-constructs",
+			"name": "📦 @astro-aws/constructs"
+		},
+		{
+			"path": "scripts",
+			"name": "📜 @astro-aws/scripts"
+		}
+	],
+	"settings": {
+		"cSpell.words": ["astro"],
+		"eslint.nodePath": ".yarn/sdks",
+		"files.associations": {
+			"*.mdx": "markdown"
+		},
+		"prettier.prettierPath": ".yarn/sdks/prettier/index.js",
+		"search.exclude": {
+			"**/.yarn": true,
+			"**/.pnp.*": true
+		},
+		"typescript.enablePromptUseWorkspaceTsdk": true,
+		"typescript.tsdk": ".yarn/sdks/typescript/lib"
+	}
+}

@@ -1,6 +1,8 @@
 {
 	"name": "@astro-aws/www",
+	"version": "0.0.0",
 	"private": true,
+	"homepage": "https://astro-aws.lshay.dev/",
 	"repository": {
 		"type": "git",
 		"url": "ssh://git@github.com/lukeshay/astro-aws.git",
@@ -17,7 +19,6 @@
 		"check": "astro check && tsc",
 		"clean": "rimraf dist",
 		"dev": "astro dev",
-		"package": "zip -j dist/lambda.zip dist/lambda/*",
 		"preview": "astro preview",
 		"release": "yarn clean && yarn build && yarn package",
 		"start": "astro dev"
@@ -29,34 +30,41 @@
 		"root": false
 	},
 	"dependencies": {
-		"@algolia/client-search": "^4.13.1",
+		"@algolia/client-search": "^4.14.2",
 		"@astro-aws/adapter": "workspace:^",
-		"@astrojs/mdx": "^0.11.4",
-		"@astrojs/netlify": "^1.2.0",
+		"@astrojs/mdx": "^0.11.6",
+		"@astrojs/netlify": "^1.2.1",
 		"@astrojs/preact": "^1.2.0",
-		"@astrojs/react": "^1.2.1",
-		"@astrojs/tailwind": "^2.1.1",
-		"@docsearch/css": "^3.1.0",
-		"@docsearch/react": "^3.1.0",
-		"@heroicons/react": "^2.0.12",
-		"@types/node": "^16.0.0",
-		"@types/react": "^17.0.45",
-		"@types/react-dom": "^18.0.0",
-		"astro": "^1.5.2",
+		"@astrojs/react": "^1.2.2",
+		"@astrojs/sitemap": "^1.0.0",
+		"@astrojs/tailwind": "^2.1.2",
+		"@docsearch/css": "^3.3.0",
+		"@docsearch/react": "^3.3.0",
+		"@heroicons/react": "^2.0.13",
+		"@types/node": "^18.11.9",
+		"@types/react": "^18.0.25",
+		"@types/react-dom": "^18.0.8",
+		"astro": "^1.6.7",
 		"astro-link": "^1.1.1",
 		"astro-seo": "^0.6.0",
-		"daisyui": "^2.33.0",
-		"preact": "^10.7.3",
-		"react": "^18.1.0",
-		"react-dom": "^18.1.0",
+		"autoprefixer": "^10.4.13",
+		"classnames": "^2.3.2",
+		"daisyui": "^2.40.1",
+		"postcss": "^8.4.19",
+		"preact": "^10.11.3",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"remark-toc": "^8.0.1",
 		"rimraf": "^3.0.2",
-		"tailwindcss": "^3.0.24"
+		"rollup": "^3.3.0",
+		"sass": "^1.56.1",
+		"tailwindcss": "^3.2.4"
 	},
 	"devDependencies": {
-		"eslint": "^8.26.0",
+		"eslint": "^8.27.0",
 		"prettier": "^2.7.1"
 	},
 	"engines": {
-		"node": ">=16.0.0"
+		"node": "14.x || 16.x"
 	}
 }

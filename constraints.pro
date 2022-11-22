@@ -30,7 +30,7 @@ gen_enforced_dependency(WorkspaceCwd, DependencyIdent, 'workspace:^', Dependency
 
 % This rule will enforce that all packages must have an correct engines.node field
 % Keep in sync with the range inside packages/yarnpkg-cli/sources/main.ts
-gen_enforced_field(WorkspaceCwd, 'engines.node', '>=16.0.0').
+gen_enforced_field(WorkspaceCwd, 'engines.node', '14.x || 16.x').
 
 % Required to make the package work with the GitHub Package Registry
 gen_enforced_field(WorkspaceCwd, 'repository.type', 'git').
@@ -38,7 +38,6 @@ gen_enforced_field(WorkspaceCwd, 'repository.url', 'ssh://git@github.com/lukesha
 gen_enforced_field(WorkspaceCwd, 'repository.directory', WorkspaceCwd).
 
 % Validate other fields
+gen_enforced_field(WorkspaceCwd, 'homepage', 'https://astro-aws.lshay.dev/').
 gen_enforced_field(WorkspaceCwd, 'license', 'MIT').
-gen_enforced_field(WorkspaceCwd, 'devDependencies.prettier').
-gen_enforced_field(WorkspaceCwd, 'devDependencies.eslint').
-gen_enforced_field(WorkspaceCwd, 'eslintConfig.extends', ['../../.eslintrc.cjs']).
+gen_enforced_field(WorkspaceCwd, 'eslintConfig.extends', ['../../.eslintrc.cjs'] || ['../.eslintrc.cjs']).

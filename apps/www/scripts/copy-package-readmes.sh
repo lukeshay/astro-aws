@@ -6,11 +6,11 @@ create_frontmatter() {
 	NAME="${1}"
 
 	echo "---"
-  echo "layout: ../../../layouts/DocsLayout.astro"
+	echo "layout: ../../../layouts/DocsLayout.astro"
 	echo "section: Packages"
 	echo "title: \"@astro-aws/${NAME}\""
 	echo "---"
-  echo ""
+	echo ""
 }
 
 copy_readme() {
@@ -28,3 +28,4 @@ copy_readme() {
 }
 
 copy_readme "adapter"
+copy_readme "constructs"

@@ -1,0 +1,62 @@
+---
+import Logo from "../Logo.astro";
+import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+
+export type Link = {
+	text: string;
+	href: string;
+};
+
+// not having parentheses around this is causing build issues
+// prettier-ignore
+export type Sections = (Record<string, { text: string; href: string }[]>);
+
+export type Props = {
+	sections: Sections;
+};
+
+const { sections } = Astro.props;
+
+const chevronClass = "w-5 h-5 pl-2 stroke-[4]";
+---
+
+<div class="fixed inset-y-0 z-50 w-72 py-4 px-10">
+	<Logo />
+	<div class="space-y-4 mt-12">
+		{
+			Object.entries(sections).map(([section, links]) => (
+				<div class="section">
+					<button class="flex flex-row items-center">
+						<h3 class="p-0 font-semibold">{section}</h3>
+						<ChevronDownIcon className={`${chevronClass} chevron-down-icon`} />
+						<ChevronRightIcon className={`hidden ${chevronClass} chevron-right-icon`} />
+					</button>
+					<ul class="menu menu-compact menu-vertical">
+						{links.map(({ href, text }) => (
+							<li class="text-base-content text-sm text-opacity-75">
+								<a href={href} class="-mx-1 p-1">
+									{text}
+								</a>
+							</li>
+						))}
+					</ul>
+				</div>
+			))
+		}
+	</div>
+</div>
+<script>
+	document.querySelectorAll(".section").forEach((section) => {
+		const button = section.querySelector("button")!;
+
+		button.addEventListener("click", () => {
+			const menu = section.querySelector("ul")!;
+			const chevronDown = section.querySelector(".chevron-down-icon")!;
+			const chevronRight = section.querySelector(".chevron-right-icon")!;
+
+			menu.classList.toggle("hidden");
+			chevronDown.classList.toggle("hidden");
+			chevronRight.classList.toggle("hidden");
+		});
+	});
+</script>

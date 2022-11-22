@@ -1,4 +1,6 @@
 ---
+import { Link } from "astro-link";
+import GithubIcon from "../icons/GithubIcon.astro";
 import Logo from "../Logo.astro";
 
 export type Props = {
@@ -11,7 +13,9 @@ const { links, showLogo = false } = Astro.props;
 const wrapperClass = showLogo ? "justify-between" : "";
 ---
 
-<div class={`${wrapperClass} inset-x-0 w-full fixed top-0 z-20 flex flex-row items-center bg-base-100 bg-opacity-95 backdrop-blur-md pr-8`}>
+<div
+	class={`${wrapperClass} inset-x-0 w-full fixed top-0 z-20 flex flex-row items-center bg-base-100 bg-opacity-95 backdrop-blur-md pr-8`}
+>
 	<div class="flex-1 pl-10">
 		{showLogo && <Logo />}
 	</div>
@@ -19,11 +23,14 @@ const wrapperClass = showLogo ? "justify-between" : "";
 		<nav class="navbar">
 			{
 				links.map(({ href, text }) => (
-					<a class="btn btn-ghost text-base normal-case" href={href}>
+					<Link class="btn btn-ghost text-base normal-case no-underline" href={href}>
 						{text}
-					</a>
+					</Link>
 				))
 			}
+			<Link class="btn btn-ghost text-base normal-case no-underline" href="https://github.com/lukeshay/astro-aws">
+				<GithubIcon />
+			</Link>
 		</nav>
 	</div>
 </div>

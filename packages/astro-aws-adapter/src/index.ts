@@ -8,33 +8,27 @@ import { bundleEntry } from "./shared.js";
 import { ADAPTER_NAME } from "./constants.js";
 import { warn } from "./log.js";
 
-export const getAdapter = (args: Args = {}): AstroAdapter => {
-	return {
-		name: ADAPTER_NAME,
-		serverEntrypoint: `${ADAPTER_NAME}/lambda.js`,
-		exports: ["handler"],
-		args,
-	};
-};
+const getBuildPath = (root: URL | string, path?: string) => new URL(path ?? ".", root);
 
-const getBuildPath = (root: string | URL, path?: string) => {
-	const distURL = new URL("./dist/", root);
-
-	return path ? new URL(path, distURL) : distURL;
-};
+export const getAdapter = (args: Args = {}): AstroAdapter => ({
+	args,
+	exports: ["handler"],
+	name: ADAPTER_NAME,
+	serverEntrypoint: `${ADAPTER_NAME}/lambda.js`,
+});
 
 export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 	let astroConfig: AstroConfig;
 
+	/* eslint-disable sort-keys */
 	return {
 		name: "@astro-aws/adapter",
 		hooks: {
 			"astro:config:setup": ({ config, updateConfig }) => {
 				updateConfig({
-					outDir: getBuildPath(config.root),
 					build: {
-						client: getBuildPath(config.root, "./client/"),
-						server: getBuildPath(config.root, "./server/"),
+						client: getBuildPath(config.outDir, "./client/"),
+						server: getBuildPath(config.outDir, "./server/"),
 						serverEntry: "entry.mjs",
 					},
 				});
@@ -51,17 +45,26 @@ export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 			},
 			"astro:build:done": async ({ routes }) => {
 				await writeFile(
-					fileURLToPath(getBuildPath(astroConfig.root, "./routes.json")),
-					JSON.stringify(routes, null, 2),
+					fileURLToPath(getBuildPath(astroConfig.outDir, "./routes.json")),
+					JSON.stringify(routes, undefined, 2),
+				);
+
+				const invalidationPaths = routes.map((route) => route.route);
+
+				await writeFile(
+					fileURLToPath(getBuildPath(astroConfig.outDir, "./invalidationPaths.json")),
+					JSON.stringify(invalidationPaths, undefined, 2),
 				);
 
 				await bundleEntry(
 					fileURLToPath(new URL(astroConfig.build.serverEntry, astroConfig.build.server)),
 					fileURLToPath(astroConfig.build.server).replace("/server", "/lambda"),
+					args,
 				);
 			},
 		},
 	};
+	/* eslint-enable sort-keys */
 };
 
 export default astroAWSFunctions;

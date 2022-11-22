@@ -5,10 +5,9 @@
 		"allowUnreachableCode": false,
 		"allowUnusedLabels": false,
 		"esModuleInterop": true,
-		"exactOptionalPropertyTypes": true,
 		"experimentalDecorators": true,
 		"forceConsistentCasingInFileNames": true,
-		"lib": ["ES2021", "DOM", "DOM.Iterable"],
+		"lib": ["ES2020", "DOM", "DOM.Iterable"],
 		"module": "ES6",
 		"moduleResolution": "Node",
 		"noFallthroughCasesInSwitch": true,
@@ -19,7 +18,7 @@
 		"noUnusedParameters": true,
 		"skipLibCheck": true,
 		"strict": true,
-		"target": "ES2021",
+		"target": "ES2020",
 		"types": ["node"]
 	},
 	"ts-node": {
