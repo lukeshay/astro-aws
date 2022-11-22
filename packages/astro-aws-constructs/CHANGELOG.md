@@ -1,5 +1,13 @@
 # @astro-aws/constructs
 
+## 0.0.4-next.1
+
+### Patch Changes
+
+- [#7](https://github.com/lukeshay/astro-aws/pull/7) [`646915f`](https://github.com/lukeshay/astro-aws/commit/646915f227c27af02084e7fe7b1c1e69c9ad9e7d) Thanks [@lukeshay](https://github.com/lukeshay)! - Upgraded dependencies
+
+- [`7dc5da2`](https://github.com/lukeshay/astro-aws/commit/7dc5da287af714b83e39b13a59eb2839d65c16d1) Thanks [@lukeshay](https://github.com/lukeshay)! - Upgraded dependencies
+
 ## 0.0.4-next.0
 
 ### Patch Changes
