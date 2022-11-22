@@ -11,16 +11,13 @@ const DEFAULT_CONFIG = {
 	target: "node16",
 };
 
-export const createEsBuildConfig = (entryFile: string, outDir: string, { esBuildOptions = {}, esm = false }: Args) =>
+export const createEsBuildConfig = (entryFile: string, outDir: string, { esBuildOptions = {} }: Args) =>
 	mergeAndConcat(DEFAULT_CONFIG, esBuildOptions, {
-		banner: {
-			js: esm ? "import { createRequire } from 'module';const require = createRequire(import.meta.url);" : "",
-		},
 		entryPoints: [entryFile],
-		format: esm ? "esm" : "cjs",
+		format: "esm",
 		outdir: outDir,
 		outExtension: {
-			".js": esm ? ".mjs" : ".cjs",
+			".js": ".mjs",
 		},
 	}) as BuildOptions;
 

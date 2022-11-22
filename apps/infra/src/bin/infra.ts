@@ -19,6 +19,5 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 	});
 
 	Tags.of(stack).add("Project", "AstroAWS");
+	Tags.of(stack).add("Environment", environment);
 });
-
-Tags.of(app).add("Project", "AstroAWS");

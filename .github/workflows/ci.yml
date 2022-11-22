@@ -11,6 +11,7 @@ env:
 
 jobs:
     prepare-yarn-cache:
+        name: Cache dependencies
         runs-on: ubuntu-22.04
         steps:
             - uses: actions/checkout@v3
@@ -20,22 +21,16 @@ jobs:
                   cache: "yarn"
             - run: yarn install --mode=skip-build
               env:
-                  YARN_ENABLE_SCRIPTS: false # disable post-install scripts
-    yarn:
+                  YARN_ENABLE_SCRIPTS: false
+    check:
+        name: Check
         runs-on: ubuntu-22.04
         needs: prepare-yarn-cache
         strategy:
             matrix:
-                script:
-                    - yarn build --exclude apps/* && yarn lint
-                    - yarn build --exclude apps/* && yarn prettier
-                    - yarn build --since-branch=main
-                    - yarn test
-                    - yarn constraints
-                    - yarn changeset status --since=main
                 node_version:
-                    - 14
                     - 16
+                    - 18
         steps:
             - uses: actions/checkout@v3
               with:
@@ -44,5 +39,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node_version }}
                   cache: "yarn"
-            - run: git fetch origin main:main
-            - run: yarn install --mode=skip-build && ${{ matrix.script }}
+            - run: yarn install --mode=skip-build
+            - run: yarn build
+            - run: yarn test
+            - run: yarn lint
+            - run: yarn prettier
+            - run: yarn synth
+            - uses: actions/upload-artifact@v3
+              with:
+                  name: cdk-templates
+                  path: apps/infra/cdk.out

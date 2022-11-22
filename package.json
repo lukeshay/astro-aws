@@ -15,21 +15,23 @@
 		"scripts"
 	],
 	"scripts": {
-		"build": "turbo run build --filter",
-		"build:all": "turbo run build",
+		"build": "turbo run build",
+		"build:one": "turbo run build --filter",
 		"clear-cache": "rimraf **/.turbo ./pompous",
-		"deploy": "turbo run deploy --filter",
-		"deploy:all": "turbo run deploy",
-		"dev": "turbo run dev --filter",
-		"dev:all": "turbo run dev",
+		"deploy": "turbo run deploy",
+		"deploy:one": "turbo run deploy --filter",
+		"dev": "turbo run dev",
+		"dev:one": "turbo run dev --filter",
 		"lint": "eslint .",
 		"lint:fix": "yarn lint --fix",
 		"prettier": "prettier --check .",
 		"prettier:fix": "yarn prettier --write",
 		"release:cut": "git add . && git commit -m 'new release' && yarn changeset publish && git push && git push --follow-tags",
 		"release:prepare": "yarn build -r && yarn changeset version && yarn prettier:fix",
-		"synth": "turbo run synth --filter",
-		"synth:all": "turbo run synth"
+		"synth": "turbo run synth",
+		"synth:one": "turbo run synth --filter",
+		"test": "turbo run test",
+		"test:one": "turbo run test --filter"
 	},
 	"prettier": "@lshay/prettier-config",
 	"eslintConfig": {
@@ -43,12 +45,12 @@
 		"@lshay/eslint-config": "^0.2.1",
 		"@lshay/prettier-config": "^0.5.2",
 		"@rushstack/eslint-patch": "^1.2.0",
-		"eslint": "^8.27.0",
+		"eslint": "^8.28.0",
 		"eslint-import-resolver-typescript": "^3.5.2",
 		"eslint-plugin-import": "^2.26.0",
 		"prettier": "^2.7.1",
 		"turbo": "^1.6.3",
-		"typescript": "^4.8.4"
+		"typescript": "^4.9.3"
 	},
 	"packageManager": "yarn@3.2.4",
 	"engines": {
