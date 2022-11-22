@@ -27,7 +27,7 @@
 		"prettier": "prettier --check .",
 		"prettier:fix": "yarn prettier --write",
 		"release:cut": "git add . && git commit -m 'new release' && yarn changeset publish && git push && git push --follow-tags",
-		"release:prepare": "yarn build -r && yarn changeset version && yarn prettier:fix",
+		"release:prepare": "yarn build && yarn changeset version && yarn prettier:fix",
 		"synth": "turbo run synth",
 		"synth:one": "turbo run synth --filter",
 		"test": "turbo run test",
