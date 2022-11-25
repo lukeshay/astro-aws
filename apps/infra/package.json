@@ -17,7 +17,7 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "scripts build --skip-tsc",
+		"build": "scripts build",
 		"deploy": "./scripts/build-and-invalidate.sh",
 		"invalidate": "./scripts/invalidate-cloudfront-cache.sh",
 		"synth": "cdk synth"
@@ -45,5 +45,14 @@
 	},
 	"engines": {
 		"node": "14.x || 16.x"
+	},
+	"cli": {
+		"clean": [
+			"dist",
+			"cdk.out"
+		],
+		"build": {
+			"skipTsc": true
+		}
 	}
 }

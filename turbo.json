@@ -2,54 +2,26 @@
 	"$schema": "https://turbo.build/schema.json",
 	"pipeline": {
 		"build": {
-			"dependsOn": ["^build"],
-			"inputs": [
-				"src/**/*",
-				"package.json",
-				"tsconfig.json",
-				"tsconfig.build.json",
-				"*.config.*",
-				"../yarn.lock",
-				"../../yarn.lock"
-			],
-			"outputs": ["dist/**/*"]
+			"dependsOn": ["^build"]
 		},
 		"test": {
-			"dependsOn": ["^build"],
-			"outputs": [],
-			"inputs": [
-				"src/**/*",
-				"test/**/*",
-				"package.json",
-				"tsconfig.json",
-				"tsconfig.build.json",
-				"*.config.*",
-				"../yarn.lock",
-				"../../yarn.lock"
-			]
+			"dependsOn": ["^build"]
 		},
 		"lint": {
-			"dependsOn": ["^build"],
-			"inputs": ["**/*"],
-			"outputs": []
+			"dependsOn": ["^build"]
 		},
 		"synth": {
-			"dependsOn": ["build"],
-			"outputs": ["cdk.out/**/*"]
+			"dependsOn": ["build"]
 		},
 		"deploy": {
-			"dependsOn": ["synth"],
-			"inputs": ["cdk.out/**/*", "dist/**/*"],
-			"outputs": []
+			"dependsOn": ["synth"]
 		},
 		"dev": {
 			"dependsOn": ["^build"],
 			"cache": false
 		},
 		"lint:fix": {
-			"dependsOn": ["^build"],
-			"inputs": ["**/*"],
-			"outputs": []
+			"dependsOn": ["^build"]
 		}
 	}
 }

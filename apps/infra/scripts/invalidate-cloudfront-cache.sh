@@ -12,7 +12,7 @@ echo "AWS_ARGS: ${AWS_ARGS}"
 echo "AWS_ACCOUNT: ${AWS_ACCOUNT}"
 echo "AWS_REGION: ${AWS_REGION}"
 
-DISTIRBUTION_ID="$(aws cloudformation describe-stacks --stack-name "AstroAWSStack-${ENVIRONMENT}-${AWS_ACCOUNT}-${AWS_REGION}" --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionId'].OutputValue" --output text ${AWS_ARGS})"
+DISTIRBUTION_ID="$(aws cloudformation describe-stacks --stack-name "AstroAWS-${ENVIRONMENT}-WebsiteStack-${AWS_ACCOUNT}-${AWS_REGION}" --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionId'].OutputValue" --output text ${AWS_ARGS})"
 PATHS="$(jq -r ". | join(\" \")" ../www/dist/invalidationPaths.json)"
 
 echo "Invalidating CloudFront distribution ${DISTIRBUTION_ID}: ${PATHS}"
