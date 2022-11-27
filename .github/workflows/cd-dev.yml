@@ -36,7 +36,7 @@ jobs:
                   role-session-name: astro-aws-cd-dev
             - uses: actions/setup-node@v3
               with:
-                  node-version: "16"
+                  node-version: "18"
                   cache: "yarn"
             - run: yarn deploy:one infra -- DEV
     deploy-dev-node-16:
