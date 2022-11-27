@@ -15,6 +15,7 @@ export type AstroAWSBareConstructProps = {
 	lambdaProps?: Omit<FunctionProps, "code" | "handler" | "runtime">;
 	websitePath?: string;
 	skipDeployment?: boolean;
+	node16?: boolean;
 };
 
 /**
@@ -35,7 +36,7 @@ export class AstroAWSBareConstruct extends Construct {
 
 		this.props = props;
 
-		const { assetsBucketProps = {}, lambdaProps = {}, websitePath, skipDeployment } = props;
+		const { assetsBucketProps = {}, lambdaProps = {}, websitePath, skipDeployment, node16 } = props;
 
 		const distPath = join(resolve(websitePath ?? dirname(".")), "dist");
 
@@ -50,7 +51,7 @@ export class AstroAWSBareConstruct extends Construct {
 		});
 
 		const lambda = new Function(this, "Lambda", {
-			runtime: Runtime.NODEJS_16_X,
+			runtime: node16 ? Runtime.NODEJS_16_X : Runtime.NODEJS_18_X,
 			...lambdaProps,
 			code: Code.fromAsset(join(distPath, "lambda")),
 			handler: "entry.handler",

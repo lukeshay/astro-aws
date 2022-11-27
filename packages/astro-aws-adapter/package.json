@@ -42,17 +42,17 @@
 	},
 	"dependencies": {
 		"@astrojs/webapi": "^1.1.1",
-		"astro": "^1.6.10",
-		"esbuild": "^0.15.15",
+		"astro": "^1.6.11",
+		"esbuild": "^0.15.16",
 		"merge-anything": "^5.1.3"
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
-		"@types/aws-lambda": "^8.10.108",
+		"@types/aws-lambda": "^8.10.109",
 		"@types/node": "^18.11.9",
 		"aws-lambda": "^1.0.7",
 		"eslint": "^8.28.0",
-		"prettier": "^2.7.1",
+		"prettier": "^2.8.0",
 		"typescript": "^4.9.3"
 	},
 	"engines": {
