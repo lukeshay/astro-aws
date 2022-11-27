@@ -1,12 +1,7 @@
 import type { StackProps } from "aws-cdk-lib";
 import { Stack, CfnOutput, Duration } from "aws-cdk-lib";
 import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
-import {
-	CacheCookieBehavior,
-	CacheHeaderBehavior,
-	CachePolicy,
-	CacheQueryStringBehavior,
-} from "aws-cdk-lib/aws-cloudfront";
+import { ResponseHeadersPolicy } from "aws-cdk-lib/aws-cloudfront";
 import { Architecture } from "aws-cdk-lib/aws-lambda";
 import type { Construct } from "constructs";
 import { AstroAWSConstruct } from "@astro-aws/constructs";
@@ -39,16 +34,14 @@ export class WebsiteStack extends Stack {
 			distributionProps: {
 				certificate,
 				defaultBehavior: {
-					cachePolicy: new CachePolicy(this, "CachePolicy", {
-						cachePolicyName: `${id}-CachePolicy`,
-						cookieBehavior: CacheCookieBehavior.all(),
-						defaultTtl: Duration.days(1),
-						enableAcceptEncodingBrotli: true,
-						enableAcceptEncodingGzip: true,
-						headerBehavior: CacheHeaderBehavior.none(),
-						maxTtl: Duration.days(2),
-						minTtl: Duration.seconds(2),
-						queryStringBehavior: CacheQueryStringBehavior.all(),
+					responseHeadersPolicy: new ResponseHeadersPolicy(this, "ResponseHeadersPolicy", {
+						securityHeadersBehavior: {
+							contentSecurityPolicy: {
+								contentSecurityPolicy:
+									"default-src 'none'; img-src 'self'; prefetch-src 'self'; upgrade-insecure-requests",
+								override: true,
+							},
+						},
 					}),
 				},
 				domainNames: domainName ? [domainName] : [],

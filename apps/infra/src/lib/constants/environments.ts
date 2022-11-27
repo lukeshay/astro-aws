@@ -13,12 +13,12 @@ export type Environment = typeof Environments[keyof typeof Environments];
 export const ENVIRONMENT_PROPS = {
 	[Environments.DEV]: {
 		...base,
-		// domainName: "astro-aws.dev.lshay.dev",
+		domainName: "astro-aws.dev.lshay.dev",
 		environment: Environments.DEV,
 	},
 	[Environments.PROD]: {
 		...base,
-		// domainName: "astro-aws.lshay.dev",
+		domainName: "astro-aws.lshay.dev",
 		environment: Environments.PROD,
 	},
 	[Environments.PERSONAL]: {
