@@ -9,18 +9,21 @@ import type { Dashboard } from "aws-cdk-lib/aws-cloudwatch";
 
 import { DistributionMetric } from "../constructs/distribution-metric.js";
 import { BasicGraphWidget } from "../constructs/basic-graph-widget.js";
+import type { Environment} from "../constants/environments.js";
+import { Environments } from "../constants/environments.js";
 
 export type WebsiteStackProps = StackProps & {
 	domainName?: string;
 	env: StackProps["env"];
 	cloudwatchDashboard: Dashboard;
+	environment: Environment;
 };
 
 export class WebsiteStack extends Stack {
 	public constructor(scope: Construct, id: string, props: WebsiteStackProps) {
 		super(scope, id, props);
 
-		const { domainName, cloudwatchDashboard } = props;
+		const { domainName, cloudwatchDashboard, environment } = props;
 
 		let certificate: Certificate | undefined;
 
@@ -50,6 +53,7 @@ export class WebsiteStack extends Stack {
 				architecture: Architecture.ARM_64,
 				memorySize: 1024,
 			},
+			node16: environment === Environments.DEV_NODE_16,
 			websitePath: "../www",
 		});
 

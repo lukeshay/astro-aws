@@ -39,3 +39,24 @@ jobs:
                   node-version: "16"
                   cache: "yarn"
             - run: yarn deploy:one infra -- DEV
+    deploy-dev-node-16:
+        name: Deploy
+        runs-on: ubuntu-22.04
+        environment:
+            name: development-node-16
+            url: https://astro-aws.dev-node-16.lshay.dev/
+        concurrency:
+            group: ${{ format('{0}-{1}', github.workflow, github.job) }}
+        steps:
+            - uses: actions/checkout@v3
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v1
+              with:
+                  aws-region: us-east-1
+                  role-to-assume: GitHubOIDCAdminRole
+                  role-session-name: astro-aws-cd-dev-node-16
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: "16"
+                  cache: "yarn"
+            - run: yarn deploy:one infra -- NODE16
