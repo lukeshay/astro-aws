@@ -199,8 +199,8 @@ __metadata:
   dependencies:
     "@astro-aws/scripts": "workspace:^"
     "@types/node": ^18.11.9
-    aws-cdk-lib: ^2.51.1
-    constructs: ^10.1.172
+    aws-cdk-lib: ^2.52.0
+    constructs: ^10.1.173
     eslint: ^8.28.0
     prettier: ^2.8.0
     typescript: ^4.9.3
@@ -218,9 +218,9 @@ __metadata:
     "@astro-aws/scripts": "workspace:^"
     "@astro-aws/www": "workspace:^"
     "@types/node": ^18.11.9
-    aws-cdk: ^2.51.1
-    aws-cdk-lib: ^2.51.1
-    constructs: ^10.1.172
+    aws-cdk: ^2.52.0
+    aws-cdk-lib: ^2.52.0
+    constructs: ^10.1.173
     eslint: ^8.28.0
     eslint-config-get-off-my-lawn: ^7.2.0
     prettier: ^2.8.0
@@ -2605,9 +2605,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-cdk-lib@npm:^2.51.1":
-  version: 2.51.1
-  resolution: "aws-cdk-lib@npm:2.51.1"
+"aws-cdk-lib@npm:^2.52.0":
+  version: 2.52.0
+  resolution: "aws-cdk-lib@npm:2.52.0"
   dependencies:
     "@aws-cdk/asset-awscli-v1": ^2.2.9
     "@aws-cdk/asset-kubectl-v20": ^2.1.1
@@ -2623,13 +2623,13 @@ __metadata:
     yaml: 1.10.2
   peerDependencies:
     constructs: ^10.0.0
-  checksum: e8b60ebf2172fce21ce5e0532c23f6af154f66740815ae0f2ab152e0e8be8a2e1260edf8b83e1650e6f09feaa9cff31dc9ed65bcb77fd4cb51594325a1680292
+  checksum: 35a058aa0c185bd65abc96509495b06c280e15112e2b94e9c39d1ad4020afce66806e0be3337d62bbebb1664daec7237e32043c6666f4504dee936049c74c64a
   languageName: node
   linkType: hard
 
-"aws-cdk@npm:^2.51.1":
-  version: 2.51.1
-  resolution: "aws-cdk@npm:2.51.1"
+"aws-cdk@npm:^2.52.0":
+  version: 2.52.0
+  resolution: "aws-cdk@npm:2.52.0"
   dependencies:
     fsevents: 2.3.2
   dependenciesMeta:
@@ -2637,7 +2637,7 @@ __metadata:
       optional: true
   bin:
     cdk: bin/cdk
-  checksum: 85313f893377106e7e99f41be208be40bcc1f0f2963ea5a1ffef2ba0b6f543ca536eb94c6d933702cfe2cd3b85ccf72e936e71c9f0b3ae3dc7e1d6f67675f76f
+  checksum: aac6a7ab396d3e22fc4f7dc74d7907d46409db62997d10195ae9ecbf3c8f3ffdcca4d30745db01d3f52ea27ba12731ff81a462bef90e08bb0b3e268587b63ced
   languageName: node
   linkType: hard
 
@@ -3241,10 +3241,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"constructs@npm:^10.1.172":
-  version: 10.1.172
-  resolution: "constructs@npm:10.1.172"
-  checksum: 04ad9facdd9030f7583030d33f8ed2aa9a210ae8117d53b1409373549707d493a3d4402ebffa0e38c05ffea090536ba7cff11c02678a077fe45e446b48e646b4
+"constructs@npm:^10.1.173":
+  version: 10.1.173
+  resolution: "constructs@npm:10.1.173"
+  checksum: 420505a8105680e7364d38201b64cadc00baed934bcd098e1f09a6453312cc7f6f381f80ec0c026b96f8bbadb2ef3e5f0ff853b633d3d86d132fd0978adf4a50
   languageName: node
   linkType: hard
 
