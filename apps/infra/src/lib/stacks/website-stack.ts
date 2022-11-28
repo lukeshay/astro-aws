@@ -9,7 +9,7 @@ import type { Dashboard } from "aws-cdk-lib/aws-cloudwatch";
 
 import { DistributionMetric } from "../constructs/distribution-metric.js";
 import { BasicGraphWidget } from "../constructs/basic-graph-widget.js";
-import type { Environment} from "../constants/environments.js";
+import type { Environment } from "../constants/environments.js";
 import { Environments } from "../constants/environments.js";
 
 export type WebsiteStackProps = StackProps & {
