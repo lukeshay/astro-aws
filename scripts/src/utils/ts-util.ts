@@ -1,6 +1,7 @@
 import { resolve } from "node:path";
 import { existsSync } from "node:fs";
-import { execSync } from "node:child_process";
+
+import { runCommand } from "./shell-util.js";
 
 const findTsConfigPath = () =>
 	existsSync("./tsconfig.build.json")
@@ -14,5 +15,5 @@ const findTsConfigPath = () =>
 export const findTsConfig = () => resolve(findTsConfigPath());
 
 export const runTsc = () => {
-	execSync(`tsc --project ${findTsConfigPath()} --declaration --emitDeclarationOnly --outDir dist`);
+	runCommand("tsc", "--project", findTsConfigPath(), "--declaration", "--emitDeclarationOnly", "--outDir", "dist");
 };
