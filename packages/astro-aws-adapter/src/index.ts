@@ -22,13 +22,13 @@ export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 
 	/* eslint-disable sort-keys */
 	return {
-		name: "@astro-aws/adapter",
+		name: ADAPTER_NAME,
 		hooks: {
 			"astro:config:setup": ({ config, updateConfig }) => {
 				updateConfig({
 					build: {
-						client: getBuildPath(config.outDir, "./client/"),
-						server: getBuildPath(config.outDir, "./server/"),
+						client: getBuildPath(config.outDir, "client/"),
+						server: getBuildPath(config.outDir, "server/"),
 						serverEntry: "entry.mjs",
 					},
 				});
@@ -45,14 +45,14 @@ export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 			},
 			"astro:build:done": async ({ routes }) => {
 				await writeFile(
-					fileURLToPath(getBuildPath(astroConfig.outDir, "./routes.json")),
+					fileURLToPath(getBuildPath(astroConfig.outDir, "routes.json")),
 					JSON.stringify(routes, undefined, 2),
 				);
 
 				const invalidationPaths = routes.map((route) => route.route);
 
 				await writeFile(
-					fileURLToPath(getBuildPath(astroConfig.outDir, "./invalidationPaths.json")),
+					fileURLToPath(getBuildPath(astroConfig.outDir, "invalidationPaths.json")),
 					JSON.stringify(invalidationPaths, undefined, 2),
 				);
 

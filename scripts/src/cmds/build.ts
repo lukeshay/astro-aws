@@ -5,6 +5,8 @@ import { Command } from "commander";
 import { runTsc } from "../utils/ts-util.js";
 import { runEsBuild } from "../utils/esbuild-util.js";
 import { readPackageJson } from "../utils/pkg-util.js";
+import { readConfig } from "../utils/config-util.js";
+import { none } from "../utils/arg-util.js";
 
 type Options = {
 	bundle: boolean;
@@ -21,12 +23,19 @@ const buildCommand = new Command("build")
 	.action(async (fileGlob: string) => {
 		const { bundle, skipClean, skipTsc } = buildCommand.opts<Options>();
 		const pkgJson = await readPackageJson();
+		const config = await readConfig();
 
-		if (!skipClean) {
-			await rm("dist", {
-				force: true,
-				recursive: true,
-			});
+		if (none(skipClean, config.build?.skipClean)) {
+			const cleanGlobs = [...(config.clean ?? []), "dist"];
+
+			await Promise.all(
+				cleanGlobs.map(async (glob) =>
+					rm(glob, {
+						force: true,
+						recursive: true,
+					}),
+				),
+			);
 		}
 
 		await runEsBuild(pkgJson, {
@@ -34,7 +43,7 @@ const buildCommand = new Command("build")
 			fileGlob,
 		});
 
-		if (!skipTsc) {
+		if (none(skipTsc, config.build?.skipTsc)) {
 			runTsc();
 		}
 	});

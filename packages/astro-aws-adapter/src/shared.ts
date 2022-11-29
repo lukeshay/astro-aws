@@ -13,6 +13,9 @@ const DEFAULT_CONFIG = {
 
 export const createEsBuildConfig = (entryFile: string, outDir: string, { esBuildOptions = {} }: Args) =>
 	mergeAndConcat(DEFAULT_CONFIG, esBuildOptions, {
+		banner: {
+			js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);",
+		},
 		entryPoints: [entryFile],
 		format: "esm",
 		outdir: outDir,

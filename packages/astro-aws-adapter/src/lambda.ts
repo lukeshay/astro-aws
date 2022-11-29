@@ -1,5 +1,4 @@
 import { Buffer } from "node:buffer";
-import { createRequire } from "module";
 
 import { polyfill } from "@astrojs/webapi";
 import type { APIGatewayProxyHandlerV2 } from "aws-lambda";
@@ -7,8 +6,6 @@ import type { SSRManifest } from "astro";
 import { App } from "astro/app";
 
 import type { Args } from "./args.js";
-
-global.require = createRequire(import.meta.url);
 
 polyfill(globalThis, {
 	exclude: "window document",

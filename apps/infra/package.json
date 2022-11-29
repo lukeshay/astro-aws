@@ -17,7 +17,7 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "scripts build --skip-tsc",
+		"build": "scripts build",
 		"deploy": "./scripts/build-and-invalidate.sh",
 		"invalidate": "./scripts/invalidate-cloudfront-cache.sh",
 		"synth": "cdk synth"
@@ -32,11 +32,11 @@
 		"@astro-aws/constructs": "workspace:^",
 		"@astro-aws/www": "workspace:^",
 		"@types/node": "^18.11.9",
-		"aws-cdk": "^2.51.1",
-		"aws-cdk-lib": "^2.51.1",
-		"constructs": "^10.1.167",
+		"aws-cdk": "^2.52.0",
+		"aws-cdk-lib": "^2.52.0",
+		"constructs": "^10.1.173",
 		"eslint": "^8.28.0",
-		"prettier": "^2.7.1",
+		"prettier": "^2.8.0",
 		"typescript": "^4.9.3"
 	},
 	"devDependencies": {
@@ -45,5 +45,14 @@
 	},
 	"engines": {
 		"node": "14.x || 16.x"
+	},
+	"cli": {
+		"clean": [
+			"dist",
+			"cdk.out"
+		],
+		"build": {
+			"skipTsc": true
+		}
 	}
 }

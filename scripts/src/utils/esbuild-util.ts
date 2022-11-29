@@ -26,7 +26,7 @@ export const createEsBuildConfig = async (
 	const { type = "module", version } = pkgJson;
 	const { bundle, fileGlob } = options;
 	const format = type === "module" ? "esm" : "cjs";
-	const entryPoints = await globby([fileGlob], {
+	const entryPoints = await globby([fileGlob, "!**/__tests__/**/*", "!**/*.spec.*", "!**/*.test.*"], {
 		absolute: true,
 		expandDirectories: true,
 		onlyFiles: true,
