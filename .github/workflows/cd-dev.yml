@@ -19,7 +19,7 @@ permissions:
 
 jobs:
     deploy-dev:
-        name: Deploy
+        name: Deploy Dev
         runs-on: ubuntu-22.04
         environment:
             name: development
@@ -42,7 +42,7 @@ jobs:
             - run: yarn install --mode=skip-build
             - run: yarn deploy:one infra -- DEV
     deploy-dev-node-16:
-        name: Deploy
+        name: Deploy Dev Node 16
         runs-on: ubuntu-22.04
         environment:
             name: development-node-16
