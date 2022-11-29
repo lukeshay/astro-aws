@@ -16,23 +16,35 @@ export class GitHubOIDCStack extends cdk.Stack {
 		});
 
 		new Role(this, "GitHubOIDCAdminRole", {
-			assumedBy: new FederatedPrincipal(gitHubOIDC.openIdConnectProviderArn, {
-				"ForAllValues:StringEquals": {
-					"token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-					"token.actions.githubusercontent.com:sub": "repo:lukeshay/astro-aws:ref:refs/heads/main",
+			assumedBy: new FederatedPrincipal(
+				gitHubOIDC.openIdConnectProviderArn,
+				{
+					StringEquals: {
+						"token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+					},
+					StringLike: {
+						"token.actions.githubusercontent.com:sub": "repo:lukeshay/astro-aws:*",
+					},
 				},
-			}),
+				"sts:AssumeRoleWithWebIdentity",
+			),
 			managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("AdministratorAccess")],
 			roleName: "GitHubOIDCAdminRole",
 		});
 
 		new Role(this, "GitHubOIDCReadOnlyRole", {
-			assumedBy: new FederatedPrincipal(gitHubOIDC.openIdConnectProviderArn, {
-				"ForAllValues:StringEquals": {
-					"token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-					"token.actions.githubusercontent.com:sub": "repo:lukeshay/astro-aws:ref:refs/heads/*",
+			assumedBy: new FederatedPrincipal(
+				gitHubOIDC.openIdConnectProviderArn,
+				{
+					StringEquals: {
+						"token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+					},
+					StringLike: {
+						"token.actions.githubusercontent.com:sub": "repo:lukeshay/astro-aws:*",
+					},
 				},
-			}),
+				"sts:AssumeRoleWithWebIdentity",
+			),
 			managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName("ReadOnlyAccess")],
 			roleName: "GitHubOIDCReadOnlyRole",
 		});

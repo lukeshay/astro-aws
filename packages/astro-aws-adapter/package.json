@@ -59,7 +59,7 @@
 		"vitest": "^0.25.3"
 	},
 	"engines": {
-		"node": "14.x || 16.x"
+		"node": "16.x || 18.x"
 	},
 	"publishConfig": {
 		"access": "public"

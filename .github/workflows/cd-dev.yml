@@ -38,6 +38,7 @@ jobs:
               with:
                   node-version: "18"
                   cache: "yarn"
+            - run: yarn install --mode=skip-build
             - run: yarn deploy:one infra -- DEV
     deploy-dev-node-16:
         name: Deploy
@@ -59,4 +60,5 @@ jobs:
               with:
                   node-version: "16"
                   cache: "yarn"
+            - run: yarn install --mode=skip-build
             - run: yarn deploy:one infra -- NODE16
