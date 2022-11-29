@@ -19,9 +19,6 @@ export class GitHubOIDCStack extends cdk.Stack {
 			assumedBy: new FederatedPrincipal(gitHubOIDC.openIdConnectProviderArn, {
 				"ForAllValues:StringEquals": {
 					"token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-					"token.actions.githubusercontent.com:iss": "https://token.actions.githubusercontent.com",
-				},
-				StringLike: {
 					"token.actions.githubusercontent.com:sub": "repo:lukeshay/astro-aws:ref:refs/heads/main",
 				},
 			}),
@@ -33,9 +30,6 @@ export class GitHubOIDCStack extends cdk.Stack {
 			assumedBy: new FederatedPrincipal(gitHubOIDC.openIdConnectProviderArn, {
 				"ForAllValues:StringEquals": {
 					"token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-					"token.actions.githubusercontent.com:iss": "https://token.actions.githubusercontent.com",
-				},
-				StringLike: {
 					"token.actions.githubusercontent.com:sub": "repo:lukeshay/astro-aws:ref:refs/heads/*",
 				},
 			}),
