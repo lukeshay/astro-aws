@@ -47,15 +47,3 @@ export default defineConfig({
 	adapter: astroAws(),
 });
 ```
-
-## Args
-
-```ts
-type Args = {
-	binaryMediaTypes?: string[];
-};
-```
-
-### `binaryMediaTypes?: string[];`
-
-Specifies what media types need to be base64 encoded.
