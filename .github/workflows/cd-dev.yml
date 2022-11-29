@@ -32,7 +32,7 @@ jobs:
               uses: aws-actions/configure-aws-credentials@v1
               with:
                   aws-region: us-east-1
-                  role-to-assume: GitHubOIDCAdminRole
+                  role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
                   role-session-name: astro-aws-cd-dev
             - uses: actions/setup-node@v3
               with:
@@ -53,7 +53,7 @@ jobs:
               uses: aws-actions/configure-aws-credentials@v1
               with:
                   aws-region: us-east-1
-                  role-to-assume: GitHubOIDCAdminRole
+                  role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
                   role-session-name: astro-aws-cd-dev-node-16
             - uses: actions/setup-node@v3
               with:

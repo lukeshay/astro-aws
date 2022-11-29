@@ -1,5 +1,33 @@
 # @astro-aws/adapter
 
+## 0.1.0
+
+### Minor Changes
+
+- [#7](https://github.com/lukeshay/astro-aws/pull/7) [`646915f`](https://github.com/lukeshay/astro-aws/commit/646915f227c27af02084e7fe7b1c1e69c9ad9e7d) Thanks [@lukeshay](https://github.com/lukeshay)! - Removed CJS support
+
+### Patch Changes
+
+- [`2693b26`](https://github.com/lukeshay/astro-aws/commit/2693b26e90fb112ead1ca87712381830b9527e21) Thanks [@lukeshay](https://github.com/lukeshay)! - Require logging to be enabled
+
+- [`305552d`](https://github.com/lukeshay/astro-aws/commit/305552d954e60b59dc56cbae6b3e9843d282795f) Thanks [@lukeshay](https://github.com/lukeshay)! - Loop through query params
+
+- [#7](https://github.com/lukeshay/astro-aws/pull/7) [`646915f`](https://github.com/lukeshay/astro-aws/commit/646915f227c27af02084e7fe7b1c1e69c9ad9e7d) Thanks [@lukeshay](https://github.com/lukeshay)! - Upgraded dependencies
+
+- [`305552d`](https://github.com/lukeshay/astro-aws/commit/305552d954e60b59dc56cbae6b3e9843d282795f) Thanks [@lukeshay](https://github.com/lukeshay)! - More simple set cookie header
+
+- [`305552d`](https://github.com/lukeshay/astro-aws/commit/305552d954e60b59dc56cbae6b3e9843d282795f) Thanks [@lukeshay](https://github.com/lukeshay)! - Fix the multiValueHeaders
+
+- [`e67da15`](https://github.com/lukeshay/astro-aws/commit/e67da154a9584fd1c52e1b71197598d1133d4181) Thanks [@lukeshay](https://github.com/lukeshay)! - Use regular set cookie header
+
+- [`fa8459b`](https://github.com/lukeshay/astro-aws/commit/fa8459b7d832af1d3b618acd4bd5aa32861ab8b5) Thanks [@lukeshay](https://github.com/lukeshay)! - Use array buffer
+
+- [`305552d`](https://github.com/lukeshay/astro-aws/commit/305552d954e60b59dc56cbae6b3e9843d282795f) Thanks [@lukeshay](https://github.com/lukeshay)! - Log response
+
+- [`7dc5da2`](https://github.com/lukeshay/astro-aws/commit/7dc5da287af714b83e39b13a59eb2839d65c16d1) Thanks [@lukeshay](https://github.com/lukeshay)! - Upgraded dependencies
+
+- [`f2736e0`](https://github.com/lukeshay/astro-aws/commit/f2736e02afbc100a26b1fa29907e4960549bad31) Thanks [@lukeshay](https://github.com/lukeshay)! - Use correct event and response
+
 ## 0.1.0-next.8
 
 ### Minor Changes
