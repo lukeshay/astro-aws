@@ -43,7 +43,3 @@ jobs:
             - run: yarn lint
             - run: yarn prettier
             - run: yarn synth
-            - uses: actions/upload-artifact@v3
-              with:
-                  name: cdk-templates
-                  path: apps/infra/cdk.out
