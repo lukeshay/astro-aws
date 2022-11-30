@@ -2,7 +2,7 @@
 	"name": "@astro-aws/www",
 	"version": "0.0.0",
 	"private": true,
-	"homepage": "https://astro-aws.lshay.dev/",
+	"homepage": "https://astro-aws.org/",
 	"repository": {
 		"type": "git",
 		"url": "ssh://git@github.com/lukeshay/astro-aws.git",
@@ -15,12 +15,12 @@
 	],
 	"scripts": {
 		"astro": "astro",
-		"build": "./scripts/copy-package-readmes.sh && astro build",
+		"build": "yarn clean && ./scripts/copy-package-readmes.sh && astro build && SSR_BUILD=true astro build",
 		"check": "astro check && tsc",
 		"clean": "rimraf dist",
 		"dev": "astro dev",
 		"preview": "astro preview",
-		"release": "yarn clean && yarn build && yarn package",
+		"release": "yarn build && yarn package",
 		"start": "astro dev"
 	},
 	"eslintConfig": {
@@ -45,6 +45,7 @@
 		"@types/react": "^18.0.25",
 		"@types/react-dom": "^18.0.9",
 		"astro": "^1.6.11",
+		"astro-icon": "^0.8.0",
 		"astro-link": "^1.1.2",
 		"astro-seo": "^0.6.0",
 		"autoprefixer": "^10.4.13",

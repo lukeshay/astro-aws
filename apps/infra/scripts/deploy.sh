@@ -13,4 +13,3 @@ echo "AWS_ACCOUNT: ${AWS_ACCOUNT}"
 echo "AWS_REGION: ${AWS_REGION}"
 
 yarn cdk deploy --require-approval never "AstroAWS-${ENVIRONMENT}-*" ${AWS_ARGS}
-./scripts/invalidate-cloudfront-cache.sh "${@}"

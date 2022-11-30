@@ -199,7 +199,7 @@ describe("index.ts", () => {
 					expect(bundleEntry).toHaveBeenCalledTimes(1);
 					expect(bundleEntry).toHaveBeenCalledWith(
 						fileURLToPath(new URL(config.build.serverEntry, config.build.server)),
-						fileURLToPath(config.build.server).replace("/server", "/lambda"),
+						fileURLToPath(new URL("lambda", config.outDir)),
 						args,
 					);
 				});

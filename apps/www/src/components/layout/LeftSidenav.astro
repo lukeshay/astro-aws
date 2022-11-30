@@ -1,6 +1,6 @@
 ---
 import Logo from "../Logo.astro";
-import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { Icon } from "astro-icon";
 
 export type Link = {
 	text: string;
@@ -28,8 +28,8 @@ const chevronClass = "w-5 h-5 pl-2 stroke-[4]";
 				<div class="section">
 					<button class="flex flex-row items-center">
 						<h3 class="p-0 font-semibold">{section}</h3>
-						<ChevronDownIcon className={`${chevronClass} chevron-down-icon`} />
-						<ChevronRightIcon className={`hidden ${chevronClass} chevron-right-icon`} />
+						<Icon name="iconoir:nav-arrow-down" class={`${chevronClass} chevron-down-icon`} />
+						<Icon name="iconoir:nav-arrow-right" class={`hidden ${chevronClass} chevron-right-icon`} />
 					</button>
 					<ul class="menu menu-compact menu-vertical">
 						{links.map(({ href, text }) => (
