@@ -6,6 +6,6 @@
 	"commit": false,
 	"fixed": [],
 	"ignore": ["@astro-aws/www", "@astro-aws/infra"],
-	"linked": [],
+	"linked": [["@astro-aws/adapter", "@astro-aws/constructs"]],
 	"updateInternalDependencies": "patch"
 }

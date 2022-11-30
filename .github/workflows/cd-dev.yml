@@ -5,7 +5,7 @@ on:
         workflows:
             - CI
         branches:
-            - main
+            - static-deployments
         types:
             - completed
 
@@ -20,47 +20,34 @@ permissions:
 jobs:
     deploy-dev:
         name: Deploy Dev
-        runs-on: ubuntu-22.04
-        environment:
-            name: development
-            url: https://astro-aws.dev.lshay.dev/
         concurrency:
             group: ${{ format('{0}-{1}', github.workflow, github.job) }}
-        steps:
-            - run: echo "::add-mask::${{ secrets.AWS_ACCOUNT_ID }}"
-            - uses: actions/checkout@v3
-            - name: Configure AWS Credentials
-              uses: aws-actions/configure-aws-credentials@v1
-              with:
-                  aws-region: us-east-1
-                  role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-                  role-session-name: astro-aws-cd-dev
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: "18"
-                  cache: "yarn"
-            - run: yarn install --mode=skip-build
-            - run: yarn deploy:one infra -- DEV
+        uses: ./.github/workflows/deploy.yml
+        with:
+            aws_session_name: astro-aws-cd-dev
+            environment_name: development
+            environment_url: https://dev.astro-aws.org/
+            stack_environment: DEV
+        secrets: inherit
     deploy-dev-node-16:
         name: Deploy Dev Node 16
-        runs-on: ubuntu-22.04
-        environment:
-            name: development-node-16
-            url: https://astro-aws.dev-node-16.lshay.dev/
         concurrency:
             group: ${{ format('{0}-{1}', github.workflow, github.job) }}
-        steps:
-            - run: echo "::add-mask::${{ secrets.AWS_ACCOUNT_ID }}"
-            - uses: actions/checkout@v3
-            - name: Configure AWS Credentials
-              uses: aws-actions/configure-aws-credentials@v1
-              with:
-                  aws-region: us-east-1
-                  role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-                  role-session-name: astro-aws-cd-dev-node-16
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: "16"
-                  cache: "yarn"
-            - run: yarn install --mode=skip-build
-            - run: yarn deploy:one infra -- NODE16
+        uses: ./.github/workflows/deploy.yml
+        with:
+            aws_session_name: astro-aws-cd-node-16
+            environment_name: development-node-16
+            environment_url: https://dev-node-16.astro-aws.org/
+            stack_environment: NODE16
+        secrets: inherit
+    deploy-dev-node-18:
+        name: Deploy Dev Node 18
+        concurrency:
+            group: ${{ format('{0}-{1}', github.workflow, github.job) }}
+        uses: ./.github/workflows/deploy.yml
+        with:
+            aws_session_name: astro-aws-cd-node-18
+            environment_name: development-node-18
+            environment_url: https://dev-node-18.astro-aws.org/
+            stack_environment: NODE18
+        secrets: inherit

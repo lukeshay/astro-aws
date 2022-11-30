@@ -58,7 +58,7 @@ export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 
 				await bundleEntry(
 					fileURLToPath(new URL(astroConfig.build.serverEntry, astroConfig.build.server)),
-					fileURLToPath(astroConfig.build.server).replace("/server", "/lambda"),
+					fileURLToPath(getBuildPath(astroConfig.outDir, "lambda")),
 					args,
 				);
 			},
