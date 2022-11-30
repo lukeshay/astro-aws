@@ -1,3 +1,5 @@
+import { env } from "node:process";
+
 import type { StackProps } from "aws-cdk-lib";
 import { Stack, CfnOutput, Duration } from "aws-cdk-lib";
 import type { Certificate } from "aws-cdk-lib/aws-certificatemanager";
@@ -97,6 +99,13 @@ export class WebsiteStack extends Stack {
 					}),
 				},
 				domainNames,
+				errorResponses: [
+					{
+						httpStatus: 403,
+						responsePagePath: "/403",
+					},
+				],
+				webAclId: env.WEB_ACL_ARN,
 			},
 			lambdaProps: {
 				architecture: Architecture.ARM_64,
