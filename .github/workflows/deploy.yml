@@ -44,6 +44,12 @@ on:
             AWS_ACCOUNT_ID:
                 description: The AWS Account ID
                 required: true
+            TURBO_TOKEN:
+                description: Turborepo remote cache token
+                required: false
+            TURBO_TEAM:
+                description: Turborepo remote cache team
+                required: false
 
 env:
     CI: true
@@ -57,6 +63,9 @@ jobs:
     deploy:
         name: Deploy
         runs-on: ubuntu-22.04
+        env:
+            TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+            TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
         environment:
             name: ${{ inputs.environment_name }}
             url: ${{ inputs.environment_url }}

@@ -8,8 +8,6 @@ import { bundleEntry } from "./shared.js";
 import { ADAPTER_NAME } from "./constants.js";
 import { warn } from "./log.js";
 
-const getBuildPath = (root: URL | string, path?: string) => new URL(path ?? ".", root);
-
 export const getAdapter = (args: Args = {}): AstroAdapter => ({
 	args,
 	exports: ["handler"],
@@ -27,8 +25,8 @@ export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 			"astro:config:setup": ({ config, updateConfig }) => {
 				updateConfig({
 					build: {
-						client: getBuildPath(config.outDir, "client/"),
-						server: getBuildPath(config.outDir, "server/"),
+						client: new URL("client/", config.outDir),
+						server: new URL("server/", config.outDir),
 						serverEntry: "entry.mjs",
 					},
 				});
@@ -45,20 +43,20 @@ export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 			},
 			"astro:build:done": async ({ routes }) => {
 				await writeFile(
-					fileURLToPath(getBuildPath(astroConfig.outDir, "routes.json")),
+					fileURLToPath(new URL("routes.json", astroConfig.outDir)),
 					JSON.stringify(routes, undefined, 2),
 				);
 
 				const invalidationPaths = routes.map((route) => route.route);
 
 				await writeFile(
-					fileURLToPath(getBuildPath(astroConfig.outDir, "invalidationPaths.json")),
+					fileURLToPath(new URL("invalidationPaths.json", astroConfig.outDir)),
 					JSON.stringify(invalidationPaths, undefined, 2),
 				);
 
 				await bundleEntry(
 					fileURLToPath(new URL(astroConfig.build.serverEntry, astroConfig.build.server)),
-					fileURLToPath(getBuildPath(astroConfig.outDir, "lambda")),
+					fileURLToPath(new URL("lambda", astroConfig.outDir)),
 					args,
 				);
 			},
