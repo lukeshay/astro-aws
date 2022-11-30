@@ -1,13 +1,13 @@
 name: CD
 
-on:
-    workflow_run:
-        workflows:
-            - CI
-        branches:
-            - main
-        types:
-            - completed
+# on:
+#     workflow_run:
+#         workflows:
+#             - CI
+#         branches:
+#             - main
+#         types:
+#             - completed
 
 env:
     CI: true
