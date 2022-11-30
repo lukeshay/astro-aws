@@ -49,7 +49,7 @@ export class WebsiteStack extends Stack {
 			});
 
 			certificate = new DnsValidatedCertificate(this, "Certificate", {
-				domainName: environment === Environments.PROD ? `*.${domainName}` : domainName,
+				domainName: environment === Environments.PROD ? `*${domainName}` : domainName,
 				hostedZone: theHostedZone,
 			});
 
