@@ -26,7 +26,7 @@
 		"lint:fix": "yarn lint --fix",
 		"prettier": "prettier --check .",
 		"prettier:fix": "yarn prettier --write",
-		"release:cut": "git add . && git commit -m 'new release' && yarn changeset publish && git push && git push --follow-tags",
+		"release:cut": "git add . && git commit -m 'new release' && WEB_ACL_ARN='' yarn deploy:one infra -- PROD && yarn changeset publish && git push && git push --follow-tags",
 		"release:prepare": "yarn build && yarn changeset version && yarn prettier:fix",
 		"synth": "turbo run synth",
 		"synth:one": "turbo run synth --filter",

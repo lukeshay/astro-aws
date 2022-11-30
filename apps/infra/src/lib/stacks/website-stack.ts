@@ -105,7 +105,7 @@ export class WebsiteStack extends Stack {
 						responsePagePath: "/403",
 					},
 				],
-				webAclId: env.WEB_ACL_ARN,
+				webAclId: env.WEB_ACL_ARN && env.WEB_ACL_ARN.length > 0 ? env.WEB_ACL_ARN : undefined,
 			},
 			lambdaProps: {
 				architecture: Architecture.ARM_64,

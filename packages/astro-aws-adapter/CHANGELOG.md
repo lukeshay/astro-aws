@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.2.0
+
+### Minor Changes
+
+- [#19](https://github.com/lukeshay/astro-aws/pull/19) [`303cf98`](https://github.com/lukeshay/astro-aws/commit/303cf98e055330e811744f18645d7936c80a0a5c) Thanks [@lukeshay](https://github.com/lukeshay)! - Added support for static deployments
+
 ## 0.1.0
 
 ### Minor Changes
