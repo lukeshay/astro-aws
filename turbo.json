@@ -14,7 +14,8 @@
 			"dependsOn": ["build"]
 		},
 		"deploy": {
-			"dependsOn": ["synth"]
+			"dependsOn": ["synth"],
+			"cache": false
 		},
 		"dev": {
 			"dependsOn": ["^build"],

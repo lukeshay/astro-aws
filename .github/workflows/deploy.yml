@@ -87,3 +87,9 @@ jobs:
                   cache: "yarn"
             - run: yarn install --mode=skip-build
             - run: yarn deploy:one infra -- ${{ inputs.stack_environment }}
+            - run: |
+                  export TIME="$(TZ=GMT date +'%Y-%m-%d_%H-%M-%S')"
+                  git tag "${{ inputs.stack_environment }}_latest" --force
+                  git tag "${{ inputs.stack_environment }}_${TIME}"
+                  git push origin "${{ inputs.stack_environment }}_latest" --force
+                  git push origin "${{ inputs.stack_environment }}_${TIME}"
