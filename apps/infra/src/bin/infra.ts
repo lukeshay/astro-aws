@@ -1,11 +1,9 @@
-import * as process from "node:process";
-
 import { App, Tags } from "aws-cdk-lib";
 
 import { Environments, ENVIRONMENT_PROPS } from "../lib/constants/environments.js";
 import { MonitoringStack } from "../lib/stacks/monitoring-stack.js";
 import { WebsiteStack } from "../lib/stacks/website-stack.js";
-import { AstroAWSStackProps } from "../lib/types/astro-aws-stack-props.js";
+import type { AstroAWSStackProps } from "../lib/types/astro-aws-stack-props.js";
 import { RedirectStack } from "../lib/stacks/redirect-stack.js";
 
 const app = new App();

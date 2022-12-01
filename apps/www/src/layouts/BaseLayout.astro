@@ -28,12 +28,7 @@ const seoProps: SEOProps = {
 	</head>
 	<body class="h-full">
 		{sections && <LeftSidenav sections={sections} />}
-		<Navbar
-			links={[
-				{ href: "/docs", text: "Docs" },
-			]}
-			showLogo={!sections}
-		/>
+		<Navbar links={[{ href: "/docs", text: "Docs" }]} showLogo={!sections} />
 		<slot />
 	</body>
 </html>
