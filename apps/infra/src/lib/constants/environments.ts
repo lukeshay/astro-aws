@@ -1,5 +1,13 @@
+import { env } from "node:process";
+
+import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js";
+
 const base = {
 	analyticsReporting: false,
+	env: {
+		account: env.AWS_ACCOUNT ?? String(env.CDK_DEFAULT_ACCOUNT),
+		region: env.AWS_REGION ?? String(env.CDK_DEFAULT_REGION),
+	},
 	hostedZoneId: "Z0584480MGUI8KRBPWM",
 };
 
@@ -13,7 +21,7 @@ export const Environments = {
 
 export type Environment = typeof Environments[keyof typeof Environments];
 
-export const ENVIRONMENT_PROPS = {
+export const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
 	[Environments.DEV]: {
 		...base,
 		alias: "dev",

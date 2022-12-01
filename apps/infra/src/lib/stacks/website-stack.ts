@@ -1,10 +1,9 @@
 import { env } from "node:process";
 
-import type { StackProps } from "aws-cdk-lib";
 import { Stack, CfnOutput, Duration } from "aws-cdk-lib";
 import type { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { DnsValidatedCertificate } from "aws-cdk-lib/aws-certificatemanager";
-import { Function, FunctionCode, FunctionEventType, ResponseHeadersPolicy } from "aws-cdk-lib/aws-cloudfront";
+import { ResponseHeadersPolicy } from "aws-cdk-lib/aws-cloudfront";
 import { Architecture } from "aws-cdk-lib/aws-lambda";
 import type { Construct } from "constructs";
 import { AstroAWSConstruct } from "@astro-aws/constructs";
@@ -15,18 +14,11 @@ import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 
 import { DistributionMetric } from "../constructs/distribution-metric.js";
 import { BasicGraphWidget } from "../constructs/basic-graph-widget.js";
-import type { Environment } from "../constants/environments.js";
 import { Environments } from "../constants/environments.js";
+import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js";
 
-export type WebsiteStackProps = StackProps & {
-	alias?: string;
+export type WebsiteStackProps = AstroAWSStackProps & {
 	cloudwatchDashboard: Dashboard;
-	domainName?: string;
-	env: StackProps["env"];
-	environment: Environment;
-	hostedZoneId?: string;
-	hostedZoneName?: string;
-	output: "server" | "static";
 };
 
 export class WebsiteStack extends Stack {
@@ -38,9 +30,7 @@ export class WebsiteStack extends Stack {
 		const domainName = [alias, hostedZoneName].filter(Boolean).join(".");
 		const domainNames = [domainName].filter(Boolean);
 
-		let certificate: Certificate | undefined,
-			hostedZone: IHostedZone | undefined,
-			wwwRedirectFunction: Function | undefined;
+		let certificate: Certificate | undefined, hostedZone: IHostedZone | undefined;
 
 		if (hostedZoneName && hostedZoneId) {
 			const theHostedZone = HostedZone.fromHostedZoneAttributes(this, "HostedZone", {
@@ -54,40 +44,12 @@ export class WebsiteStack extends Stack {
 			});
 
 			hostedZone = theHostedZone;
-
-			// if (environment === Environments.PROD) {
-			// 	domainNames.push(`www.${domainName}`);
-
-			// 	wwwRedirectFunction = new Function(this, "WwwRedirectFunction", {
-			// 		code: FunctionCode.fromInline(`
-			// 			function handler(event) {
-			// 				return {
-			// 					statusCode: 301,
-			// 					statusDescription: "Moved Permanently",
-			// 					headers: {
-			// 						location: {
-			// 							value: "https://${domainName}" + event.request.uri,
-			// 						}
-			// 					}
-			// 				}
-			// 			}
-			// 		`),
-			// 	});
-			// }
 		}
 
 		const astroAwsConstruct = new AstroAWSConstruct(this, "AstroAWSConstruct", {
 			distributionProps: {
 				certificate,
 				defaultBehavior: {
-					functionAssociations: wwwRedirectFunction
-						? [
-								{
-									eventType: FunctionEventType.VIEWER_REQUEST,
-									function: wwwRedirectFunction,
-								},
-						  ]
-						: undefined,
 					responseHeadersPolicy: new ResponseHeadersPolicy(this, "ResponseHeadersPolicy", {
 						securityHeadersBehavior: {
 							contentSecurityPolicy: {

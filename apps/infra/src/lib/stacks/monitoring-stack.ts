@@ -1,11 +1,10 @@
-import type { StackProps } from "aws-cdk-lib";
 import { Stack } from "aws-cdk-lib";
 import { Dashboard } from "aws-cdk-lib/aws-cloudwatch";
 import type { Construct } from "constructs";
 
-export type MonitoringStackProps = StackProps & {
-	readonly environment: string;
-};
+import type { AstroAWSStackProps } from "../types/astro-aws-stack-props";
+
+export type MonitoringStackProps = AstroAWSStackProps;
 
 export class MonitoringStack extends Stack {
 	public readonly cloudwatchDashboard: Dashboard;

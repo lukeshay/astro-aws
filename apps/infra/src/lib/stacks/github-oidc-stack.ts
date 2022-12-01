@@ -1,9 +1,10 @@
 import * as cdk from "aws-cdk-lib";
-import type { StackProps } from "aws-cdk-lib";
 import type { Construct } from "constructs";
 import { FederatedPrincipal, ManagedPolicy, OpenIdConnectProvider, Role } from "aws-cdk-lib/aws-iam";
 
-export type GitHubOIDCStackProps = StackProps;
+import type { AstroAWSStackProps } from "../types/astro-aws-stack-props";
+
+export type GitHubOIDCStackProps = AstroAWSStackProps;
 
 export class GitHubOIDCStack extends cdk.Stack {
 	public constructor(scope: Construct, id: string, props: GitHubOIDCStackProps) {
