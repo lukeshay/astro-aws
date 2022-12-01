@@ -25,17 +25,16 @@ export class WebsiteStack extends Stack {
 	public constructor(scope: Construct, id: string, props: WebsiteStackProps) {
 		super(scope, id, props);
 
-		const { hostedZoneName, alias, hostedZoneId, cloudwatchDashboard, environment, output } = props;
+		const { hostedZoneName, alias, cloudwatchDashboard, environment, output } = props;
 
 		const domainName = [alias, hostedZoneName].filter(Boolean).join(".");
 		const domainNames = [domainName].filter(Boolean);
 
 		let certificate: Certificate | undefined, hostedZone: IHostedZone | undefined;
 
-		if (hostedZoneName && hostedZoneId) {
-			const theHostedZone = HostedZone.fromHostedZoneAttributes(this, "HostedZone", {
-				hostedZoneId,
-				zoneName: hostedZoneName,
+		if (hostedZoneName) {
+			const theHostedZone = HostedZone.fromLookup(this, "HostedZone", {
+				domainName: hostedZoneName,
 			});
 
 			certificate = new DnsValidatedCertificate(this, "Certificate", {
@@ -53,8 +52,7 @@ export class WebsiteStack extends Stack {
 					responseHeadersPolicy: new ResponseHeadersPolicy(this, "ResponseHeadersPolicy", {
 						securityHeadersBehavior: {
 							contentSecurityPolicy: {
-								contentSecurityPolicy:
-									"default-src 'none'; img-src 'self'; prefetch-src 'self'; upgrade-insecure-requests",
+								contentSecurityPolicy: "default-src 'self'; upgrade-insecure-requests",
 								override: true,
 							},
 						},

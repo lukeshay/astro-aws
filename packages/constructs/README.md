@@ -73,3 +73,7 @@ export class MyAstroStack extends Stack {
 	}
 }
 ```
+
+## Example
+
+See [the source code of this site](https://github.com/lukeshay/astro-aws/blob/main/apps/infra/src/stacks/website-stack.ts)

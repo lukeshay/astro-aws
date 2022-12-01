@@ -20,7 +20,7 @@ const seoProps: SEOProps = {
 ---
 
 <!DOCTYPE html>
-<html lang="en" class="h-full" data-theme="astro-aws">
+<html lang="en" class="h-full scroll-smooth" data-theme="astro-aws">
 	<head>
 		<SEO {...seoProps} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -30,5 +30,8 @@ const seoProps: SEOProps = {
 		{sections && <LeftSidenav sections={sections} />}
 		<Navbar links={[{ href: "/docs", text: "Docs" }]} showLogo={!sections} />
 		<slot />
+		<style global>
+			@import "../styles/global.css";
+		</style>
 	</body>
 </html>

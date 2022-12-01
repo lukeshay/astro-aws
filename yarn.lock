@@ -175,9 +175,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@astro-aws/adapter@workspace:^, @astro-aws/adapter@workspace:packages/astro-aws-adapter":
+"@astro-aws/adapter@workspace:^, @astro-aws/adapter@workspace:packages/adapter":
   version: 0.0.0-use.local
-  resolution: "@astro-aws/adapter@workspace:packages/astro-aws-adapter"
+  resolution: "@astro-aws/adapter@workspace:packages/adapter"
   dependencies:
     "@astro-aws/scripts": "workspace:^"
     "@astrojs/webapi": ^1.1.1
@@ -195,9 +195,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@astro-aws/constructs@workspace:^, @astro-aws/constructs@workspace:packages/astro-aws-constructs":
+"@astro-aws/constructs@workspace:^, @astro-aws/constructs@workspace:packages/constructs":
   version: 0.0.0-use.local
-  resolution: "@astro-aws/constructs@workspace:packages/astro-aws-constructs"
+  resolution: "@astro-aws/constructs@workspace:packages/constructs"
   dependencies:
     "@astro-aws/scripts": "workspace:^"
     "@types/node": ^18.11.9

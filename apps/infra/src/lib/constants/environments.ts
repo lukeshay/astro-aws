@@ -6,9 +6,8 @@ const base = {
 	analyticsReporting: false,
 	env: {
 		account: env.AWS_ACCOUNT ?? String(env.CDK_DEFAULT_ACCOUNT),
-		region: env.AWS_REGION ?? String(env.CDK_DEFAULT_REGION),
+		region: "us-east-1",
 	},
-	hostedZoneId: "Z0584480MGUI8KRBPWM",
 };
 
 export const Environments = {

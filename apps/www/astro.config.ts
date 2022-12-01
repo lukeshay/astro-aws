@@ -1,7 +1,6 @@
 import process from "node:process";
 
 import { defineConfig } from "astro/config";
-import tailwind from "@astrojs/tailwind";
 import aws from "@astro-aws/adapter";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
@@ -16,7 +15,7 @@ export default defineConfig({
 				esm: true,
 		  })
 		: undefined,
-	integrations: [tailwind(), mdx(), sitemap()],
+	integrations: [mdx(), sitemap()],
 	markdown: {
 		extendDefaultPlugins: true,
 		remarkPlugins: [remarkToc],
