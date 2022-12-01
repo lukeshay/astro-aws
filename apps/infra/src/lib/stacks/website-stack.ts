@@ -49,31 +49,31 @@ export class WebsiteStack extends Stack {
 			});
 
 			certificate = new DnsValidatedCertificate(this, "Certificate", {
-				domainName: environment === Environments.PROD ? `*${domainName}` : domainName,
+				domainName,
 				hostedZone: theHostedZone,
 			});
 
 			hostedZone = theHostedZone;
 
-			if (environment === Environments.PROD) {
-				domainNames.push(`www.${domainName}`);
+			// if (environment === Environments.PROD) {
+			// 	domainNames.push(`www.${domainName}`);
 
-				wwwRedirectFunction = new Function(this, "WwwRedirectFunction", {
-					code: FunctionCode.fromInline(`
-						function handler(event) {
-							return {
-								statusCode: 301,
-								statusDescription: "Moved Permanently",
-								headers: {
-									location: {
-										value: "https://${domainName}" + event.request.uri,
-									}
-								}
-							}
-						}
-					`),
-				});
-			}
+			// 	wwwRedirectFunction = new Function(this, "WwwRedirectFunction", {
+			// 		code: FunctionCode.fromInline(`
+			// 			function handler(event) {
+			// 				return {
+			// 					statusCode: 301,
+			// 					statusDescription: "Moved Permanently",
+			// 					headers: {
+			// 						location: {
+			// 							value: "https://${domainName}" + event.request.uri,
+			// 						}
+			// 					}
+			// 				}
+			// 			}
+			// 		`),
+			// 	});
+			// }
 		}
 
 		const astroAwsConstruct = new AstroAWSConstruct(this, "AstroAWSConstruct", {
