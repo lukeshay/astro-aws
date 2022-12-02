@@ -6,7 +6,6 @@ import {
 	Function,
 	FunctionCode,
 	AllowedMethods,
-	CachePolicy,
 	Distribution,
 	OriginAccessIdentity,
 	OriginRequestPolicy,
@@ -116,7 +115,6 @@ export class AstroAWSConstruct extends AstroAWSBareConstruct {
 				? {
 						"/api/*": {
 							allowedMethods: AllowedMethods.ALLOW_ALL,
-							compress: true,
 							origin: lambdaOrigin,
 							originRequestPolicy: OriginRequestPolicy.USER_AGENT_REFERER_HEADERS,
 							responseHeadersPolicy: ResponseHeadersPolicy.CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT_AND_SECURITY_HEADERS,
@@ -127,9 +125,6 @@ export class AstroAWSConstruct extends AstroAWSBareConstruct {
 				  }
 				: distributionProps.additionalBehaviors,
 			defaultBehavior: {
-				allowedMethods: AllowedMethods.ALLOW_GET_HEAD,
-				cachePolicy: CachePolicy.CACHING_OPTIMIZED,
-				compress: true,
 				originRequestPolicy: OriginRequestPolicy.USER_AGENT_REFERER_HEADERS,
 				responseHeadersPolicy: ResponseHeadersPolicy.CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT_AND_SECURITY_HEADERS,
 				viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,

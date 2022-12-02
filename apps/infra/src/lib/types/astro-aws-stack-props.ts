@@ -12,5 +12,6 @@ export type AstroAWSStackProps = Readonly<
 		alias?: string;
 		hostedZoneName?: string;
 		output: "server" | "static";
+		skipDashboard?: boolean;
 	}
 >;

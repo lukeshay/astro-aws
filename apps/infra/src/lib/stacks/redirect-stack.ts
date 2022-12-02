@@ -1,9 +1,10 @@
 import { Stack, Duration } from "aws-cdk-lib";
-import { DnsValidatedCertificate } from "aws-cdk-lib/aws-certificatemanager";
+import type { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { Distribution, Function, FunctionCode, FunctionEventType } from "aws-cdk-lib/aws-cloudfront";
 import type { Construct } from "constructs";
 import type { Dashboard } from "aws-cdk-lib/aws-cloudwatch";
-import { AaaaRecord, ARecord, HostedZone, RecordTarget } from "aws-cdk-lib/aws-route53";
+import type { IHostedZone } from "aws-cdk-lib/aws-route53";
+import { AaaaRecord, ARecord, RecordTarget } from "aws-cdk-lib/aws-route53";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 import { HttpOrigin } from "aws-cdk-lib/aws-cloudfront-origins";
 
@@ -13,27 +14,17 @@ import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js";
 
 export type RedirectStackProps = AstroAWSStackProps & {
 	cloudwatchDashboard: Dashboard;
-	hostedZoneId: string;
-	hostedZoneName: string;
+	certificate: Certificate;
+	hostedZone: IHostedZone;
 };
 
 export class RedirectStack extends Stack {
 	public constructor(scope: Construct, id: string, props: RedirectStackProps) {
 		super(scope, id, props);
 
-		const { hostedZoneName, alias, hostedZoneId, cloudwatchDashboard } = props;
+		const { hostedZoneName, alias, cloudwatchDashboard, hostedZone, certificate } = props;
 
-		const domainName = ["www", alias, hostedZoneName].filter(Boolean).join(".");
-
-		const hostedZone = HostedZone.fromHostedZoneAttributes(this, "HostedZone", {
-			hostedZoneId,
-			zoneName: hostedZoneName,
-		});
-
-		const certificate = new DnsValidatedCertificate(this, "Certificate", {
-			domainName,
-			hostedZone,
-		});
+		const domainName = [alias, hostedZoneName].filter(Boolean).join(".");
 
 		const wwwRedirectFunction = new Function(this, "WwwRedirectFunction", {
 			code: FunctionCode.fromInline(`

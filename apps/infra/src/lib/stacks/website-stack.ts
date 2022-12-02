@@ -2,14 +2,13 @@ import { env } from "node:process";
 
 import { Stack, CfnOutput, Duration } from "aws-cdk-lib";
 import type { Certificate } from "aws-cdk-lib/aws-certificatemanager";
-import { DnsValidatedCertificate } from "aws-cdk-lib/aws-certificatemanager";
 import { ResponseHeadersPolicy } from "aws-cdk-lib/aws-cloudfront";
 import { Architecture } from "aws-cdk-lib/aws-lambda";
 import type { Construct } from "constructs";
 import { AstroAWSConstruct } from "@astro-aws/constructs";
 import type { Dashboard } from "aws-cdk-lib/aws-cloudwatch";
 import type { IHostedZone } from "aws-cdk-lib/aws-route53";
-import { AaaaRecord, ARecord, HostedZone, RecordTarget } from "aws-cdk-lib/aws-route53";
+import { AaaaRecord, ARecord, RecordTarget } from "aws-cdk-lib/aws-route53";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 
 import { DistributionMetric } from "../constructs/distribution-metric.js";
@@ -19,31 +18,18 @@ import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js";
 
 export type WebsiteStackProps = AstroAWSStackProps & {
 	cloudwatchDashboard: Dashboard;
+	certificate?: Certificate;
+	hostedZone?: IHostedZone;
 };
 
 export class WebsiteStack extends Stack {
 	public constructor(scope: Construct, id: string, props: WebsiteStackProps) {
 		super(scope, id, props);
 
-		const { hostedZoneName, alias, cloudwatchDashboard, environment, output } = props;
+		const { hostedZoneName, alias, cloudwatchDashboard, environment, output, certificate, hostedZone } = props;
 
 		const domainName = [alias, hostedZoneName].filter(Boolean).join(".");
 		const domainNames = [domainName].filter(Boolean);
-
-		let certificate: Certificate | undefined, hostedZone: IHostedZone | undefined;
-
-		if (hostedZoneName) {
-			const theHostedZone = HostedZone.fromLookup(this, "HostedZone", {
-				domainName: hostedZoneName,
-			});
-
-			certificate = new DnsValidatedCertificate(this, "Certificate", {
-				domainName,
-				hostedZone: theHostedZone,
-			});
-
-			hostedZone = theHostedZone;
-		}
 
 		const astroAwsConstruct = new AstroAWSConstruct(this, "AstroAWSConstruct", {
 			distributionProps: {

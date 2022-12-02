@@ -4,7 +4,6 @@ import { BlockPublicAccess, BucketEncryption, Bucket } from "aws-cdk-lib/aws-s3"
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { Code, Function, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
-import { RemovalPolicy } from "aws-cdk-lib";
 import type { BucketDeploymentProps } from "aws-cdk-lib/aws-s3-deployment";
 import type { BucketProps } from "aws-cdk-lib/aws-s3";
 import type { FunctionProps } from "aws-cdk-lib/aws-lambda";
@@ -55,12 +54,9 @@ export class AstroAWSBareConstruct extends Construct {
 		this.distPath = outDir ? resolve(outDir) : resolve(websiteDir ?? dirname("."), "dist");
 
 		this.assetsBucket = new Bucket(this, "AssetsBucket", {
-			autoDeleteObjects: false,
 			blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
 			encryption: BucketEncryption.S3_MANAGED,
 			enforceSSL: true,
-			publicReadAccess: false,
-			removalPolicy: RemovalPolicy.DESTROY,
 			...assetsBucketProps,
 		});
 

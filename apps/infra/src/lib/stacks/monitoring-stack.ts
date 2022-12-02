@@ -12,10 +12,13 @@ export class MonitoringStack extends Stack {
 	public constructor(scope: Construct, id: string, props: MonitoringStackProps) {
 		super(scope, id, props);
 
-		const { environment } = props;
+		const {
+			environment,
+			env: { region },
+		} = props;
 
-		this.cloudwatchDashboard = new Dashboard(this, `AstroAWSDashboard-${environment}`, {
-			dashboardName: `AstroAWS-${environment}`,
+		this.cloudwatchDashboard = new Dashboard(this, `AstroAWSDashboard-${environment}-${region}`, {
+			dashboardName: `AstroAWS-${environment}-${region}`,
 		});
 	}
 }
