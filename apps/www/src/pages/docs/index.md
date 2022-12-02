@@ -103,7 +103,7 @@ export class HelloCdkStack extends Stack {
 
 		new AstroAWSConstruct(this, "AstroAWSConstruct", {
 			output: "server",
-			websitePath: "../my-astro-project",
+			websiteDir: "../my-astro-project",
 		});
 	}
 }
