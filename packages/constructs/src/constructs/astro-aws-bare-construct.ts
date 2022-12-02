@@ -64,6 +64,7 @@ export class AstroAWSBareConstruct extends Construct {
 			const { lambdaProps = {}, node16 } = props;
 
 			this.lambda = new Function(this, "Lambda", {
+				memorySize: 512,
 				runtime: node16 ? Runtime.NODEJS_16_X : Runtime.NODEJS_18_X,
 				...lambdaProps,
 				code: Code.fromAsset(resolve(this.distPath, "lambda")),
