@@ -39,7 +39,6 @@ jobs:
             group: ${{ format('{0}-{1}', github.workflow, github.job) }}
         uses: ./.github/workflows/deploy.yml
         with:
-            aws_session_name: astro-aws-cd-dev
             environment_name: development
             environment_url: https://dev.astro-aws.org/
             stack_environment: DEV
@@ -51,7 +50,6 @@ jobs:
             group: ${{ format('{0}-{1}', github.workflow, github.job) }}
         uses: ./.github/workflows/deploy.yml
         with:
-            aws_session_name: astro-aws-cd-node-16
             environment_name: development-node-16
             environment_url: https://dev-node-16.astro-aws.org/
             stack_environment: NODE16
@@ -63,7 +61,6 @@ jobs:
             group: ${{ format('{0}-{1}', github.workflow, github.job) }}
         uses: ./.github/workflows/deploy.yml
         with:
-            aws_session_name: astro-aws-cd-node-18
             environment_name: development-node-18
             environment_url: https://dev-node-18.astro-aws.org/
             stack_environment: NODE18

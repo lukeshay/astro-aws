@@ -28,7 +28,7 @@ on:
                 description: The AWS region
                 required: false
                 type: string
-                default: us-east-1
+                default: us-east-2
             ref:
                 description: The git ref to checkout
                 required: false
@@ -38,18 +38,18 @@ on:
                 required: false
                 type: string
         secrets:
-            AWS_ROLE_ARN:
-                description: The AWS Role ARN to use
+            AWS_ACCESS_KEY_ID:
+                required: true
+            AWS_SECRET_ACCESS_KEY:
                 required: true
             AWS_ACCOUNT_ID:
-                description: The AWS Account ID
                 required: true
             TURBO_TOKEN:
-                description: Turborepo remote cache token
                 required: false
             TURBO_TEAM:
-                description: Turborepo remote cache team
                 required: false
+            WEB_ACL_ARN:
+                required: true
 
 env:
     CI: true
@@ -79,14 +79,16 @@ jobs:
               uses: aws-actions/configure-aws-credentials@v1
               with:
                   aws-region: ${{ inputs.aws_region }}
-                  role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-                  role-session-name: ${{ inputs.aws_session_name }}
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             - uses: actions/setup-node@v3
               with:
                   node-version: ${{ inputs.node_version }}
                   cache: "yarn"
             - run: yarn install --mode=skip-build
             - run: yarn deploy:one infra -- ${{ inputs.stack_environment }}
+              env:
+                  WEB_ACL_ARN: ${{ secrets.WEB_ACL_ARN }}
             - run: |
                   export TIME="$(TZ=GMT date +'%Y-%m-%d_%H-%M-%S')"
                   git tag "${{ inputs.stack_environment }}_latest" --force
