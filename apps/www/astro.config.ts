@@ -10,11 +10,8 @@ const isSSR = process.env.SSR_BUILD === "true";
 
 // https://astro.build/config
 export default defineConfig({
-	adapter: isSSR
-		? aws({
-				esm: true,
-		  })
-		: undefined,
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+	adapter: isSSR ? aws() : undefined,
 	integrations: [mdx(), sitemap()],
 	markdown: {
 		extendDefaultPlugins: true,
