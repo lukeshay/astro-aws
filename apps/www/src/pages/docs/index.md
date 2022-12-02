@@ -70,8 +70,22 @@ cdk init app --language typescript
 
 ### Add the `@astro-aws/constructs` package
 
+# Using NPM
+
 ```sh
 npm i @astro-aws/constructs
+```
+
+# Using Yarn
+
+```sh
+yarn add @astro-aws/constructs
+```
+
+# Using PNPM
+
+```sh
+pnpm i @astro-aws/constructs
 ```
 
 ### Modify `lib/hello-cdk-stack.ts` to contain the following
