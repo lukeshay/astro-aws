@@ -19,13 +19,13 @@
 			"import": "./dist/index.js",
 			"types": "./dist/index.d.ts"
 		},
-		"./lambda": {
-			"import": "./dist/lambda.js",
-			"types": "./dist/lambda.d.ts"
+		"./lambda/index": {
+			"import": "./dist/lambda/index.js",
+			"types": "./dist/lambda/index.d.ts"
 		},
-		"./lambda.js": {
-			"import": "./dist/lambda.js",
-			"types": "./dist/lambda.d.ts"
+		"./lambda/index.js": {
+			"import": "./dist/lambda/index.js",
+			"types": "./dist/lambda/index.d.ts"
 		}
 	},
 	"files": [

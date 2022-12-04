@@ -12,7 +12,7 @@ export const getAdapter = (args: Args = {}): AstroAdapter => ({
 	args,
 	exports: ["handler"],
 	name: ADAPTER_NAME,
-	serverEntrypoint: `${ADAPTER_NAME}/lambda.js`,
+	serverEntrypoint: `${ADAPTER_NAME}/lambda/index.js`,
 });
 
 export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
