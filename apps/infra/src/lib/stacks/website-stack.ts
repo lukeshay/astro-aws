@@ -32,7 +32,7 @@ export class WebsiteStack extends Stack {
 		const domainNames = [domainName].filter(Boolean);
 
 		const astroAwsConstruct = new AstroAWSConstruct(this, "AstroAWSConstruct", {
-			distributionProps: {
+			cloudfrontDistributionProps: {
 				certificate,
 				defaultBehavior: {
 					responseHeadersPolicy: new ResponseHeadersPolicy(this, "ResponseHeadersPolicy", {
@@ -53,9 +53,8 @@ export class WebsiteStack extends Stack {
 				],
 				webAclId: env.WEB_ACL_ARN && env.WEB_ACL_ARN.length > 0 ? env.WEB_ACL_ARN : undefined,
 			},
-			lambdaProps: {
+			lambdaFunctionProps: {
 				architecture: Architecture.ARM_64,
-				memorySize: 512,
 			},
 			node16: environment === Environments.DEV_NODE_16,
 			outDir: `../www/dist/${output}`,
@@ -65,19 +64,19 @@ export class WebsiteStack extends Stack {
 		if (hostedZone) {
 			new ARecord(this, "ARecord", {
 				recordName: domainName,
-				target: RecordTarget.fromAlias(new CloudFrontTarget(astroAwsConstruct.distribution)),
+				target: RecordTarget.fromAlias(new CloudFrontTarget(astroAwsConstruct.cloudfrontDistribution)),
 				zone: hostedZone,
 			});
 
 			new AaaaRecord(this, "AaaaRecord", {
 				recordName: domainName,
-				target: RecordTarget.fromAlias(new CloudFrontTarget(astroAwsConstruct.distribution)),
+				target: RecordTarget.fromAlias(new CloudFrontTarget(astroAwsConstruct.cloudfrontDistribution)),
 				zone: hostedZone,
 			});
 		}
 
 		const distribution5xxErrorRateMetric = new DistributionMetric({
-			distribution: astroAwsConstruct.distribution,
+			distribution: astroAwsConstruct.cloudfrontDistribution,
 			label: "CloudFront 5xx error rate",
 			metricName: "5xxErrorRate",
 			period: Duration.minutes(5),
@@ -85,7 +84,7 @@ export class WebsiteStack extends Stack {
 		});
 
 		const distributionRequestsMetric = new DistributionMetric({
-			distribution: astroAwsConstruct.distribution,
+			distribution: astroAwsConstruct.cloudfrontDistribution,
 			label: "CloudFront requests",
 			metricName: "Requests",
 			period: Duration.minutes(5),
@@ -97,26 +96,26 @@ export class WebsiteStack extends Stack {
 			new BasicGraphWidget({ metric: distributionRequestsMetric }),
 		];
 
-		if (astroAwsConstruct.lambda) {
-			const lambdaFailureRateMetric = astroAwsConstruct.lambda.metricErrors({
+		if (astroAwsConstruct.lambdaFunction) {
+			const lambdaFailureRateMetric = astroAwsConstruct.lambdaFunction.metricErrors({
 				label: "Lambda failure rate",
 				period: Duration.minutes(5),
 				statistic: "sum",
 			});
 
-			const lambdaInvocationsMetric = astroAwsConstruct.lambda.metricInvocations({
+			const lambdaInvocationsMetric = astroAwsConstruct.lambdaFunction.metricInvocations({
 				label: "Lambda invocations",
 				period: Duration.minutes(5),
 				statistic: "sum",
 			});
 
-			const lambdaDurationMetric = astroAwsConstruct.lambda.metricDuration({
+			const lambdaDurationMetric = astroAwsConstruct.lambdaFunction.metricDuration({
 				label: "Lambda duration",
 				period: Duration.minutes(5),
 				statistic: "avg",
 			});
 
-			const lambdaThrottlesMetric = astroAwsConstruct.lambda.metricThrottles({
+			const lambdaThrottlesMetric = astroAwsConstruct.lambdaFunction.metricThrottles({
 				label: "Lambda throttles",
 				period: Duration.minutes(5),
 				statistic: "sum",
@@ -133,11 +132,11 @@ export class WebsiteStack extends Stack {
 		cloudwatchDashboard.addWidgets(...widgets);
 
 		new CfnOutput(this, "CloudFrontDistributionId", {
-			value: astroAwsConstruct.distribution.distributionId,
+			value: astroAwsConstruct.cloudfrontDistribution.distributionId,
 		});
 
 		new CfnOutput(this, "CloudFrontDomainName", {
-			value: astroAwsConstruct.distribution.distributionDomainName,
+			value: astroAwsConstruct.cloudfrontDistribution.distributionDomainName,
 		});
 	}
 }
