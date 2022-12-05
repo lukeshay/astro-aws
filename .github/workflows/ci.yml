@@ -46,6 +46,7 @@ jobs:
                   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             - run: yarn install --mode=skip-build
             - run: yarn build
+            - run: yarn constraints
             - run: yarn test
             - run: yarn lint
             - run: yarn prettier

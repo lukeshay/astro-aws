@@ -11,7 +11,7 @@
 	"repository": {
 		"type": "git",
 		"url": "ssh://git@github.com/lukeshay/astro-aws.git",
-		"directory": "packages/astro-aws-constructs"
+		"directory": "packages/constructs"
 	},
 	"license": "MIT",
 	"type": "module",
@@ -31,10 +31,10 @@
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
-		"@types/node": "^18.11.9",
+		"@types/node": "^18.11.10",
 		"aws-cdk-lib": "^2.53.0",
-		"constructs": "^10.1.175",
-		"eslint": "^8.28.0",
+		"constructs": "^10.1.180",
+		"eslint": "^8.29.0",
 		"prettier": "^2.8.0",
 		"typescript": "^4.9.3"
 	},

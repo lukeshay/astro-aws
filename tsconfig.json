@@ -3,8 +3,8 @@
 	"compilerOptions": {
 		"baseUrl": "./",
 		"paths": {
-			"@astro-aws/adapter": ["./packages/astro-aws-adapter/src/index.ts"],
-			"@astro-aws/constructs": ["./packages/astro-aws-constructs/src/index.ts"]
+			"@astro-aws/adapter": ["./packages/adapter/src/index.ts"],
+			"@astro-aws/constructs": ["./packages/constructs/src/index.ts"]
 		}
 	},
 	"extends": "./tsconfig.base.json"
