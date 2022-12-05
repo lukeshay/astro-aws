@@ -10,7 +10,6 @@ const isSSR = process.env.SSR_BUILD === "true";
 
 // https://astro.build/config
 export default defineConfig({
-	 
 	adapter: isSSR ? aws() : undefined,
 	integrations: [mdx(), sitemap()],
 	markdown: {
