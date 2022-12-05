@@ -30,11 +30,11 @@
 	"dependencies": {
 		"@astro-aws/constructs": "workspace:^",
 		"@astro-aws/www": "workspace:^",
-		"@types/node": "^18.11.9",
+		"@types/node": "^18.11.10",
 		"aws-cdk": "^2.53.0",
 		"aws-cdk-lib": "^2.53.0",
-		"constructs": "^10.1.175",
-		"eslint": "^8.28.0",
+		"constructs": "^10.1.180",
+		"eslint": "^8.29.0",
 		"prettier": "^2.8.0",
 		"typescript": "^4.9.3"
 	},

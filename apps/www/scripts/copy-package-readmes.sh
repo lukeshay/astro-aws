@@ -16,7 +16,7 @@ create_frontmatter() {
 copy_readme() {
 	NAME="${1}"
 
-	README_FILE="../../packages/astro-aws-${NAME}/README.md"
+	README_FILE="../../packages/${NAME}/README.md"
 	DOCS_FILE="./src/pages/docs/packages/${NAME}.md"
 
 	if [ -f "${README_FILE}" ]; then

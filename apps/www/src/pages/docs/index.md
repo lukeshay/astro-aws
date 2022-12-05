@@ -6,6 +6,8 @@ title: Getting Started
 
 # Getting Started
 
+> **DISCLAIMER**: This package is still unstable. APIs and resource names **will** change.
+
 ## What is Astro AWS
 
 Astro AWS is an [Astro](https://astro.build/) SSR adapter and constructs for deploying your Astro application to AWS.
@@ -37,21 +39,14 @@ pnpm astro add @astro-aws/adapter
 
 ## Build your Astro project
 
+```sh
 ### Using NPM
-
-```sh
 npm run build
-```
 
-### Using Yarn
-
-```sh
+# Using Yarn
 yarn build
-```
 
-### Using PNPM
-
-```sh
+# Using PNPM
 pnpm run build
 ```
 
@@ -70,21 +65,14 @@ cdk init app --language typescript
 
 ### Add the `@astro-aws/constructs` package
 
-# Using NPM
-
 ```sh
+# Using NPM
 npm i @astro-aws/constructs
-```
 
 # Using Yarn
-
-```sh
 yarn add @astro-aws/constructs
-```
 
 # Using PNPM
-
-```sh
 pnpm i @astro-aws/constructs
 ```
 
