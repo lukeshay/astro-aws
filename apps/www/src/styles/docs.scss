@@ -59,6 +59,22 @@
 	}
 
 	ol {
-		@apply list-inside list-decimal;
+		@apply ml-4 list-outside list-decimal;
+	}
+
+	ul {
+		@apply ml-4 list-outside list-disc;
+	}
+
+	ul,
+	ol {
+		ul,
+		ol {
+			@apply ml-8;
+		}
+	}
+
+	img {
+		@apply rounded-lg;
 	}
 }

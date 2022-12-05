@@ -14,7 +14,7 @@ const sectionOrder = {
 
 type Section = keyof typeof sectionOrder;
 
-const sections: Record<Section, Link[]> = {
+const sections: Record<Section, (Link & { order: number | undefined })[]> = {
 	"Start Here": [],
 	Packages: [],
 };
@@ -34,8 +34,18 @@ docs
 		sections[section].push({
 			href: doc.url,
 			text: doc.frontmatter.title,
+			order: doc.frontmatter.order as number | undefined,
 		});
 	});
+
+Object.keys(sections).forEach((key) => {
+	sections[key as Section].sort((a, b) => {
+		const aOrder = a.order ?? 999;
+		const bOrder = b.order ?? 999;
+
+		return aOrder - bOrder;
+	});
+});
 ---
 
 <BaseLayout sections={sections} title={frontmatter.title} description={frontmatter.description}>
