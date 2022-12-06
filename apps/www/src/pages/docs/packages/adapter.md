@@ -47,3 +47,7 @@ export default defineConfig({
 	adapter: astroAws(),
 });
 ```
+
+## Example
+
+See [the source code of this site](https://github.com/lukeshay/astro-aws/blob/main/apps/www/astro.config.ts)
