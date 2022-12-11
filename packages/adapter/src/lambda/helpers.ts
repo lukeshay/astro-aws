@@ -21,13 +21,11 @@ export const createFunctionResponse = async (app: App, response: Response, known
 	const ab = await response.arrayBuffer();
 	const responseBody = Buffer.from(ab).toString(responseIsBase64Encoded ? "base64" : "utf-8");
 
-	const fnResponse = {
+	return {
 		body: responseBody,
 		cookies: [...app.setCookieHeaders(response)],
 		headers: responseHeaders,
 		isBase64Encoded: responseIsBase64Encoded,
 		statusCode: response.status,
 	};
-
-	return fnResponse;
 };
