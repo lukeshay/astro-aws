@@ -2,7 +2,7 @@ import type { App } from "astro/app";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { faker } from "@faker-js/faker";
 
-import { createFunctionResponse } from "../helpers.js";
+import { createLambdaFunctionResponse } from "../helpers.js";
 
 const knownBinaryMediaTypes = new Set(["image/png", "image/jpeg"]);
 
@@ -10,7 +10,7 @@ describe("helpers", () => {
 	describe("createFunctionResponse", () => {
 		let response: Response,
 			app: App,
-			fnResponse: Awaited<ReturnType<typeof createFunctionResponse>>,
+			fnResponse: Awaited<ReturnType<typeof createLambdaFunctionResponse>>,
 			body: string,
 			headers: Record<string, string>;
 
@@ -29,7 +29,7 @@ describe("helpers", () => {
 				setCookieHeaders: vi.fn(() => []),
 			} as unknown as App;
 
-			fnResponse = await createFunctionResponse(app, response, knownBinaryMediaTypes);
+			fnResponse = await createLambdaFunctionResponse(app, response, knownBinaryMediaTypes);
 		});
 
 		test("creates function response", () => {

@@ -16,6 +16,7 @@ export const Environments = {
 	DEV: "DEV",
 	DEV_NODE_16: "NODE16",
 	DEV_NODE_18: "NODE18",
+	EDGE: "EDGE",
 	PERSONAL: "PERSONAL",
 	PROD: "PROD",
 } as const;
@@ -43,6 +44,17 @@ export const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
 		environment: Environments.DEV_NODE_18,
 		hostedZoneName: "astro-aws.org",
 		output: "server",
+	},
+	[Environments.EDGE]: {
+		...base,
+		alias: "edge.dev",
+		env: {
+			...base.env,
+			region: "us-east-1",
+		},
+		environment: Environments.EDGE,
+		hostedZoneName: "astro-aws.org",
+		output: "edge",
 	},
 	[Environments.PROD]: {
 		...base,

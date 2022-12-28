@@ -31,26 +31,26 @@
 	},
 	"dependencies": {
 		"@astro-aws/adapter": "workspace:^",
-		"@astrojs/mdx": "^0.12.0",
+		"@astrojs/mdx": "^0.13.0",
 		"@astrojs/sitemap": "^1.0.0",
-		"@types/node": "^18.11.10",
-		"astro": "^1.6.12",
+		"@types/node": "^18.11.17",
+		"astro": "^1.7.2",
 		"astro-icon": "^0.8.0",
 		"astro-link": "^1.1.2",
-		"astro-seo": "^0.6.0",
+		"astro-seo": "^0.6.1",
 		"autoprefixer": "^10.4.13",
 		"classnames": "^2.3.2",
-		"daisyui": "^2.42.1",
-		"postcss": "^8.4.19",
+		"daisyui": "^2.46.0",
+		"postcss": "^8.4.20",
 		"remark-toc": "^8.0.1",
 		"rimraf": "^3.0.2",
-		"rollup": "^3.6.0",
-		"sass": "^1.56.1",
+		"rollup": "^3.8.1",
+		"sass": "^1.57.1",
 		"tailwindcss": "^3.2.4"
 	},
 	"devDependencies": {
-		"eslint": "^8.29.0",
-		"prettier": "^2.8.0"
+		"eslint": "^8.30.0",
+		"prettier": "^2.8.1"
 	},
 	"engines": {
 		"node": "16.x || 18.x"

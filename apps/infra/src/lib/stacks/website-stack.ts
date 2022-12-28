@@ -1,8 +1,8 @@
 import { env } from "node:process";
 
-import { Stack, CfnOutput, Duration } from "aws-cdk-lib";
+import { CfnOutput, Duration, Stack } from "aws-cdk-lib";
 import type { Certificate } from "aws-cdk-lib/aws-certificatemanager";
-import { ResponseHeadersPolicy } from "aws-cdk-lib/aws-cloudfront";
+import { CachePolicy, PriceClass, ResponseHeadersPolicy, SSLMethod } from "aws-cdk-lib/aws-cloudfront";
 import { Architecture } from "aws-cdk-lib/aws-lambda";
 import type { Construct } from "constructs";
 import { AstroAWSConstruct } from "@astro-aws/constructs";
@@ -10,6 +10,7 @@ import type { Dashboard } from "aws-cdk-lib/aws-cloudwatch";
 import type { IHostedZone } from "aws-cdk-lib/aws-route53";
 import { AaaaRecord, ARecord, RecordTarget } from "aws-cdk-lib/aws-route53";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
+import { BlockPublicAccess, Bucket, BucketEncryption } from "aws-cdk-lib/aws-s3";
 
 import { DistributionMetric } from "../constructs/distribution-metric.js";
 import { BasicGraphWidget } from "../constructs/basic-graph-widget.js";
@@ -31,10 +32,21 @@ export class WebsiteStack extends Stack {
 		const domainName = [alias, hostedZoneName].filter(Boolean).join(".");
 		const domainNames = [domainName].filter(Boolean);
 
+		const cachePolicy = new CachePolicy(this, "CachePolicy", {
+			minTtl: Duration.days(365),
+		});
+
+		const accessLogBucket = new Bucket(this, "AccessLogBucket", {
+			blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+			encryption: BucketEncryption.S3_MANAGED,
+		});
+
 		const astroAwsConstruct = new AstroAWSConstruct(this, "AstroAWSConstruct", {
 			cloudfrontDistributionProps: {
 				certificate,
+				comment: environment,
 				defaultBehavior: {
+					cachePolicy,
 					responseHeadersPolicy: new ResponseHeadersPolicy(this, "ResponseHeadersPolicy", {
 						securityHeadersBehavior: {
 							contentSecurityPolicy: {
@@ -51,14 +63,21 @@ export class WebsiteStack extends Stack {
 						responsePagePath: "/403",
 					},
 				],
+				logBucket: accessLogBucket,
+				logFilePrefix: "cloudfront/",
+				priceClass: environment === Environments.PROD ? PriceClass.PRICE_CLASS_ALL : PriceClass.PRICE_CLASS_100,
 				webAclId: env.WEB_ACL_ARN && env.WEB_ACL_ARN.length > 0 ? env.WEB_ACL_ARN : undefined,
 			},
 			lambdaFunctionProps: {
-				architecture: Architecture.ARM_64,
+				architecture: output === "edge" ? Architecture.X86_64 : Architecture.ARM_64,
 			},
 			node16: environment === Environments.DEV_NODE_16,
-			outDir: `../www/dist/${output}`,
+			outDir: `../www/dist/${output === "static" ? "static" : "server"}`,
 			output,
+			s3BucketProps: {
+				serverAccessLogsBucket: accessLogBucket,
+				serverAccessLogsPrefix: "s3/",
+			},
 		});
 
 		if (hostedZone) {
