@@ -1,14 +1,17 @@
 import { dirname, resolve } from "node:path";
 
-import type { FunctionProps, FunctionUrl, FunctionUrlOptions } from "aws-cdk-lib/aws-lambda";
-import { Code, Runtime, FunctionUrlAuthType, Function as LambdaFunction } from "aws-cdk-lib/aws-lambda";
+import { FunctionProps, FunctionUrl, FunctionUrlOptions, Version } from "aws-cdk-lib/aws-lambda";
+import { Code, Function as LambdaFunction, FunctionUrlAuthType, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import {
-	FunctionEventType,
-	Function,
-	FunctionCode,
 	AllowedMethods,
 	Distribution,
+	EdgeLambda,
+	Function,
+	FunctionAssociation,
+	FunctionCode,
+	FunctionEventType,
+	LambdaEdgeEventType,
 	OriginAccessIdentity,
 	OriginRequestPolicy,
 	ResponseHeadersPolicy,
@@ -22,23 +25,28 @@ import { Fn } from "aws-cdk-lib";
 import type { BucketDeploymentProps } from "aws-cdk-lib/aws-s3-deployment";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import type { BucketProps } from "aws-cdk-lib/aws-s3";
-import { Bucket, BlockPublicAccess, BucketEncryption } from "aws-cdk-lib/aws-s3";
+import { BlockPublicAccess, Bucket, BucketEncryption } from "aws-cdk-lib/aws-s3";
 
 export type StaticProps = {
 	output: "static";
 };
 
-export type SSRProps = {
+export type BaseSSRProps<T extends string> = {
 	lambdaFunctionProps?: Omit<FunctionProps, "code" | "handler" | "runtime">;
+	output: T;
+};
+
+export type SSRProps = BaseSSRProps<"server"> & {
 	node16?: boolean;
-	output: "server";
 	/** Passed through to the Lambda Function URL. */
 	lambdaFunctionUrlOptions?: FunctionUrlOptions;
 	/** Passed through to the Lambda Origin. */
 	lambdaOriginProps?: HttpOriginProps;
 };
 
-export type OutputProps = SSRProps | StaticProps;
+export type SSREdgeProps = BaseSSRProps<"edge">;
+
+export type OutputProps = SSRProps | SSREdgeProps | StaticProps;
 
 export type AstroAWSConstructProps = OutputProps & {
 	/** Passed through to the Cloudfront Distribution. */
@@ -120,10 +128,38 @@ export class AstroAWSConstruct extends Construct {
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				primaryOrigin: this.lambdaFunctionOrigin!,
 			});
+		} else if (output === "edge") {
+			this.createSSREdgeOnlyResources(props, true);
+
+			this.defaultOrigin = this.s3BucketOrigin;
 		} else {
 			this.createStaticOnlyResources();
 
 			this.defaultOrigin = this.s3BucketOrigin;
+		}
+
+		const functionAssociations: FunctionAssociation[] =
+			cloudfrontDistributionProps.defaultBehavior?.functionAssociations ?? [];
+
+		if (this.redirectToIndexCloudfrontFunction) {
+			functionAssociations.push({
+				eventType: FunctionEventType.VIEWER_REQUEST,
+				function: this.redirectToIndexCloudfrontFunction,
+			});
+		}
+
+		const edgeLambdas: EdgeLambda[] = cloudfrontDistributionProps.defaultBehavior?.edgeLambdas ?? [];
+
+		if (output === "edge" && this.lambdaFunction) {
+			const functionVersion = new Version(this, "LambdaVersion", {
+				lambda: this.lambdaFunction,
+			});
+
+			edgeLambdas.push({
+				eventType: LambdaEdgeEventType.ORIGIN_REQUEST,
+				includeBody: true,
+				functionVersion,
+			});
 		}
 
 		this.cloudfrontDistribution = new Distribution(this, "Distribution", {
@@ -142,20 +178,13 @@ export class AstroAWSConstruct extends Construct {
 				  }
 				: cloudfrontDistributionProps.additionalBehaviors,
 			defaultBehavior: {
-				functionAssociations: this.redirectToIndexCloudfrontFunction
-					? [
-							{
-								eventType: FunctionEventType.VIEWER_REQUEST,
-								function: this.redirectToIndexCloudfrontFunction,
-							},
-							...(cloudfrontDistributionProps.defaultBehavior?.functionAssociations ?? []),
-					  ]
-					: cloudfrontDistributionProps.defaultBehavior?.functionAssociations,
 				origin: this.defaultOrigin,
 				originRequestPolicy: OriginRequestPolicy.USER_AGENT_REFERER_HEADERS,
 				responseHeadersPolicy: ResponseHeadersPolicy.CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT_AND_SECURITY_HEADERS,
 				viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 				...cloudfrontDistributionProps.defaultBehavior,
+				edgeLambdas,
+				functionAssociations,
 			},
 		});
 
@@ -223,7 +252,20 @@ export class AstroAWSConstruct extends Construct {
 	}
 
 	private createSSROnlyResources(props: AstroAWSConstructProps & SSRProps) {
-		const { lambdaFunctionProps = {}, node16, lambdaFunctionUrlOptions, lambdaOriginProps } = props;
+		const { node16, lambdaFunctionUrlOptions, lambdaOriginProps } = props;
+
+		this.createSSREdgeOnlyResources(props, node16);
+
+		this.lambdaFunctionUrl = this.lambdaFunction!.addFunctionUrl({
+			authType: FunctionUrlAuthType.NONE,
+			...lambdaFunctionUrlOptions,
+		});
+
+		this.lambdaFunctionOrigin = new HttpOrigin(Fn.parseDomainName(this.lambdaFunctionUrl.url), lambdaOriginProps);
+	}
+
+	private createSSREdgeOnlyResources(props: AstroAWSConstructProps & BaseSSRProps<string>, node16?: boolean) {
+		const { lambdaFunctionProps = {} } = props;
 
 		this.lambdaFunction = new LambdaFunction(this, "Lambda", {
 			memorySize: 512,
@@ -232,13 +274,6 @@ export class AstroAWSConstruct extends Construct {
 			code: Code.fromAsset(resolve(this.distDir, "lambda")),
 			handler: "entry.handler",
 		});
-
-		this.lambdaFunctionUrl = this.lambdaFunction.addFunctionUrl({
-			authType: FunctionUrlAuthType.NONE,
-			...lambdaFunctionUrlOptions,
-		});
-
-		this.lambdaFunctionOrigin = new HttpOrigin(Fn.parseDomainName(this.lambdaFunctionUrl.url), lambdaOriginProps);
 	}
 
 	public createBucketDeployment(props?: Partial<Omit<BucketDeploymentProps, "destinationBucket" | "distribution">>) {
