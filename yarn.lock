@@ -103,7 +103,7 @@ __metadata:
     astro: ^1.6.12
     astro-icon: ^0.8.0
     astro-link: ^1.1.2
-    astro-seo: ^0.6.0
+    astro-seo: ^0.7.0
     autoprefixer: ^10.4.13
     classnames: ^2.3.2
     daisyui: ^2.42.1
@@ -2354,10 +2354,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astro-seo@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "astro-seo@npm:0.6.0"
-  checksum: ded710aa0c0bf449110983fc39110f46d438afa69f28aee162178a5a0182f486ed90855e8041ff8ddb3abba50a679ba4a30e0c95913ce586065c1ec6aa5971a4
+"astro-seo@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "astro-seo@npm:0.7.0"
+  checksum: 1f63fdeb7ed862e55a4575364ca332e435f06ee419b8537c28c91209fb964767fe16ca88810cf3c228bed9a03a5f3b0672ed484ebc04644326307559380c3861
   languageName: node
   linkType: hard
 

@@ -37,7 +37,7 @@
 		"astro": "^1.6.12",
 		"astro-icon": "^0.8.0",
 		"astro-link": "^1.1.2",
-		"astro-seo": "^0.6.0",
+		"astro-seo": "^0.7.0",
 		"autoprefixer": "^10.4.13",
 		"classnames": "^2.3.2",
 		"daisyui": "^2.42.1",
