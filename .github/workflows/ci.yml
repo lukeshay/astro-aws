@@ -29,6 +29,7 @@ jobs:
         runs-on: ubuntu-22.04
         needs: prepare-yarn-cache
         strategy:
+            fail-fast: false
             matrix:
                 node_version:
                     - 16
