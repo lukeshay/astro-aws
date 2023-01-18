@@ -48,7 +48,7 @@ jobs:
             - run: yarn install --mode=skip-build
             - run: yarn build
             - run: yarn constraints
-            - if: ${{ matrix.node_version }} == "18"
+            - if: matrix.node_version == 18
               run: yarn test
             - run: yarn lint
             - run: yarn prettier
