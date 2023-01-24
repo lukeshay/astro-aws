@@ -42,7 +42,7 @@
 		"root": false
 	},
 	"dependencies": {
-		"@astrojs/webapi": "^1.1.1",
+		"@astrojs/webapi": "^2.0.0",
 		"astro": "^1.6.12",
 		"esbuild": "^0.16.0",
 		"merge-anything": "^5.1.4"
