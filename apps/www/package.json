@@ -31,7 +31,7 @@
 	},
 	"dependencies": {
 		"@astro-aws/adapter": "workspace:^",
-		"@astrojs/mdx": "^0.12.0",
+		"@astrojs/mdx": "^0.16.0",
 		"@astrojs/sitemap": "^1.0.0",
 		"@types/node": "^18.11.10",
 		"astro": "^1.6.12",

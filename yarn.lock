@@ -97,7 +97,7 @@ __metadata:
   resolution: "@astro-aws/www@workspace:apps/www"
   dependencies:
     "@astro-aws/adapter": "workspace:^"
-    "@astrojs/mdx": ^0.12.0
+    "@astrojs/mdx": ^0.16.0
     "@astrojs/sitemap": ^1.0.0
     "@types/node": ^18.11.10
     astro: ^1.6.12
@@ -179,11 +179,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@astrojs/mdx@npm:^0.12.0":
-  version: 0.12.0
-  resolution: "@astrojs/mdx@npm:0.12.0"
+"@astrojs/markdown-remark@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@astrojs/markdown-remark@npm:2.0.1"
   dependencies:
-    "@astrojs/prism": ^1.0.2
+    "@astrojs/prism": ^2.0.0
+    github-slugger: ^1.4.0
+    import-meta-resolve: ^2.1.0
+    rehype-raw: ^6.1.1
+    rehype-stringify: ^9.0.3
+    remark-gfm: ^3.0.1
+    remark-parse: ^10.0.1
+    remark-rehype: ^10.1.0
+    remark-smartypants: ^2.0.0
+    shiki: ^0.11.1
+    unified: ^10.1.2
+    unist-util-visit: ^4.1.0
+    vfile: ^5.3.2
+  peerDependencies:
+    astro: ^2.0.2
+  checksum: fe603a00e91a3c383b84c90b44e0834bcd8dd1530c6c24a99f9a20125c5860f5127905feceffa13ec088963f0eddf36208f5f05f1983833dcf4d4ab9fe1fc899
+  languageName: node
+  linkType: hard
+
+"@astrojs/mdx@npm:^0.16.0":
+  version: 0.16.0
+  resolution: "@astrojs/mdx@npm:0.16.0"
+  dependencies:
+    "@astrojs/markdown-remark": ^2.0.1
+    "@astrojs/prism": ^2.0.0
     "@mdx-js/mdx": ^2.1.2
     "@mdx-js/rollup": ^2.1.1
     acorn: ^8.8.0
@@ -199,7 +223,7 @@ __metadata:
     shiki: ^0.11.1
     unist-util-visit: ^4.1.0
     vfile: ^5.3.2
-  checksum: 3903cb04d7b5db2f224cdcadbad8a2b13b92b3762f1395996713fbe67fdce22cbef6ba3c09804886c6c158dbf2c0630d783c045c13b67f4e16b62444c99e0d1b
+  checksum: 3ad8945213835f94b2ab5d674fe7fc8723b26a0f0998f1bc02336d5ac57e1ecedea4fa87db1dcb8beea84047a329eee43c97caefa65896a25cd28a17c70eaee8
   languageName: node
   linkType: hard
 
@@ -220,12 +244,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@astrojs/prism@npm:^1.0.0, @astrojs/prism@npm:^1.0.2":
+"@astrojs/prism@npm:^1.0.0":
   version: 1.0.2
   resolution: "@astrojs/prism@npm:1.0.2"
   dependencies:
     prismjs: ^1.28.0
   checksum: ff6a222b402c156c157515ae08d71cebea7ab11807bb0ffcad3ac62e28a85beef93814f040d3706f3e178d825cbf444a315b5bdac3b5412c87df0f83b091d0e6
+  languageName: node
+  linkType: hard
+
+"@astrojs/prism@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@astrojs/prism@npm:2.0.0"
+  dependencies:
+    prismjs: ^1.28.0
+  checksum: 71080d863a3216c58a1b8936070d05a26bac5457c8b35dede8dc4bd87480defa9234c71415c1c52c36bfaf96dcfac7cb1c1786593b31279400d34dfd0b9d95e0
   languageName: node
   linkType: hard
 
