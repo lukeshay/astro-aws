@@ -18,8 +18,8 @@ const depthPadding = {
 const { headings, url } = Astro.props;
 ---
 
-<div class="fixed hidden lg:block inset-y-0 z-50 w-72 py-1 px-10 right-0 mt-24">
-	<h1 class="text-sm font-bold mb-2">On this page</h1>
+<div class="fixed inset-y-0 right-0 z-50 mt-24 hidden w-72 py-1 px-10 lg:block">
+	<h1 class="mb-2 text-sm font-bold">On this page</h1>
 	<ul class="menu menu-compact menu-vertical">
 		{
 			headings

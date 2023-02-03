@@ -20,7 +20,7 @@ export const Environments = {
 	PROD: "PROD",
 } as const;
 
-export type Environment = typeof Environments[keyof typeof Environments];
+export type Environment = (typeof Environments)[keyof typeof Environments];
 
 export const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
 	[Environments.DEV]: {

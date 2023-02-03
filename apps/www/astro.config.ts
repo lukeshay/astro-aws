@@ -13,7 +13,6 @@ export default defineConfig({
 	adapter: isSSR ? aws() : undefined,
 	integrations: [mdx(), sitemap()],
 	markdown: {
-		extendDefaultPlugins: true,
 		remarkPlugins: [remarkToc],
 	},
 	outDir: isSSR ? "dist/server" : "dist/static",

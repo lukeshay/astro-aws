@@ -1,8 +1,6 @@
 require("@rushstack/eslint-patch/modern-module-resolution");
 
-/**
- * @type {import("eslint").Linter.Config}
- */
+/** @type {import("eslint").Linter.Config} */
 module.exports = {
 	extends: ["@lshay/eslint-config"],
 	root: true,
