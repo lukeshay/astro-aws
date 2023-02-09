@@ -1,17 +1,14 @@
 import { Buffer } from "node:buffer";
 
-import type { APIGatewayProxyResultV2 } from "aws-lambda";
-import type { App } from "astro/app";
-import { DISALLOWED_EDGE_HEADERS } from "./constants";
+import type { APIGatewayProxyResultV2, CloudFrontHeaders, CloudFrontRequestResult } from "aws-lambda";
+import type { NodeApp } from "astro/app/node";
 
-export const parseContentType = (header?: string) => header?.split(";")[0] ?? "";
+import { DISALLOWED_EDGE_HEADERS } from "./constants.js";
 
-export const createRequestBody = (
-	method: string,
-	requestBody: string | undefined,
-	isBase64Encoded: boolean | string,
-) => {
-	if (method !== "GET" && method !== "HEAD" && requestBody) {
+export const parseContentType = (header?: string | null) => header?.split(";")[0] ?? "";
+
+export const createRequestBody = (method: string, body: string | undefined, isBase64Encoded: boolean | string) => {
+	if (method !== "GET" && method !== "HEAD" && body) {
 		const encoding =
 			typeof isBase64Encoded === "boolean"
 				? isBase64Encoded
@@ -19,56 +16,65 @@ export const createRequestBody = (
 					: "utf-8"
 				: (isBase64Encoded as BufferEncoding);
 
-		return Buffer.from(requestBody, encoding);
+		return encoding === "base64" ? Buffer.from(body, encoding).toString() : body;
 	}
 
 	return undefined;
 };
 
 export const createLambdaFunctionResponse = async (
-	app: App,
+	app: NodeApp,
 	response: Response,
 	knownBinaryMediaTypes: Set<string>,
 ): Promise<APIGatewayProxyResultV2> => {
-	const responseHeaders = Object.fromEntries(response.headers.entries());
-	const responseContentType = parseContentType(responseHeaders["content-type"]);
-	const responseIsBase64Encoded = knownBinaryMediaTypes.has(responseContentType);
-	const ab = await response.arrayBuffer();
-	const responseBody = Buffer.from(ab).toString(responseIsBase64Encoded ? "base64" : "utf-8");
+	const cookies = [...app.setCookieHeaders(response)];
+
+	response.headers.delete("Set-Cookie");
+
+	const headers = Object.fromEntries(response.headers.entries());
+	const responseContentType = parseContentType(headers["content-type"]);
+	const isBase64Encoded = knownBinaryMediaTypes.has(responseContentType);
+	const body = isBase64Encoded ? Buffer.from(await response.arrayBuffer()).toString("base64") : await response.text();
 
 	return {
-		body: responseBody,
-		cookies: [...app.setCookieHeaders(response)],
-		headers: responseHeaders,
-		isBase64Encoded: responseIsBase64Encoded,
+		body,
+		cookies,
+		headers,
+		isBase64Encoded,
 		statusCode: response.status,
 	};
 };
 
 export const createLambdaEdgeFunctionResponse = async (
-	app: App,
+	app: NodeApp,
 	response: Response,
 	knownBinaryMediaTypes: Set<string>,
-) => {
+): Promise<CloudFrontRequestResult> => {
 	app.setCookieHeaders(response);
 
 	const responseHeadersObj = Object.fromEntries(response.headers.entries());
 
-	const responseHeaders = Object.fromEntries(
+	const headers: CloudFrontHeaders = Object.fromEntries(
 		Object.entries(responseHeadersObj)
-			.filter(([key]) => !DISALLOWED_EDGE_HEADERS.includes(key.toLowerCase()))
-			.map(([key, value]) => [key.toLowerCase(), [{ value }]]),
+			.filter(([key]) => !DISALLOWED_EDGE_HEADERS.some((reg) => reg.test(key.toLowerCase())))
+			.map(([key, value]) => [
+				key.toLowerCase(),
+				[
+					{
+						key,
+						value,
+					},
+				],
+			]),
 	);
-	const responseContentType = parseContentType(responseHeaders["content-type"]?.[0]?.value);
-	const responseIsBase64Encoded = knownBinaryMediaTypes.has(responseContentType);
-	const encoding = responseIsBase64Encoded ? "base64" : "utf-8";
-	const ab = await response.arrayBuffer();
-	const responseBody = Buffer.from(ab).toString(encoding);
+	const responseContentType = parseContentType(response.headers.get("content-type"));
+	const bodyEncoding = knownBinaryMediaTypes.has(responseContentType) ? "base64" : "text";
 
 	return {
-		body: responseBody,
-		bodyEncoding: responseIsBase64Encoded ? "base64" : "text",
-		headers: responseHeaders,
-		status: response.status,
+		body: await response.text(),
+		bodyEncoding,
+		headers,
+		status: String(response.status),
+		statusDescription: response.statusText,
 	};
 };

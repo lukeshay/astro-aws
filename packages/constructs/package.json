@@ -1,7 +1,12 @@
 {
 	"name": "@astro-aws/constructs",
 	"version": "0.2.0",
+	"description": "Constructs for deploying an Astro application to AWS Lambda",
 	"keywords": [
+		"withastro",
+		"renderer",
+		"performance",
+		"perf",
 		"astro-adapter",
 		"aws",
 		"aws-lambda",

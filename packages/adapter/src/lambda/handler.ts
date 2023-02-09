@@ -1,4 +1,4 @@
-import type { App } from "astro/app";
+import type { NodeApp } from "astro/app/node";
 import type { APIGatewayProxyEventV2, CloudFrontRequestEvent } from "aws-lambda";
 
 import type { Args } from "../args.js";
@@ -6,21 +6,18 @@ import { log } from "../log.js";
 
 import { createLambdaEdgeFunctionResponse, createLambdaFunctionResponse, createRequestBody } from "./helpers.js";
 
-const clientAddressSymbol = Symbol.for("astro.clientAddress");
-
 export const createHandler =
-	(app: App, knownBinaryMediaTypes: Set<string>, { logFnResponse, logFnRequest }: Args) =>
+	(app: NodeApp, knownBinaryMediaTypes: Set<string>, { logFnResponse, logFnRequest }: Args) =>
 	async (originalEvent: APIGatewayProxyEventV2 | CloudFrontRequestEvent) => {
 		if (logFnRequest) {
 			log("function request", JSON.stringify(originalEvent, undefined, 2));
 		}
 
 		if ("Records" in originalEvent) {
-			const event = originalEvent as CloudFrontRequestEvent;
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			const cloudfrontRequest = originalEvent.Records[0]!.cf.request;
 
-			const cloudfrontRequest = event.Records[0]!.cf.request;
-
-			const { body: requestBody, headers: eventHeaders, querystring, uri, method, origin } = cloudfrontRequest;
+			const { body, headers: eventHeaders, querystring, uri, method } = cloudfrontRequest;
 
 			const headers = new Headers(
 				Object.fromEntries(
@@ -28,27 +25,21 @@ export const createHandler =
 				) as HeadersInit,
 			);
 
-			const init: RequestInit = {
-				body: requestBody ? createRequestBody(method, requestBody.data, requestBody.encoding) : undefined,
+			const scheme = headers.get("x-forwarded-protocol") ?? "https";
+			const host = headers.get("x-forwarded-host") ?? headers.get("host") ?? "";
+			const qs = querystring.length ? `?${querystring}` : "";
+			const url = new URL(`${uri}${qs}`, `${scheme}://${host}`);
+
+			const request = new Request(url, {
+				body: body?.data ? createRequestBody(method, body.data, body.encoding) : undefined,
 				headers,
 				method,
-				referrer:
-					headers.get("referrer") ??
-					[origin?.custom?.protocol ?? "https", "://", origin?.custom?.domainName ?? "example.com"].join(""),
-			};
-
-			const url = new URL(`${uri}?${decodeURIComponent(querystring)}`, init.referrer);
-
-			const request = new Request(url, init);
-			const routeData = app.match(request, { matchNotFound: true });
+			});
+			const routeData = app.match(request);
 
 			if (!routeData) {
 				return cloudfrontRequest;
 			}
-
-			const ip = headers.get("x-forwarded-for");
-
-			Reflect.set(request, clientAddressSymbol, ip);
 
 			const response = await app.render(request, routeData);
 			const fnResponse = await createLambdaEdgeFunctionResponse(app, response, knownBinaryMediaTypes);
@@ -58,63 +49,52 @@ export const createHandler =
 			}
 
 			return fnResponse;
-		} else {
-			const event = originalEvent as APIGatewayProxyEventV2;
-
-			const {
-				body: requestBody,
-				cookies,
-				headers: eventHeaders,
-				isBase64Encoded,
-				queryStringParameters = {},
-				rawPath,
-				requestContext: {
-					domainName,
-					http: { method },
-				},
-			} = event;
-
-			const headers = new Headers({
-				...eventHeaders,
-				cookie: cookies?.join("; ") ?? "",
-			});
-
-			const init: RequestInit = {
-				body: createRequestBody(method, requestBody, isBase64Encoded),
-				headers,
-				method,
-				referrer: headers.get("referrer") ?? `https://${domainName}`,
-			};
-
-			const url = new URL(rawPath, init.referrer);
-
-			Object.entries(queryStringParameters).forEach(([key, value]) => {
-				if (value) {
-					url.searchParams.set(key, value);
-				}
-			});
-
-			const request = new Request(url, init);
-			const routeData = app.match(request, { matchNotFound: true });
-
-			if (!routeData) {
-				return {
-					body: "Not found",
-					statusCode: 404,
-				};
-			}
-
-			const ip = headers.get("x-forwarded-for");
-
-			Reflect.set(request, clientAddressSymbol, ip);
-
-			const response = await app.render(request, routeData);
-			const fnResponse = await createLambdaFunctionResponse(app, response, knownBinaryMediaTypes);
-
-			if (logFnResponse) {
-				log("function response", JSON.stringify(fnResponse, undefined, 2));
-			}
-
-			return fnResponse;
 		}
+
+		const event = originalEvent;
+
+		const {
+			body: requestBody,
+			cookies,
+			headers: eventHeaders,
+			isBase64Encoded,
+			rawQueryString,
+			rawPath,
+			requestContext: {
+				http: { method },
+			},
+		} = event;
+
+		const headers = new Headers({
+			...eventHeaders,
+			cookie: cookies?.join("; ") ?? "",
+		});
+
+		const scheme = eventHeaders["x-forwarded-protocol"] ?? "https";
+		const host = eventHeaders["x-forwarded-host"] ?? eventHeaders.host ?? "";
+		const qs = rawQueryString.length ? `?${rawQueryString}` : "";
+		const url = new URL(`${rawPath}${qs}`, `${scheme}://${host}`);
+
+		const request = new Request(url, {
+			body: createRequestBody(method, requestBody, isBase64Encoded),
+			headers,
+			method,
+		});
+		const routeData = app.match(request);
+
+		if (!routeData) {
+			return {
+				body: "Not found",
+				statusCode: 404,
+			};
+		}
+
+		const response = await app.render(request, routeData);
+		const fnResponse = await createLambdaFunctionResponse(app, response, knownBinaryMediaTypes);
+
+		if (logFnResponse) {
+			log("function response", JSON.stringify(fnResponse, undefined, 2));
+		}
+
+		return fnResponse;
 	};

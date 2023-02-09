@@ -1,6 +1,5 @@
 import { Stack } from "aws-cdk-lib";
-import type { Certificate } from "aws-cdk-lib/aws-certificatemanager";
-import { DnsValidatedCertificate } from "aws-cdk-lib/aws-certificatemanager";
+import { Certificate, CertificateValidation } from "aws-cdk-lib/aws-certificatemanager";
 import type { Construct } from "constructs";
 import type { IHostedZone } from "aws-cdk-lib/aws-route53";
 import { HostedZone } from "aws-cdk-lib/aws-route53";
@@ -32,9 +31,9 @@ export class CertificateStack extends Stack {
 			domainName: hostedZoneName,
 		});
 
-		this.certificate = new DnsValidatedCertificate(this, "Certificate", {
+		this.certificate = new Certificate(this, "Certificate", {
 			domainName,
-			hostedZone: this.hostedZone,
+			validation: CertificateValidation.fromDns(this.hostedZone),
 		});
 	}
 }
