@@ -34,5 +34,7 @@ copy_readme() {
 	fi
 }
 
+mkdir -p src/pages/docs/packages
+
 copy_readme "adapter"
 copy_readme "constructs"
