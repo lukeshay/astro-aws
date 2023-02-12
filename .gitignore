@@ -17,4 +17,4 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 package.tgz
-apps/www/src/packages/*
+apps/www/src/pages/docs/packages/*
