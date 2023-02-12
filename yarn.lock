@@ -23,15 +23,15 @@ __metadata:
     "@astrojs/webapi": ^2.0.0
     "@faker-js/faker": ^7.6.0
     "@types/aws-lambda": ^8.10.110
-    "@types/node": ^18.11.18
-    astro: ^2.0.5
+    "@types/node": ^18.13.0
+    astro: ^2.0.10
     aws-lambda: ^1.0.7
-    esbuild: ^0.17.5
+    esbuild: ^0.17.6
     eslint: ^8.33.0
     merge-anything: ^5.1.4
-    prettier: ^2.8.3
+    prettier: ^2.8.4
     typescript: ^4.9.5
-    vitest: ^0.28.3
+    vitest: ^0.28.4
   peerDependencies:
     astro: ">=1"
   languageName: unknown
@@ -42,11 +42,11 @@ __metadata:
   resolution: "@astro-aws/constructs@workspace:packages/constructs"
   dependencies:
     "@astro-aws/scripts": "workspace:^"
-    "@types/node": ^18.11.18
-    aws-cdk-lib: ^2.63.0
-    constructs: ^10.1.238
+    "@types/node": ^18.13.0
+    aws-cdk-lib: ^2.64.0
+    constructs: ^10.1.245
     eslint: ^8.33.0
-    prettier: ^2.8.3
+    prettier: ^2.8.4
     typescript: ^4.9.5
   peerDependencies:
     aws-cdk-lib: ^2.40.0
@@ -61,13 +61,13 @@ __metadata:
     "@astro-aws/constructs": "workspace:^"
     "@astro-aws/scripts": "workspace:^"
     "@astro-aws/www": "workspace:^"
-    "@types/node": ^18.11.18
-    aws-cdk: ^2.63.0
-    aws-cdk-lib: ^2.63.0
-    constructs: ^10.1.238
+    "@types/node": ^18.13.0
+    aws-cdk: ^2.64.0
+    aws-cdk-lib: ^2.64.0
+    constructs: ^10.1.245
     eslint: ^8.33.0
     eslint-config-get-off-my-lawn: ^7.2.0
-    prettier: ^2.8.3
+    prettier: ^2.8.4
     typescript: ^4.9.5
   bin:
     astro-aws-cdk: dist/bin/infra.js
@@ -80,10 +80,10 @@ __metadata:
   dependencies:
     commander: ^10.0.0
     cosmiconfig: ^8.0.0
-    esbuild: ^0.17.5
+    esbuild: ^0.17.6
     eslint: ^8.33.0
     globby: ^13.1.3
-    prettier: ^2.8.3
+    prettier: ^2.8.4
     ts-node: ^10.9.1
     typescript: ^4.9.5
   peerDependencies:
@@ -101,8 +101,8 @@ __metadata:
     "@astro-aws/adapter": "workspace:^"
     "@astrojs/mdx": ^0.16.0
     "@astrojs/sitemap": ^1.0.1
-    "@types/node": ^18.11.18
-    astro: ^2.0.5
+    "@types/node": ^18.13.0
+    astro: ^2.0.10
     astro-icon: ^0.8.0
     astro-link: ^1.1.4
     astro-seo: ^0.7.0
@@ -111,12 +111,12 @@ __metadata:
     daisyui: ^2.50.0
     eslint: ^8.33.0
     postcss: ^8.4.21
-    prettier: ^2.8.3
+    prettier: ^2.8.4
     remark-toc: ^8.0.1
     rimraf: ^4.1.2
-    rollup: ^3.12.1
+    rollup: ^3.14.0
     sass: ^1.58.0
-    tailwindcss: ^3.2.4
+    tailwindcss: ^3.2.6
   languageName: unknown
   linkType: soft
 
@@ -1792,7 +1792,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^18.11.18":
+"@types/node@npm:*, @types/node@npm:^18.13.0":
   version: 18.13.0
   resolution: "@types/node@npm:18.13.0"
   checksum: 4ea10f8802848b01672bce938f678b6774ca2cee0c9774f12275ab064ae07818419c3e2e41d6257ce7ba846d1ea26c63214aa1dfa4166fa3746291752b8c6416
@@ -2458,9 +2458,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astro@npm:^2.0.5":
-  version: 2.0.7
-  resolution: "astro@npm:2.0.7"
+"astro@npm:^2.0.10":
+  version: 2.0.10
+  resolution: "astro@npm:2.0.10"
   dependencies:
     "@astrojs/compiler": ^1.1.0
     "@astrojs/language-server": ^0.28.3
@@ -2516,7 +2516,7 @@ __metadata:
     zod: ^3.17.3
   bin:
     astro: astro.js
-  checksum: 453e37a8b9c03496d08e97106f9d7de21ab7028a7af13248f425c5ab9127456a0e2fbb95184e1d07405b894872d3477603a0dd9831e530f1e182295416098d8d
+  checksum: 7898288af88a0409b0e87542a51248a64175b50a2c1adc897e12f8ee2d2379845390ef739aad501450625a10a38e65cbc3391298bd182e71066e00dc865f687d
   languageName: node
   linkType: hard
 
@@ -2552,9 +2552,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-cdk-lib@npm:^2.63.0":
-  version: 2.63.2
-  resolution: "aws-cdk-lib@npm:2.63.2"
+"aws-cdk-lib@npm:^2.64.0":
+  version: 2.64.0
+  resolution: "aws-cdk-lib@npm:2.64.0"
   dependencies:
     "@aws-cdk/asset-awscli-v1": ^2.2.52
     "@aws-cdk/asset-kubectl-v20": ^2.1.1
@@ -2570,13 +2570,13 @@ __metadata:
     yaml: 1.10.2
   peerDependencies:
     constructs: ^10.0.0
-  checksum: 4b16f567f748c104c7112863de1b209bb04a27b520ad75cbf2df85865e69af7f7a08dc5f5ff44655905570d385b8b37d66cbb09aec4de59023fe548f5299e61e
+  checksum: 26b6e6657c6a65c8fde3f6450950912798171929ebd655aafce1ed13dd7ef2999930f329972877e1f8a66336116e9ecbb4650235df6ede65ceef116253770645
   languageName: node
   linkType: hard
 
-"aws-cdk@npm:^2.63.0":
-  version: 2.63.2
-  resolution: "aws-cdk@npm:2.63.2"
+"aws-cdk@npm:^2.64.0":
+  version: 2.64.0
+  resolution: "aws-cdk@npm:2.64.0"
   dependencies:
     fsevents: 2.3.2
   dependenciesMeta:
@@ -2584,7 +2584,7 @@ __metadata:
       optional: true
   bin:
     cdk: bin/cdk
-  checksum: 4a017797859b67d24738d87c6c7c9832afb13fa185d72f143f2275701f385139d841460c60f5b6ee7620e1fb89b4383d223e1246dfa1baf22862f00a9db486fa
+  checksum: 3745db54eafdd64066addb8b5657400620b9c28a4bb45d76ede5ba77a1c0d97ce5ac71be385deebc5f831919e8e72e9fee1394ed48015dd7599d5905e44a28d7
   languageName: node
   linkType: hard
 
@@ -3237,10 +3237,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"constructs@npm:^10.1.238":
-  version: 10.1.243
-  resolution: "constructs@npm:10.1.243"
-  checksum: 47c74dc7dda8b53662957b99afc420ff266467efdd6568d455c034a9ad1a5636bcd050630c228179b4cf9ef7e701e628cb8934cb32307476ad8be01b2c4a480a
+"constructs@npm:^10.1.245":
+  version: 10.1.245
+  resolution: "constructs@npm:10.1.245"
+  checksum: 6c7a679bdf184a70e71f8b01e836c9f9071dbd711820b8401fec545d31cf841c8ab09c4d8c7d75c4b0472bf300dfee1cb43fd99da26827d2f62361dd0c62adb7
   languageName: node
   linkType: hard
 
@@ -3982,7 +3982,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.17.5":
+"esbuild@npm:^0.17.6":
   version: 0.17.6
   resolution: "esbuild@npm:0.17.6"
   dependencies:
@@ -8133,7 +8133,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-selector-parser@npm:^6.0.10":
+"postcss-selector-parser@npm:^6.0.10, postcss-selector-parser@npm:^6.0.11":
   version: 6.0.11
   resolution: "postcss-selector-parser@npm:6.0.11"
   dependencies:
@@ -8150,7 +8150,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.18, postcss@npm:^8.4.21":
+"postcss@npm:^8.0.9, postcss@npm:^8.4.18, postcss@npm:^8.4.21":
   version: 8.4.21
   resolution: "postcss@npm:8.4.21"
   dependencies:
@@ -8296,12 +8296,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.7.1, prettier@npm:^2.8.3":
+"prettier@npm:^2.7.1":
   version: 2.8.3
   resolution: "prettier@npm:2.8.3"
   bin:
     prettier: bin-prettier.js
   checksum: 92f2ceb522d454370e02082aa74ad27388672f7cee8975028b59517c069fe643bdc73e322675c8faf2ff173d7a626d1a6389f26b474000308e793aa25fff46e5
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^2.8.4":
+  version: 2.8.4
+  resolution: "prettier@npm:2.8.4"
+  bin:
+    prettier: bin-prettier.js
+  checksum: c173064bf3df57b6d93d19aa98753b9b9dd7657212e33b41ada8e2e9f9884066bb9ca0b4005b89b3ab137efffdf8fbe0b462785aba20364798ff4303aadda57e
   languageName: node
   linkType: hard
 
@@ -8851,7 +8860,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.10.0, rollup@npm:^3.12.1":
+"rollup@npm:^3.10.0, rollup@npm:^3.14.0":
   version: 3.14.0
   resolution: "rollup@npm:3.14.0"
   dependencies:
@@ -8877,8 +8886,8 @@ __metadata:
     eslint: ^8.33.0
     eslint-import-resolver-typescript: ^3.5.3
     eslint-plugin-import: ^2.27.5
-    prettier: ^2.8.3
-    turbo: ^1.7.2
+    prettier: ^2.8.4
+    turbo: ^1.7.4
     typescript: ^4.9.5
   languageName: unknown
   linkType: soft
@@ -9613,7 +9622,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^3, tailwindcss@npm:^3.2.4":
+"tailwindcss@npm:^3":
   version: 3.2.4
   resolution: "tailwindcss@npm:3.2.4"
   dependencies:
@@ -9646,6 +9655,42 @@ __metadata:
     tailwind: lib/cli.js
     tailwindcss: lib/cli.js
   checksum: ec187d180c722ec4f57537f2216c7b21269b525f12aaf353cea464d939c3e6286a1221eb3e1206e45d1f015f296171309ad4d9952899b0245cd07d9500a9401f
+  languageName: node
+  linkType: hard
+
+"tailwindcss@npm:^3.2.6":
+  version: 3.2.6
+  resolution: "tailwindcss@npm:3.2.6"
+  dependencies:
+    arg: ^5.0.2
+    chokidar: ^3.5.3
+    color-name: ^1.1.4
+    detective: ^5.2.1
+    didyoumean: ^1.2.2
+    dlv: ^1.1.3
+    fast-glob: ^3.2.12
+    glob-parent: ^6.0.2
+    is-glob: ^4.0.3
+    lilconfig: ^2.0.6
+    micromatch: ^4.0.5
+    normalize-path: ^3.0.0
+    object-hash: ^3.0.0
+    picocolors: ^1.0.0
+    postcss: ^8.0.9
+    postcss-import: ^14.1.0
+    postcss-js: ^4.0.0
+    postcss-load-config: ^3.1.4
+    postcss-nested: 6.0.0
+    postcss-selector-parser: ^6.0.11
+    postcss-value-parser: ^4.2.0
+    quick-lru: ^5.1.1
+    resolve: ^1.22.1
+  peerDependencies:
+    postcss: ^8.0.9
+  bin:
+    tailwind: lib/cli.js
+    tailwindcss: lib/cli.js
+  checksum: 908451ff7b334b2aec2a0ba5bf426a786a3f190b440a1f8ede206d889448ffda3b77349829f06dc297336fd0b5edc696ae5f23b808d6444bb5c689f218e95323
   languageName: node
   linkType: hard
 
@@ -9881,58 +9926,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"turbo-darwin-64@npm:1.7.3":
-  version: 1.7.3
-  resolution: "turbo-darwin-64@npm:1.7.3"
+"turbo-darwin-64@npm:1.7.4":
+  version: 1.7.4
+  resolution: "turbo-darwin-64@npm:1.7.4"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-darwin-arm64@npm:1.7.3":
-  version: 1.7.3
-  resolution: "turbo-darwin-arm64@npm:1.7.3"
+"turbo-darwin-arm64@npm:1.7.4":
+  version: 1.7.4
+  resolution: "turbo-darwin-arm64@npm:1.7.4"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-linux-64@npm:1.7.3":
-  version: 1.7.3
-  resolution: "turbo-linux-64@npm:1.7.3"
+"turbo-linux-64@npm:1.7.4":
+  version: 1.7.4
+  resolution: "turbo-linux-64@npm:1.7.4"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-linux-arm64@npm:1.7.3":
-  version: 1.7.3
-  resolution: "turbo-linux-arm64@npm:1.7.3"
+"turbo-linux-arm64@npm:1.7.4":
+  version: 1.7.4
+  resolution: "turbo-linux-arm64@npm:1.7.4"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-windows-64@npm:1.7.3":
-  version: 1.7.3
-  resolution: "turbo-windows-64@npm:1.7.3"
+"turbo-windows-64@npm:1.7.4":
+  version: 1.7.4
+  resolution: "turbo-windows-64@npm:1.7.4"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-windows-arm64@npm:1.7.3":
-  version: 1.7.3
-  resolution: "turbo-windows-arm64@npm:1.7.3"
+"turbo-windows-arm64@npm:1.7.4":
+  version: 1.7.4
+  resolution: "turbo-windows-arm64@npm:1.7.4"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo@npm:^1.7.2":
-  version: 1.7.3
-  resolution: "turbo@npm:1.7.3"
+"turbo@npm:^1.7.4":
+  version: 1.7.4
+  resolution: "turbo@npm:1.7.4"
   dependencies:
-    turbo-darwin-64: 1.7.3
-    turbo-darwin-arm64: 1.7.3
-    turbo-linux-64: 1.7.3
-    turbo-linux-arm64: 1.7.3
-    turbo-windows-64: 1.7.3
-    turbo-windows-arm64: 1.7.3
+    turbo-darwin-64: 1.7.4
+    turbo-darwin-arm64: 1.7.4
+    turbo-linux-64: 1.7.4
+    turbo-linux-arm64: 1.7.4
+    turbo-windows-64: 1.7.4
+    turbo-windows-arm64: 1.7.4
   dependenciesMeta:
     turbo-darwin-64:
       optional: true
@@ -9948,7 +9993,7 @@ __metadata:
       optional: true
   bin:
     turbo: bin/turbo
-  checksum: 62fce7e1895593c51e51225789b1290d575affc74e8933692d9d133528b21a8e0942d2947529faeec4cf81486700854923aac48479f6dcc6e285091bab5075a0
+  checksum: c4387cfee36c57dd1490e9b2452888d8450faa390aec5bc148389b426bc079d03044891d61ad84a6a3a7454e66dfbe9e9cfba05f636b36fef7ece7af275ef9ce
   languageName: node
   linkType: hard
 
@@ -10420,7 +10465,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest@npm:^0.28.3":
+"vitest@npm:^0.28.4":
   version: 0.28.4
   resolution: "vitest@npm:0.28.4"
   dependencies:
