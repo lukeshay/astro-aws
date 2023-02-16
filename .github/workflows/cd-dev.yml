@@ -51,7 +51,7 @@ jobs:
         uses: ./.github/workflows/deploy.yml
         with:
             environment_name: development-node-16
-            environment_url: https://dev-node-16.astro-aws.org/
+            environment_url: https://node16.dev.astro-aws.org/
             stack_environment: NODE16
         secrets: inherit
     deploy-dev-node-18:
@@ -62,6 +62,17 @@ jobs:
         uses: ./.github/workflows/deploy.yml
         with:
             environment_name: development-node-18
-            environment_url: https://dev-node-18.astro-aws.org/
+            environment_url: https://node18.dev.astro-aws.org/
             stack_environment: NODE18
+        secrets: inherit
+    deploy-dev-edge:
+        name: Deploy Dev Node 18
+        needs: [prepare-yarn-cache]
+        concurrency:
+            group: ${{ format('{0}-{1}', github.workflow, github.job) }}
+        uses: ./.github/workflows/deploy.yml
+        with:
+            environment_name: development-edge
+            environment_url: https://edge.dev.astro-aws.org/
+            stack_environment: EDGE
         secrets: inherit

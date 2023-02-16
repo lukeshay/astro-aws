@@ -1,7 +1,12 @@
 {
 	"name": "@astro-aws/constructs",
 	"version": "0.2.0",
+	"description": "Constructs for deploying an Astro application to AWS Lambda",
 	"keywords": [
+		"withastro",
+		"renderer",
+		"performance",
+		"perf",
 		"astro-adapter",
 		"aws",
 		"aws-lambda",
@@ -31,11 +36,11 @@
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
-		"@types/node": "^18.11.18",
-		"aws-cdk-lib": "^2.63.0",
-		"constructs": "^10.1.238",
-		"eslint": "^8.33.0",
-		"prettier": "^2.8.3",
+		"@types/node": "^18.13.0",
+		"aws-cdk-lib": "^2.64.0",
+		"constructs": "^10.1.248",
+		"eslint": "^8.34.0",
+		"prettier": "^2.8.4",
 		"typescript": "^4.9.5"
 	},
 	"peerDependencies": {

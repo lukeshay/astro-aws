@@ -1,27 +1,66 @@
-import type { App } from "astro/app";
-import type { APIGatewayProxyHandlerV2 } from "aws-lambda";
+import type { NodeApp } from "astro/app/node";
+import type { APIGatewayProxyEventV2, CloudFrontRequestEvent } from "aws-lambda";
 
 import type { Args } from "../args.js";
 import { log } from "../log.js";
 
-import { createFunctionResponse, createRequestBody } from "./helpers.js";
-
-const clientAddressSymbol = Symbol.for("astro.clientAddress");
+import { createLambdaEdgeFunctionResponse, createLambdaFunctionResponse, createRequestBody } from "./helpers.js";
 
 export const createHandler =
-	(app: App, knownBinaryMediaTypes: Set<string>, { logFnResponse, logFnRequest }: Args): APIGatewayProxyHandlerV2 =>
-	async (event) => {
-		if (logFnRequest) log("function request", JSON.stringify(event, undefined, 2));
+	(app: NodeApp, knownBinaryMediaTypes: Set<string>, { logFnResponse, logFnRequest }: Args) =>
+	async (originalEvent: APIGatewayProxyEventV2 | CloudFrontRequestEvent) => {
+		if (logFnRequest) {
+			log("function request", JSON.stringify(originalEvent, undefined, 2));
+		}
+
+		if ("Records" in originalEvent) {
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			const cloudfrontRequest = originalEvent.Records[0]!.cf.request;
+
+			const { body, headers: eventHeaders, querystring, uri, method } = cloudfrontRequest;
+
+			const headers = new Headers(
+				Object.fromEntries(
+					Object.entries(eventHeaders).map(([key, value]) => [value[0]?.key ?? key, value[0]?.value]),
+				) as HeadersInit,
+			);
+
+			const scheme = headers.get("x-forwarded-protocol") ?? "https";
+			const host = headers.get("x-forwarded-host") ?? headers.get("host") ?? "";
+			const qs = querystring.length ? `?${querystring}` : "";
+			const url = new URL(`${uri}${qs}`, `${scheme}://${host}`);
+
+			const request = new Request(url, {
+				body: body?.data ? createRequestBody(method, body.data, body.encoding) : undefined,
+				headers,
+				method,
+			});
+			const routeData = app.match(request);
+
+			if (!routeData) {
+				return cloudfrontRequest;
+			}
+
+			const response = await app.render(request, routeData);
+			const fnResponse = await createLambdaEdgeFunctionResponse(app, response, knownBinaryMediaTypes);
+
+			if (logFnResponse) {
+				log("function response", JSON.stringify(fnResponse, undefined, 2));
+			}
+
+			return fnResponse;
+		}
+
+		const event = originalEvent;
 
 		const {
 			body: requestBody,
 			cookies,
 			headers: eventHeaders,
 			isBase64Encoded,
-			queryStringParameters = {},
+			rawQueryString,
 			rawPath,
 			requestContext: {
-				domainName,
 				http: { method },
 			},
 		} = event;
@@ -31,23 +70,17 @@ export const createHandler =
 			cookie: cookies?.join("; ") ?? "",
 		});
 
-		const init: RequestInit = {
+		const scheme = eventHeaders["x-forwarded-protocol"] ?? "https";
+		const host = eventHeaders["x-forwarded-host"] ?? eventHeaders.host ?? "";
+		const qs = rawQueryString.length ? `?${rawQueryString}` : "";
+		const url = new URL(`${rawPath}${qs}`, `${scheme}://${host}`);
+
+		const request = new Request(url, {
 			body: createRequestBody(method, requestBody, isBase64Encoded),
 			headers,
 			method,
-			referrer: headers.get("referrer") ?? `https://${domainName}`,
-		};
-
-		const url = new URL(rawPath, init.referrer);
-
-		Object.entries(queryStringParameters).forEach(([key, value]) => {
-			if (value) {
-				url.searchParams.set(key, value);
-			}
 		});
-
-		const request = new Request(url, init);
-		const routeData = app.match(request, { matchNotFound: true });
+		const routeData = app.match(request);
 
 		if (!routeData) {
 			return {
@@ -56,14 +89,12 @@ export const createHandler =
 			};
 		}
 
-		const ip = headers.get("x-forwarded-for");
-
-		Reflect.set(request, clientAddressSymbol, ip);
-
 		const response = await app.render(request, routeData);
-		const fnResponse = await createFunctionResponse(app, response, knownBinaryMediaTypes);
+		const fnResponse = await createLambdaFunctionResponse(app, response, knownBinaryMediaTypes);
 
-		if (logFnResponse) log("function response", JSON.stringify(fnResponse, undefined, 2));
+		if (logFnResponse) {
+			log("function response", JSON.stringify(fnResponse, undefined, 2));
+		}
 
 		return fnResponse;
 	};

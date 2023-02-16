@@ -30,7 +30,7 @@ const seoProps: SEOProps = {
 		{sections && <LeftSidenav sections={sections} />}
 		<Navbar links={[{ href: "/docs", text: "Docs" }]} showLogo={!sections} />
 		<slot />
-		<style global>
+		<style is:global>
 			@import "../styles/global.css";
 		</style>
 	</body>

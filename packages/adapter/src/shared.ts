@@ -4,9 +4,11 @@ import { mergeAndConcat } from "merge-anything";
 
 import type { Args } from "./args.js";
 
-const DEFAULT_CONFIG = {
+const DEFAULT_CONFIG: BuildOptions = {
+	allowOverwrite: true,
 	bundle: true,
 	external: ["aws-sdk"],
+	metafile: true,
 	platform: "node",
 	target: "node16",
 };
@@ -14,7 +16,10 @@ const DEFAULT_CONFIG = {
 export const createEsBuildConfig = (entryFile: string, outDir: string, { esBuildOptions = {} }: Args) =>
 	mergeAndConcat(DEFAULT_CONFIG, esBuildOptions, {
 		banner: {
-			js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);",
+			js: [
+				"import { createRequire as topLevelCreateRequire } from 'module';",
+				"const require = topLevelCreateRequire(import.meta.url);",
+			].join(""),
 		},
 		entryPoints: [entryFile],
 		format: "esm",
