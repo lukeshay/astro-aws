@@ -89,9 +89,9 @@ jobs:
             - run: yarn deploy:one infra -- ${{ inputs.stack_environment }}
               env:
                   WEB_ACL_ARN: ${{ secrets.WEB_ACL_ARN }}
-            - run: |
-                  export TIME="$(TZ=GMT date +'%Y-%m-%d_%H-%M-%S')"
-                  git tag "${{ inputs.stack_environment }}_latest" --force
-                  git tag "${{ inputs.stack_environment }}_${TIME}"
-                  git push origin "${{ inputs.stack_environment }}_latest" --force
-                  git push origin "${{ inputs.stack_environment }}_${TIME}"
+            # - run: |
+            #       export TIME="$(TZ=GMT date +'%Y-%m-%d_%H-%M-%S')"
+            #       git tag "${{ inputs.stack_environment }}_latest" --force
+            #       git tag "${{ inputs.stack_environment }}_${TIME}"
+            #       git push origin "${{ inputs.stack_environment }}_latest" --force
+            #       git push origin "${{ inputs.stack_environment }}_${TIME}"
