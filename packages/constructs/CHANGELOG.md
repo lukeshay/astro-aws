@@ -1,5 +1,21 @@
 # @astro-aws/constructs
 
+## 0.3.0
+
+### Minor Changes
+
+- [#43](https://github.com/lukeshay/astro-aws/pull/43) [`81e10bc`](https://github.com/lukeshay/astro-aws/commit/81e10bc93d6febcdb1571150c29af5c63239b9a6) Thanks [@lukeshay](https://github.com/lukeshay)! - Restructured props and resource access
+
+- [#43](https://github.com/lukeshay/astro-aws/pull/43) [`81e10bc`](https://github.com/lukeshay/astro-aws/commit/81e10bc93d6febcdb1571150c29af5c63239b9a6) Thanks [@lukeshay](https://github.com/lukeshay)! - Added support for edge deployment
+
+- [#29](https://github.com/lukeshay/astro-aws/pull/29) [`d17b2a7`](https://github.com/lukeshay/astro-aws/commit/d17b2a7cf7c1c8ee0ca4acc1d610c8ee040969c4) Thanks [@lukeshay](https://github.com/lukeshay)! - Renamed resources and removed the bare construct
+
+### Patch Changes
+
+- [`08476a0`](https://github.com/lukeshay/astro-aws/commit/08476a081c2c6bbac8b5beab1ca2afea6e7e2c60) Thanks [@lukeshay](https://github.com/lukeshay)! - Upgraded dependencies
+
+- [#26](https://github.com/lukeshay/astro-aws/pull/26) [`cf09511`](https://github.com/lukeshay/astro-aws/commit/cf09511345e0ac932d518f9cc3561abe106ae4ec) Thanks [@lukeshay](https://github.com/lukeshay)! - Raised default lambda memory to 512mb
+
 ## 0.2.0
 
 ### Minor Changes

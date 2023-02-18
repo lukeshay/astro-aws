@@ -1,5 +1,17 @@
 # @astro-aws/adapter
 
+## 0.3.0
+
+### Minor Changes
+
+- [#43](https://github.com/lukeshay/astro-aws/pull/43) [`81e10bc`](https://github.com/lukeshay/astro-aws/commit/81e10bc93d6febcdb1571150c29af5c63239b9a6) Thanks [@lukeshay](https://github.com/lukeshay)! - Added support for edge deployment
+
+### Patch Changes
+
+- [`08476a0`](https://github.com/lukeshay/astro-aws/commit/08476a081c2c6bbac8b5beab1ca2afea6e7e2c60) Thanks [@lukeshay](https://github.com/lukeshay)! - Upgraded dependencies
+
+- [#43](https://github.com/lukeshay/astro-aws/pull/43) [`81e10bc`](https://github.com/lukeshay/astro-aws/commit/81e10bc93d6febcdb1571150c29af5c63239b9a6) Thanks [@lukeshay](https://github.com/lukeshay)! - fixed createRequire is getting defined twice bug
+
 ## 0.2.0
 
 ### Minor Changes
