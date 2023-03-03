@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 
 import { type FunctionProps, Code, Function, Runtime } from "aws-cdk-lib/aws-lambda";
 import { type Construct } from "constructs";
+import { RemovalPolicy } from "aws-cdk-lib";
 
 import { type Output } from "../types/output.js";
 import { AstroAWSBaseConstruct } from "../types/astro-aws-construct.js";
@@ -114,6 +115,10 @@ export class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> 
 			code: Code.fromAsset(resolve(this.distDir, "lambda")),
 			handler: "entry.handler",
 		});
+
+		if (this.props.output === "edge") {
+			this.#lambdaFunction.applyRemovalPolicy(RemovalPolicy.RETAIN);
+		}
 	}
 
 	public get cdk(): AstroAWSCdk {

@@ -30,10 +30,10 @@ export type AstroAWSOriginProps = {
 };
 
 export type AstroAWSOriginCdk = {
-	lambdaFunctionOrigin?: HttpOrigin;
-	lambdaFunctionUrl?: FunctionUrl;
+	lambdaFunctionOrigin: HttpOrigin | undefined;
+	lambdaFunctionUrl: FunctionUrl | undefined;
 	origin: IOrigin;
-	originGroup?: OriginGroup;
+	originGroup: OriginGroup | undefined;
 	s3Origin: S3Origin;
 };
 
@@ -60,18 +60,14 @@ export class AstroAWSOrigin extends AstroAWSBaseConstruct<AstroAWSOriginProps, A
 				this.props.cdk?.lambdaFunctionOrigin,
 			);
 
-			if (this.props.output === "server") {
-				this.#originGroup = new OriginGroup({
-					...this.props.cdk?.originGroup,
-					fallbackOrigin: this.#s3Origin,
-					fallbackStatusCodes: [404, ...(this.props.cdk?.originGroup?.fallbackStatusCodes ?? [])],
-					primaryOrigin: this.#lambdaFunctionOrigin,
-				});
+			this.#originGroup = new OriginGroup({
+				...this.props.cdk?.originGroup,
+				fallbackOrigin: this.#s3Origin,
+				fallbackStatusCodes: [404, ...(this.props.cdk?.originGroup?.fallbackStatusCodes ?? [])],
+				primaryOrigin: this.#lambdaFunctionOrigin,
+			});
 
-				this.#origin = this.#originGroup;
-			} else {
-				this.#origin = this.#s3Origin;
-			}
+			this.#origin = this.#originGroup;
 		} else {
 			this.#origin = this.#s3Origin;
 		}

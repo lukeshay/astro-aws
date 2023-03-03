@@ -1,0 +1,21 @@
+{
+	"name": "@example/ssr",
+	"type": "module",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"dev": "astro dev",
+		"start": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro"
+	},
+	"dependencies": {
+		"@astro-aws/adapter": "workspace:*",
+		"@astrojs/svelte": "^2.0.2",
+		"astro": "^2.0.17",
+		"svelte": "^3.48.0",
+		"unocss": "^0.15.6",
+		"vite-imagetools": "^4.0.4"
+	}
+}

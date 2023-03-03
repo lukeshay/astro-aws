@@ -3,10 +3,13 @@ import { Construct } from "constructs";
 export abstract class AstroAWSBaseConstruct<Props, Cdk> extends Construct {
 	#props: Props;
 
+	protected readonly id: string;
+
 	public constructor(scope: Construct, id: string, props: Props) {
 		super(scope, id);
 
 		this.#props = props;
+		this.id = id;
 	}
 
 	public get props(): Props {

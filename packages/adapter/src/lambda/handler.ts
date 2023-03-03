@@ -25,10 +25,10 @@ export const createHandler =
 				) as HeadersInit,
 			);
 
-			const scheme = headers.get("x-forwarded-protocol") ?? "https";
-			const host = headers.get("x-forwarded-host") ?? headers.get("host") ?? "";
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			const host = headers.get("host")!;
 			const qs = querystring.length ? `?${querystring}` : "";
-			const url = new URL(`${uri}${qs}`, `${scheme}://${host}`);
+			const url = new URL(`${uri}${qs}`, `https://${host}`);
 
 			const request = new Request(url, {
 				body: body?.data ? createRequestBody(method, body.data, body.encoding) : undefined,

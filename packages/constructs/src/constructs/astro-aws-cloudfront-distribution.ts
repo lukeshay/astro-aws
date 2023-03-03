@@ -37,7 +37,7 @@ export type AstroAWSCloudfrontDistributionProps = {
 
 export type AstroAWSCloudfrontDistributionCdk = {
 	cloudfrontDistribution: Distribution;
-	redirectToIndexCloudfrontFunction?: CfFunction;
+	redirectToIndexCloudfrontFunction: CfFunction | undefined;
 };
 
 export class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<

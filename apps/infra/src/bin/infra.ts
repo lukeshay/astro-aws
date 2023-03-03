@@ -6,6 +6,7 @@ import { WebsiteStack } from "../lib/stacks/website-stack.js";
 import { RedirectStack } from "../lib/stacks/redirect-stack.js";
 import type { CertificateStackProps } from "../lib/stacks/certificate-stack.js";
 import { CertificateStack } from "../lib/stacks/certificate-stack.js";
+import { SSRExample } from "../lib/stacks/ssr-example-stack.js";
 
 const app = new App();
 
@@ -31,6 +32,10 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 		hostedZone: certificateStack?.hostedZone,
 	});
 
+	if (([Environments.EDGE, Environments.DEV_NODE_18] as string[]).includes(environment)) {
+		new SSRExample(app, createStackName(environment, "SSRExample"), environmentProps);
+	}
+
 	if (environment === Environments.PROD && environmentProps.hostedZoneName) {
 		const redirectProps = {
 			...environmentProps,
@@ -39,11 +44,11 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 
 		const redirectCertificateStack = new CertificateStack(
 			app,
-			createStackName(environment, "RedirectCertificate", redirectProps),
+			createStackName(environment, "RedirectCertificate"),
 			redirectProps as CertificateStackProps,
 		);
 
-		new RedirectStack(app, createStackName(environment, "Redirect", redirectProps), {
+		new RedirectStack(app, createStackName(environment, "Redirect"), {
 			...redirectProps,
 			certificate: redirectCertificateStack.certificate,
 			cloudwatchDashboard: monitoringStack.cloudwatchDashboard,
