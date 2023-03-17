@@ -5,20 +5,20 @@ import { CanonicalUserPrincipal, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 import { AstroAWSBaseConstruct } from "../types/astro-aws-construct.js";
 
-export type AstroAWSS3BucketCdkProps = {
+type AstroAWSS3BucketCdkProps = {
 	s3Bucket?: Partial<BucketProps>;
 };
 
-export type AstroAWSS3BucketProps = {
+type AstroAWSS3BucketProps = {
 	cdk?: AstroAWSS3BucketCdkProps;
 };
 
-export type AstroAWSS3BucketCdk = {
+type AstroAWSS3BucketCdk = {
 	originAccessIdentity: OriginAccessIdentity;
 	s3Bucket: Bucket;
 };
 
-export class AstroAWSS3Bucket extends AstroAWSBaseConstruct<AstroAWSS3BucketProps, AstroAWSS3BucketCdk> {
+class AstroAWSS3Bucket extends AstroAWSBaseConstruct<AstroAWSS3BucketProps, AstroAWSS3BucketCdk> {
 	#s3Bucket: Bucket;
 	#originAccessIdentity: OriginAccessIdentity;
 
@@ -55,3 +55,5 @@ export class AstroAWSS3Bucket extends AstroAWSBaseConstruct<AstroAWSS3BucketProp
 		};
 	}
 }
+
+export { type AstroAWSS3BucketCdkProps, type AstroAWSS3BucketProps, type AstroAWSS3BucketCdk, AstroAWSS3Bucket };

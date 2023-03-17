@@ -12,7 +12,7 @@ const base = {
 	terminationProtection: false,
 };
 
-export const Environments = {
+const Environments = {
 	DEV: "DEV",
 	DEV_NODE_16: "NODE16",
 	DEV_NODE_18: "NODE18",
@@ -21,9 +21,9 @@ export const Environments = {
 	PROD: "PROD",
 } as const;
 
-export type Environment = (typeof Environments)[keyof typeof Environments];
+type Environment = (typeof Environments)[keyof typeof Environments];
 
-export const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
+const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
 	[Environments.DEV]: {
 		...base,
 		alias: "dev",
@@ -68,3 +68,5 @@ export const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
 		output: "static",
 	},
 } as const;
+
+export { Environments, type Environment, ENVIRONMENT_PROPS };

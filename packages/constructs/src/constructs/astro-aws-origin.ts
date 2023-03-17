@@ -15,21 +15,21 @@ import { Fn } from "aws-cdk-lib";
 import { AstroAWSBaseConstruct } from "../types/astro-aws-construct.js";
 import { type Output } from "../types/output.js";
 
-export type AstroAWSOriginCdkProps = {
+type AstroAWSOriginCdkProps = {
 	lambdaFunctionOrigin?: HttpOriginProps;
 	lambdaFunctionUrl?: FunctionUrlOptions;
 	originGroup?: OriginGroupProps;
 	s3Origin?: S3OriginProps;
 };
 
-export type AstroAWSOriginProps = {
+type AstroAWSOriginProps = {
 	output: Output;
 	lambdaFunction?: Function;
 	s3Bucket: Bucket;
 	cdk?: AstroAWSOriginCdkProps;
 };
 
-export type AstroAWSOriginCdk = {
+type AstroAWSOriginCdk = {
 	lambdaFunctionOrigin?: HttpOrigin;
 	lambdaFunctionUrl?: FunctionUrl;
 	origin: IOrigin;
@@ -37,7 +37,7 @@ export type AstroAWSOriginCdk = {
 	s3Origin: S3Origin;
 };
 
-export class AstroAWSOrigin extends AstroAWSBaseConstruct<AstroAWSOriginProps, AstroAWSOriginCdk> {
+class AstroAWSOrigin extends AstroAWSBaseConstruct<AstroAWSOriginProps, AstroAWSOriginCdk> {
 	#origin: IOrigin;
 	#lambdaFunctionUrl?: FunctionUrl;
 	#s3Origin: S3Origin;
@@ -87,3 +87,5 @@ export class AstroAWSOrigin extends AstroAWSBaseConstruct<AstroAWSOriginProps, A
 		};
 	}
 }
+
+export { type AstroAWSOriginCdkProps, type AstroAWSOriginProps, type AstroAWSOriginCdk, AstroAWSOrigin };

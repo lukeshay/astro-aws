@@ -42,8 +42,8 @@
 	"dependencies": {
 		"@changesets/changelog-github": "^0.4.8",
 		"@changesets/cli": "^2.26.0",
-		"@lshay/eslint-config": "^0.2.4",
-		"@lshay/prettier-config": "^0.5.4",
+		"@lshay/eslint-config": "^0.2.5",
+		"@lshay/prettier-config": "^0.5.5",
 		"@rushstack/eslint-patch": "^1.2.0",
 		"eslint": "^8.36.0",
 		"eslint-import-resolver-typescript": "^3.5.3",

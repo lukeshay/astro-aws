@@ -1,9 +1,11 @@
 import { ADAPTER_NAME } from "./constants.js";
 
-export const warn = (message?: unknown, ...optionalParams: unknown[]) => {
+const warn = (message?: unknown, ...optionalParams: unknown[]) => {
 	console.warn(`[${ADAPTER_NAME}]`, message, ...optionalParams);
 };
 
-export const log = (message?: unknown, ...optionalParams: unknown[]) => {
+const log = (message?: unknown, ...optionalParams: unknown[]) => {
 	console.log(`[${ADAPTER_NAME}]`, message, ...optionalParams);
 };
+
+export { warn, log };

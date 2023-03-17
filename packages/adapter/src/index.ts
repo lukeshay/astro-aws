@@ -8,14 +8,14 @@ import { bundleEntry } from "./shared.js";
 import { ADAPTER_NAME } from "./constants.js";
 import { warn } from "./log.js";
 
-export const getAdapter = (args: Args = {}): AstroAdapter => ({
+const getAdapter = (args: Args = {}): AstroAdapter => ({
 	args,
 	exports: ["handler"],
 	name: ADAPTER_NAME,
 	serverEntrypoint: `${ADAPTER_NAME}/lambda/index.js`,
 });
 
-export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
+const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 	let astroConfig: AstroConfig;
 
 	/* eslint-disable sort-keys */
@@ -65,4 +65,5 @@ export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 	/* eslint-enable sort-keys */
 };
 
+export { getAdapter, astroAWSFunctions };
 export default astroAWSFunctions;

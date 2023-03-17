@@ -20,14 +20,14 @@ import {
 import { AstroAWSBaseConstruct } from "../types/astro-aws-construct.js";
 import { type Output } from "../types/output.js";
 
-export type AstroAWSCloudfrontDistributionCdkProps = {
+type AstroAWSCloudfrontDistributionCdkProps = {
 	cloudfrontDistribution?: Omit<DistributionProps, "apiBehavior" | "defaultBehavior"> & {
 		defaultBehavior?: Omit<BehaviorOptions, "origin">;
 		apiBehavior?: Omit<BehaviorOptions, "origin">;
 	};
 };
 
-export type AstroAWSCloudfrontDistributionProps = {
+type AstroAWSCloudfrontDistributionProps = {
 	output: Output;
 	lambdaFunction?: Function;
 	origin: IOrigin;
@@ -35,12 +35,12 @@ export type AstroAWSCloudfrontDistributionProps = {
 	cdk?: AstroAWSCloudfrontDistributionCdkProps;
 };
 
-export type AstroAWSCloudfrontDistributionCdk = {
+type AstroAWSCloudfrontDistributionCdk = {
 	cloudfrontDistribution: Distribution;
 	redirectToIndexCloudfrontFunction?: CfFunction;
 };
 
-export class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
+class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 	AstroAWSCloudfrontDistributionProps,
 	AstroAWSCloudfrontDistributionCdk
 > {
@@ -131,3 +131,10 @@ export class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 		};
 	}
 }
+
+export {
+	type AstroAWSCloudfrontDistributionCdkProps,
+	type AstroAWSCloudfrontDistributionProps,
+	type AstroAWSCloudfrontDistributionCdk,
+	AstroAWSCloudfrontDistribution,
+};

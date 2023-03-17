@@ -22,11 +22,11 @@ import { AstroAWSCloudfrontDistribution } from "./astro-aws-cloudfront-distribut
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
-export type AstroAWSCdkProps = {
+type AstroAWSCdkProps = {
 	lambdaFunction?: Omit<FunctionProps, "code" | "handler" | "runtime">;
 };
 
-export type AstroAWSProps = {
+type AstroAWSProps = {
 	/** Passed through to the Bucket Origin. */
 	websiteDir?: string;
 	outDir?: string;
@@ -39,7 +39,7 @@ export type AstroAWSProps = {
 		AstroAWSS3BucketDeploymentCdkProps;
 };
 
-export type AstroAWSCdk = AstroAWSCloudfrontDistributionCdk &
+type AstroAWSCdk = AstroAWSCloudfrontDistributionCdk &
 	AstroAWSOriginCdk &
 	AstroAWSS3BucketCdk &
 	AstroAWSS3BucketDeploymentCdk & {
@@ -57,7 +57,7 @@ export type AstroAWSCdk = AstroAWSCloudfrontDistributionCdk &
  * If "server" output is selected, this works by routing requests to the Lambda function. If the Lambda function returns
  * a 404 response, the Cloudfront distribution falls back to the S3 bucket.
  */
-export class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> {
+class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> {
 	public readonly distDir: string;
 
 	#lambdaFunction?: Function;
@@ -105,6 +105,16 @@ export class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> 
 		});
 	}
 
+	public get cdk(): AstroAWSCdk {
+		return {
+			...this.#astroAWSS3BucketDeployment.cdk,
+			...this.#astroAWSS3Bucket.cdk,
+			...this.#astroAWSOrigin.cdk,
+			...this.#astroAWSCloudfrontDistribution.cdk,
+			lambdaFunction: this.#lambdaFunction,
+		};
+	}
+
 	private createSSROnlyResources() {
 		this.#lambdaFunction = new Function(this, "Function", {
 			description: "SSR Lambda Function",
@@ -115,14 +125,6 @@ export class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> 
 			handler: "entry.handler",
 		});
 	}
-
-	public get cdk(): AstroAWSCdk {
-		return {
-			...this.#astroAWSS3BucketDeployment.cdk,
-			...this.#astroAWSS3Bucket.cdk,
-			...this.#astroAWSOrigin.cdk,
-			...this.#astroAWSCloudfrontDistribution.cdk,
-			lambdaFunction: this.#lambdaFunction,
-		};
-	}
 }
+
+export { type AstroAWSCdkProps, type AstroAWSProps, type AstroAWSCdk, AstroAWS };
