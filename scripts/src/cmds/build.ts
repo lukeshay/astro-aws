@@ -1,12 +1,9 @@
-import { rm } from "node:fs/promises";
-
 import { Command } from "commander";
 
-import { runTsc } from "../utils/ts-util.js";
-import { runEsBuild } from "../utils/esbuild-util.js";
 import { readPackageJson } from "../utils/pkg-util.js";
 import { readConfig } from "../utils/config-util.js";
 import { none } from "../utils/arg-util.js";
+import { runTsupBuild } from "../utils/tsup-util.js";
 
 type Options = {
 	bundle: boolean;
@@ -25,27 +22,12 @@ const buildCommand = new Command("build")
 		const pkgJson = await readPackageJson();
 		const config = await readConfig();
 
-		if (none(skipClean, config.build?.skipClean)) {
-			const cleanGlobs = [...(config.clean ?? []), "dist"];
-
-			await Promise.all(
-				cleanGlobs.map(async (glob) =>
-					rm(glob, {
-						force: true,
-						recursive: true,
-					}),
-				),
-			);
-		}
-
-		await runEsBuild(pkgJson, {
+		await runTsupBuild(pkgJson, {
 			bundle,
+			clean: none(skipClean, config.build?.skipClean),
+			dts: none(skipTsc, config.build?.skipTsc),
 			fileGlob,
 		});
-
-		if (none(skipTsc, config.build?.skipTsc)) {
-			runTsc();
-		}
 	});
 
 export { buildCommand };
