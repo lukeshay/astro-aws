@@ -76,7 +76,7 @@ jobs:
                   ref: ${{ inputs.ref }}
                   repository: ${{ inputs.repository }}
             - name: Configure AWS Credentials
-              uses: aws-actions/configure-aws-credentials@v1
+              uses: aws-actions/configure-aws-credentials@v2
               with:
                   aws-region: ${{ inputs.aws_region }}
                   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}

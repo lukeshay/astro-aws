@@ -40,7 +40,7 @@ jobs:
               with:
                   node-version: ${{ matrix.node_version }}
                   cache: "yarn"
-            - uses: aws-actions/configure-aws-credentials@v1
+            - uses: aws-actions/configure-aws-credentials@v2
               with:
                   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   aws-region: us-east-2
