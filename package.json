@@ -41,15 +41,15 @@
 	},
 	"dependencies": {
 		"@changesets/changelog-github": "^0.4.8",
-		"@changesets/cli": "^2.26.0",
+		"@changesets/cli": "^2.26.1",
 		"@lshay/eslint-config": "^0.2.5",
 		"@lshay/prettier-config": "^0.5.5",
 		"@rushstack/eslint-patch": "^1.2.0",
 		"eslint": "^8.36.0",
 		"eslint-import-resolver-typescript": "^3.5.3",
 		"eslint-plugin-import": "^2.27.5",
-		"prettier": "^2.8.4",
-		"turbo": "^1.8.3",
+		"prettier": "^2.8.7",
+		"turbo": "^1.8.6",
 		"typescript": "^5.0.2"
 	},
 	"packageManager": "yarn@3.4.1",

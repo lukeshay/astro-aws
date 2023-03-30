@@ -39,11 +39,11 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 
 		const redirectCertificateStack = new CertificateStack(
 			app,
-			createStackName(environment, "RedirectCertificate", redirectProps),
+			createStackName(environment, "RedirectCertificate"),
 			redirectProps as CertificateStackProps,
 		);
 
-		new RedirectStack(app, createStackName(environment, "Redirect", redirectProps), {
+		new RedirectStack(app, createStackName(environment, "Redirect"), {
 			...redirectProps,
 			certificate: redirectCertificateStack.certificate,
 			cloudwatchDashboard: monitoringStack.cloudwatchDashboard,
