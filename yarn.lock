@@ -99,7 +99,7 @@ __metadata:
   resolution: "@astro-aws/www@workspace:apps/www"
   dependencies:
     "@astro-aws/adapter": "workspace:^"
-    "@astrojs/mdx": ^0.17.0
+    "@astrojs/mdx": ^0.19.0
     "@astrojs/sitemap": ^1.0.1
     "@types/node": ^18.14.0
     astro: ^2.0.14
@@ -179,16 +179,39 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@astrojs/mdx@npm:^0.17.0":
-  version: 0.17.0
-  resolution: "@astrojs/mdx@npm:0.17.0"
+"@astrojs/markdown-remark@npm:^2.1.4":
+  version: 2.1.4
+  resolution: "@astrojs/markdown-remark@npm:2.1.4"
   dependencies:
-    "@astrojs/markdown-remark": ^2.0.1
-    "@astrojs/prism": ^2.0.0
+    "@astrojs/prism": ^2.1.0
+    github-slugger: ^1.4.0
+    import-meta-resolve: ^2.1.0
+    rehype-raw: ^6.1.1
+    rehype-stringify: ^9.0.3
+    remark-gfm: ^3.0.1
+    remark-parse: ^10.0.1
+    remark-rehype: ^10.1.0
+    remark-smartypants: ^2.0.0
+    shiki: ^0.11.1
+    unified: ^10.1.2
+    unist-util-visit: ^4.1.0
+    vfile: ^5.3.2
+  peerDependencies:
+    astro: ^2.3.0
+  checksum: 20f3d5843426393a5d02420f69cdf59331a8f17cb802e6f787564151a0cc2107cd8519c184a82d90ec21df904e8da62b2aaef39975ebcd8e5481be85a0f06398
+  languageName: node
+  linkType: hard
+
+"@astrojs/mdx@npm:^0.19.0":
+  version: 0.19.0
+  resolution: "@astrojs/mdx@npm:0.19.0"
+  dependencies:
+    "@astrojs/markdown-remark": ^2.1.4
+    "@astrojs/prism": ^2.1.1
     "@mdx-js/mdx": ^2.3.0
     "@mdx-js/rollup": ^2.3.0
     acorn: ^8.8.0
-    es-module-lexer: ^0.10.5
+    es-module-lexer: ^1.1.1
     estree-util-visit: ^1.2.0
     github-slugger: ^1.4.0
     gray-matter: ^4.0.3
@@ -198,9 +221,10 @@ __metadata:
     remark-gfm: ^3.0.1
     remark-smartypants: ^2.0.0
     shiki: ^0.11.1
+    source-map: ^0.7.4
     unist-util-visit: ^4.1.0
     vfile: ^5.3.2
-  checksum: 5adb5a427cf4c1a4df6c4f6ef3d9d706c4c752ae4afa1c4b511358056159851e620e75c8bb19376289789643436e23883eea9433a8eca78103d9362ba2ae9d6b
+  checksum: e547f03ba5ab1de48c67a73e26674091d847e533c182d43874d6b65e41fbb07e92ddd8542778ea1028f91faeb489c858fdc999cad4d15e652dd545a0d9108fa2
   languageName: node
   linkType: hard
 
@@ -210,6 +234,15 @@ __metadata:
   dependencies:
     prismjs: ^1.28.0
   checksum: 71080d863a3216c58a1b8936070d05a26bac5457c8b35dede8dc4bd87480defa9234c71415c1c52c36bfaf96dcfac7cb1c1786593b31279400d34dfd0b9d95e0
+  languageName: node
+  linkType: hard
+
+"@astrojs/prism@npm:^2.1.0, @astrojs/prism@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@astrojs/prism@npm:2.1.1"
+  dependencies:
+    prismjs: ^1.28.0
+  checksum: 396314ba0bb816d32e3916146d7e7518641ad247adbc18af76676ed0cfd5833f017f1696a05bc12f113cf1b2bdd102b49f61e068ef5d20d81b746b4bbb687d80
   languageName: node
   linkType: hard
 
@@ -3892,17 +3925,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"es-module-lexer@npm:^0.10.5":
-  version: 0.10.5
-  resolution: "es-module-lexer@npm:0.10.5"
-  checksum: d2f9debd9d913323322095934653e0558bb8220177645eb76d316b4afd911e8d83ffee0b748b0faa9f3ce1560db3eee4a0ac68d6c2f750c11f4250adce84cf02
-  languageName: node
-  linkType: hard
-
 "es-module-lexer@npm:^1.1.0":
   version: 1.1.1
   resolution: "es-module-lexer@npm:1.1.1"
   checksum: 1eba6029faa74b8bf6ab0619f8e5a407ded87be6df3ea3831325166ecf9323d69e389b2a4403339e79c94f43e9dd9823580d5bbc5dfad7c6920ed4830575dc75
+  languageName: node
+  linkType: hard
+
+"es-module-lexer@npm:^1.1.1":
+  version: 1.2.1
+  resolution: "es-module-lexer@npm:1.2.1"
+  checksum: c4145b853e1491eaa5d591e4580926d242978c38071ad3d09165c3b6d50314cc0ae3bf6e1dec81a9e53768b9299df2063d2e4a67d7742a5029ddeae6c4fc26f0
   languageName: node
   linkType: hard
 
@@ -9328,7 +9361,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map@npm:^0.7.0, source-map@npm:^0.7.3":
+"source-map@npm:^0.7.0, source-map@npm:^0.7.3, source-map@npm:^0.7.4":
   version: 0.7.4
   resolution: "source-map@npm:0.7.4"
   checksum: 01cc5a74b1f0e1d626a58d36ad6898ea820567e87f18dfc9d24a9843a351aaa2ec09b87422589906d6ff1deed29693e176194dc88bcae7c9a852dc74b311dbf5
