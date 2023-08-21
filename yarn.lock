@@ -2484,9 +2484,9 @@ __metadata:
   linkType: hard
 
 "astro-seo@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "astro-seo@npm:0.7.0"
-  checksum: 1f63fdeb7ed862e55a4575364ca332e435f06ee419b8537c28c91209fb964767fe16ca88810cf3c228bed9a03a5f3b0672ed484ebc04644326307559380c3861
+  version: 0.7.6
+  resolution: "astro-seo@npm:0.7.6"
+  checksum: c507fd3476fc247557fec2e5866de39d5c36d2230878efbe8c870e480e6c535c6828e9f975dc915b10bd78a400774f36266f5dc3a5b85e5ee118848277e6a82e
   languageName: node
   linkType: hard
 
