@@ -50,23 +50,31 @@ export const createLambdaEdgeFunctionResponse = async (
 	response: Response,
 	knownBinaryMediaTypes: Set<string>,
 ): Promise<CloudFrontRequestResult> => {
-	app.setCookieHeaders(response);
+	const cookies = [...app.setCookieHeaders(response)];
 
 	const responseHeadersObj = Object.fromEntries(response.headers.entries());
 
-	const headers: CloudFrontHeaders = Object.fromEntries(
-		Object.entries(responseHeadersObj)
-			.filter(([key]) => !DISALLOWED_EDGE_HEADERS.some((reg) => reg.test(key.toLowerCase())))
-			.map(([key, value]) => [
-				key.toLowerCase(),
-				[
-					{
-						key,
-						value,
-					},
-				],
-			]),
-	);
+	const headers: CloudFrontHeaders = {
+		...Object.fromEntries(
+			Object.entries(responseHeadersObj)
+				.filter(([key]) => !DISALLOWED_EDGE_HEADERS.some((reg) => reg.test(key.toLowerCase())))
+				.map(([key, value]) => [
+					key.toLowerCase(),
+					[
+						{
+							key,
+							value,
+						},
+					],
+				]),
+		),
+		...(cookies.length > 0 && {
+			'set-cookie': cookies.map((cookie) => ({
+				key: 'set-cookie',
+				value: cookie,
+			})),
+		}),
+	}
 	const responseContentType = parseContentType(response.headers.get("content-type"));
 	const bodyEncoding = knownBinaryMediaTypes.has(responseContentType) ? "base64" : "text";
 
