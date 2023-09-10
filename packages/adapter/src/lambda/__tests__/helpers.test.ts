@@ -2,11 +2,10 @@ import type { App } from "astro/app"
 import { beforeEach, describe, expect, test, vi } from "vitest"
 import { faker } from "@faker-js/faker"
 
-<<<<<<< HEAD
-import { createLambdaFunctionResponse, createLambdaEdgeFunctionResponse } from "../helpers.js";
-=======
-import { createLambdaFunctionResponse } from "../helpers.js"
->>>>>>> ddb6036 (chore: updated deps)
+import {
+	createLambdaFunctionResponse,
+	createLambdaEdgeFunctionResponse,
+} from "../helpers.js"
 
 const knownBinaryMediaTypes = new Set(["image/png", "image/jpeg"])
 
@@ -50,42 +49,45 @@ describe("helpers", () => {
 				headers,
 				isBase64Encoded: false,
 				statusCode: 200,
-<<<<<<< HEAD
-			});
-		});
-	});
+			})
+		})
+	})
 
 	describe("createLambdaEdgeFunctionResponse", () => {
 		let response: Response,
 			app: App,
 			fnResponse: Awaited<ReturnType<typeof createLambdaEdgeFunctionResponse>>,
 			body: string,
-			headers: Record<string, string>;
+			headers: Record<string, string>
 
 		beforeEach(async () => {
-			body = faker.datatype.string();
+			body = faker.datatype.string()
 			headers = {
 				"content-type": "text/plain",
-			};
+			}
 
 			response = new Response(body, {
 				headers,
 				status: 200,
-			});
+			})
 
 			app = {
 				setCookieHeaders: vi.fn(() => [
 					"newCookie=newValue",
 					"deleteCookie=deleted; Expires=Thu, 01 Jan 1970 00:00:00 GMT",
 				]),
-			} as unknown as App;
+			} as unknown as App
 
-			fnResponse = await createLambdaEdgeFunctionResponse(app, response, knownBinaryMediaTypes);
-		});
+			fnResponse = await createLambdaEdgeFunctionResponse(
+				app,
+				response,
+				knownBinaryMediaTypes,
+			)
+		})
 
 		test("creates function response", () => {
-			expect(app.setCookieHeaders).toHaveBeenCalledTimes(1);
-			expect(app.setCookieHeaders).toHaveBeenCalledWith(response);
+			expect(app.setCookieHeaders).toHaveBeenCalledTimes(1)
+			expect(app.setCookieHeaders).toHaveBeenCalledWith(response)
 
 			expect(fnResponse).toStrictEqual({
 				body,
@@ -104,19 +106,14 @@ describe("helpers", () => {
 						},
 						{
 							key: "set-cookie",
-							value: "deleteCookie=deleted; Expires=Thu, 01 Jan 1970 00:00:00 GMT",
+							value:
+								"deleteCookie=deleted; Expires=Thu, 01 Jan 1970 00:00:00 GMT",
 						},
 					],
 				},
 				status: "200",
 				statusDescription: "",
-			});
-		});
-	});
-});
-=======
 			})
 		})
 	})
 })
->>>>>>> ddb6036 (chore: updated deps)

@@ -87,11 +87,7 @@ import { AstroAWSConstruct } from "@astro-aws/constructs"
 export interface HelloCdkStackProps extends StackProps {}
 
 export class HelloCdkStack extends Stack {
-	public constructor(
-		scope: Construct, 
-		id: string, 
-		props: HelloCdkStackProps,
-	) {
+	public constructor(scope: Construct, id: string, props: HelloCdkStackProps) {
 		super(scope, id, props)
 
 		new AstroAWSConstruct(this, "AstroAWSConstruct", {
