@@ -1,1 +1,1 @@
-export * from "./constructs/astro-aws.js";
+export * from "./constructs/astro-aws.js"

@@ -53,6 +53,6 @@
 		"prettier": "^2.8.4"
 	},
 	"engines": {
-		"node": "16.x || 18.x"
+		"node": "18.x"
 	}
 }

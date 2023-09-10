@@ -30,7 +30,7 @@ gen_enforced_dependency(WorkspaceCwd, DependencyIdent, 'workspace:^', Dependency
 
 % This rule will enforce that all packages must have an correct engines.node field
 % Keep in sync with the range inside packages/yarnpkg-cli/sources/main.ts
-gen_enforced_field(WorkspaceCwd, 'engines.node', '16.x || 18.x').
+gen_enforced_field(WorkspaceCwd, 'engines.node', '18.x').
 
 % Required to make the package work with the GitHub Package Registry
 gen_enforced_field(WorkspaceCwd, 'repository.type', 'git').

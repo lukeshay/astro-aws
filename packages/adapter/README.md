@@ -33,13 +33,13 @@ pnpm add @astro-aws/adapter
 2. Add the following to your `astro.config.mjs` file.
 
 ```js
-import { defineConfig } from "astro/config";
-import astroAws from "@astro-aws/adapter";
+import { defineConfig } from "astro/config"
+import astroAws from "@astro-aws/adapter"
 
 export default defineConfig({
 	output: "server",
 	adapter: astroAws(),
-});
+})
 ```
 
 ## Example

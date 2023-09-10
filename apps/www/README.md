@@ -91,7 +91,7 @@ export const SIDEBAR = {
 		{ text: "Another Section", header: true },
 		{ text: "Page 4", link: "en/page-4" },
 	],
-};
+}
 ```
 
 Note the top-level `en` key: This is needed for multi-language support. You can change it to whatever language you'd like, or add new languages as you go. More details on this below.

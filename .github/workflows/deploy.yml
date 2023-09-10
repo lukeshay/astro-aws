@@ -1,97 +1,97 @@
 name: Deploy
 
 on:
-    workflow_call:
-        inputs:
-            node_version:
-                description: The version of node to use
-                required: false
-                type: string
-                default: "18"
-            stack_environment:
-                description: The stack environment to deploy
-                required: true
-                type: string
-            environment_name:
-                description: The GitHub environment name
-                required: true
-                type: string
-            environment_url:
-                description: The GitHub environment url
-                required: true
-                type: string
-            aws_session_name:
-                description: AWS session name
-                required: false
-                type: string
-            aws_region:
-                description: The AWS region
-                required: false
-                type: string
-                default: us-east-2
-            ref:
-                description: The git ref to checkout
-                required: false
-                type: string
-            repository:
-                description: The git repository to checkout
-                required: false
-                type: string
-        secrets:
-            AWS_ACCESS_KEY_ID:
-                required: true
-            AWS_SECRET_ACCESS_KEY:
-                required: true
-            AWS_ACCOUNT_ID:
-                required: true
-            TURBO_TOKEN:
-                required: false
-            TURBO_TEAM:
-                required: false
-            WEB_ACL_ARN:
-                required: true
+  workflow_call:
+    inputs:
+      node_version:
+        description: The version of node to use
+        required: false
+        type: string
+        default: "18"
+      stack_environment:
+        description: The stack environment to deploy
+        required: true
+        type: string
+      environment_name:
+        description: The GitHub environment name
+        required: true
+        type: string
+      environment_url:
+        description: The GitHub environment url
+        required: true
+        type: string
+      aws_session_name:
+        description: AWS session name
+        required: false
+        type: string
+      aws_region:
+        description: The AWS region
+        required: false
+        type: string
+        default: us-east-2
+      ref:
+        description: The git ref to checkout
+        required: false
+        type: string
+      repository:
+        description: The git repository to checkout
+        required: false
+        type: string
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      AWS_ACCOUNT_ID:
+        required: true
+      TURBO_TOKEN:
+        required: false
+      TURBO_TEAM:
+        required: false
+      WEB_ACL_ARN:
+        required: true
 
 env:
-    CI: true
+  CI: true
 
 permissions:
-    id-token: write
-    contents: read
-    deployments: write
+  id-token: write
+  contents: read
+  deployments: write
 
 jobs:
-    deploy:
-        name: Deploy
-        runs-on: ubuntu-22.04
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-22.04
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+    environment:
+      name: ${{ inputs.environment_name }}
+      url: ${{ inputs.environment_url }}
+    steps:
+      - run: echo "::add-mask::${{ secrets.AWS_ACCOUNT_ID }}"
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
+          repository: ${{ inputs.repository }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ inputs.aws_region }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node_version }}
+          cache: "yarn"
+      - run: yarn install --mode=skip-build
+      - run: yarn deploy:one infra -- ${{ inputs.stack_environment }}
         env:
-            TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-            TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-        environment:
-            name: ${{ inputs.environment_name }}
-            url: ${{ inputs.environment_url }}
-        steps:
-            - run: echo "::add-mask::${{ secrets.AWS_ACCOUNT_ID }}"
-            - uses: actions/checkout@v3
-              with:
-                  ref: ${{ inputs.ref }}
-                  repository: ${{ inputs.repository }}
-            - name: Configure AWS Credentials
-              uses: aws-actions/configure-aws-credentials@v1
-              with:
-                  aws-region: ${{ inputs.aws_region }}
-                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: ${{ inputs.node_version }}
-                  cache: "yarn"
-            - run: yarn install --mode=skip-build
-            - run: yarn deploy:one infra -- ${{ inputs.stack_environment }}
-              env:
-                  WEB_ACL_ARN: ${{ secrets.WEB_ACL_ARN }}
-            # - run: |
-            #       export TIME="$(TZ=GMT date +'%Y-%m-%d_%H-%M-%S')"
-            #       git tag "${{ inputs.stack_environment }}_latest" --force
-            #       git tag "${{ inputs.stack_environment }}_${TIME}"
-            #       git push origin "${{ inputs.stack_environment }}_latest" --force
-            #       git push origin "${{ inputs.stack_environment }}_${TIME}"
+          WEB_ACL_ARN: ${{ secrets.WEB_ACL_ARN }}
+      # - run: |
+      #       export TIME="$(TZ=GMT date +'%Y-%m-%d_%H-%M-%S')"
+      #       git tag "${{ inputs.stack_environment }}_latest" --force
+      #       git tag "${{ inputs.stack_environment }}_${TIME}"
+      #       git push origin "${{ inputs.stack_environment }}_latest" --force
+      #       git push origin "${{ inputs.stack_environment }}_${TIME}"

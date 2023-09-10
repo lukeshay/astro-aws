@@ -1,7 +1,7 @@
 blank_issues_enabled: false
 contact_links:
-    - name: 🗣 Ask a Question, Discuss
-      url: https://github.com/lukeshay/astro-aws/discussions
-    - name: 🤗 Support the Project
-      url: https://github.com/sponsors/astro-aws
-      about: Support Astro AWS financially.
+  - name: 🗣 Ask a Question, Discuss
+    url: https://github.com/lukeshay/astro-aws/discussions
+  - name: 🤗 Support the Project
+    url: https://github.com/sponsors/astro-aws
+    about: Support Astro AWS financially.

@@ -31,8 +31,8 @@
 		"@astro-aws/constructs": "workspace:^",
 		"@astro-aws/www": "workspace:^",
 		"@types/node": "^18.14.0",
-		"aws-cdk": "^2.65.0",
-		"aws-cdk-lib": "^2.65.0",
+		"aws-cdk": "^2.94.0",
+		"aws-cdk-lib": "^2.94.0",
 		"constructs": "^10.1.253",
 		"eslint": "^8.34.0",
 		"prettier": "^2.8.4",
@@ -43,7 +43,7 @@
 		"eslint-config-get-off-my-lawn": "^7.2.0"
 	},
 	"engines": {
-		"node": "16.x || 18.x"
+		"node": "18.x"
 	},
 	"cli": {
 		"clean": [

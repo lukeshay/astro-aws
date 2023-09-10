@@ -1,19 +1,19 @@
-import { polyfill } from "@astrojs/webapi";
-import type { SSRManifest } from "astro";
-import { NodeApp } from "astro/app/node";
+import { polyfill } from "@astrojs/webapi"
+import type { SSRManifest } from "astro"
+import { NodeApp } from "astro/app/node"
 
-import type { Args } from "../args.js";
+import type { Args } from "../args.js"
 
-import { createHandler } from "./handler.js";
+import { createHandler } from "./handler.js"
 
 polyfill(globalThis, {
 	exclude: "window document",
-});
+})
 
 export const createExports = (manifest: SSRManifest, args: Args) => {
-	const app = new NodeApp(manifest);
+	const app = new NodeApp(manifest)
 
-	const { binaryMediaTypes = [] } = args;
+	const { binaryMediaTypes = [] } = args
 
 	const knownBinaryMediaTypes = new Set([
 		"application/epub+zip",
@@ -66,9 +66,9 @@ export const createExports = (manifest: SSRManifest, args: Args) => {
 		"video/webm",
 		"video/x-msvideo",
 		...binaryMediaTypes,
-	]);
+	])
 
-	const handler = createHandler(app, knownBinaryMediaTypes, args);
+	const handler = createHandler(app, knownBinaryMediaTypes, args)
 
-	return { handler };
-};
+	return { handler }
+}

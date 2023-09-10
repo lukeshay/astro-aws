@@ -1,26 +1,26 @@
 name: "Stale issue handler"
 on:
-    workflow_dispatch:
-    schedule:
-        - cron: "40 23 * * *"
+  workflow_dispatch:
+  schedule:
+    - cron: "40 23 * * *"
 
 permissions:
-    issues: write
+  issues: write
 
 jobs:
-    stale:
-        runs-on: ubuntu-22.04
-        if: github.repository_owner == 'lukeshay'
-        steps:
-            - uses: actions/stale@v7
-              name: "Close stale issues with no reproduction"
-              with:
-                  close-issue-message: "This issue has been automatically closed because it received no activity. If you think this was closed by accident, please leave a comment. If you are running into a similar issue, please open a new issue with a reproduction. Thank you."
-                  days-before-issue-close: 7
-                  days-before-issue-stale: 7
-                  days-before-pr-close: -1
-                  days-before-pr-stale: -1
-                  exempt-issue-labels: "blocked,keep,needs triage"
-                  only-labels: "needs more info"
-                  operations-per-run: 300
-                  stale-issue-label: "stale"
+  stale:
+    runs-on: ubuntu-22.04
+    if: github.repository_owner == 'lukeshay'
+    steps:
+      - uses: actions/stale@v7
+        name: "Close stale issues with no reproduction"
+        with:
+          close-issue-message: "This issue has been automatically closed because it received no activity. If you think this was closed by accident, please leave a comment. If you are running into a similar issue, please open a new issue with a reproduction. Thank you."
+          days-before-issue-close: 7
+          days-before-issue-stale: 7
+          days-before-pr-close: -1
+          days-before-pr-stale: -1
+          exempt-issue-labels: "blocked,keep,needs triage"
+          only-labels: "needs more info"
+          operations-per-run: 300
+          stale-issue-label: "stale"

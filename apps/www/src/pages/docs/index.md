@@ -80,20 +80,24 @@ pnpm i @astro-aws/constructs
 ### Modify `lib/hello-cdk-stack.ts` to contain the following
 
 ```ts
-import { Stack } from "aws-cdk-lib";
-import type { StackProps } from "aws-cdk-lib";
-import { AstroAWSConstruct } from "@astro-aws/constructs";
+import { Stack } from "aws-cdk-lib/core"
+import type { StackProps } from "aws-cdk-lib/core"
+import { AstroAWSConstruct } from "@astro-aws/constructs"
 
 export interface HelloCdkStackProps extends StackProps {}
 
 export class HelloCdkStack extends Stack {
-	public constructor(scope: Construct, id: string, props: HelloCdkStackProps) {
-		super(scope, id, props);
+	public constructor(
+		scope: Construct, 
+		id: string, 
+		props: HelloCdkStackProps,
+	) {
+		super(scope, id, props)
 
 		new AstroAWSConstruct(this, "AstroAWSConstruct", {
 			output: "server",
 			websiteDir: "../my-astro-project",
-		});
+		})
 	}
 }
 ```

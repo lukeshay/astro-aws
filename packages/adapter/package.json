@@ -67,7 +67,7 @@
 		"astro": ">=1"
 	},
 	"engines": {
-		"node": "16.x || 18.x"
+		"node": "18.x"
 	},
 	"publishConfig": {
 		"access": "public"

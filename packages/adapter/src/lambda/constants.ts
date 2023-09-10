@@ -34,4 +34,4 @@ export const DISALLOWED_EDGE_HEADERS = [
 	"Via",
 	"X-Amz-Cf-.*",
 	"X-Edge-.*",
-].map((str) => new RegExp(`^${str.toLowerCase()}$`, "u"));
+].map((str) => new RegExp(`^${str.toLowerCase()}$`, "u"))

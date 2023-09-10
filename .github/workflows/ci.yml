@@ -1,55 +1,53 @@
 name: CI
 
 on:
-    pull_request:
-    push:
-        branches:
-            - "main"
+  pull_request:
+  push:
+    branches:
+      - "main"
 
 env:
-    CI: true
-    TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-    TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+  CI: true
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
 jobs:
-    prepare-yarn-cache:
-        name: Cache dependencies
-        runs-on: ubuntu-22.04
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: "18"
-                  cache: "yarn"
-            - run: yarn install --mode=skip-build
-              env:
-                  YARN_ENABLE_SCRIPTS: false
-    check:
-        name: Check
-        runs-on: ubuntu-22.04
-        needs: prepare-yarn-cache
-        strategy:
-            fail-fast: false
-            matrix:
-                node_version:
-                    - 16
-                    - 18
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: ${{ matrix.node_version }}
-                  cache: "yarn"
-            - uses: aws-actions/configure-aws-credentials@v1
-              with:
-                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  aws-region: us-east-2
-                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            - run: yarn install --mode=skip-build
-            - run: yarn build
-            - run: yarn constraints
-            - if: matrix.node_version == 18
-              run: yarn test
-            - run: yarn lint
-            - run: yarn prettier
-            - run: yarn synth
+  prepare-yarn-cache:
+    name: Cache dependencies
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "yarn"
+      - run: yarn install --mode=skip-build
+        env:
+          YARN_ENABLE_SCRIPTS: false
+  check:
+    name: Check
+    runs-on: ubuntu-22.04
+    needs: prepare-yarn-cache
+    strategy:
+      fail-fast: false
+      matrix:
+        node_version:
+          - 18
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node_version }}
+          cache: "yarn"
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: us-east-2
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - run: yarn install --mode=skip-build
+      - run: yarn build
+      - run: yarn constraints
+      - run: yarn test
+      - run: yarn lint
+      - run: yarn prettier
+      - run: yarn synth

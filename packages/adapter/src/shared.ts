@@ -1,8 +1,8 @@
-import type { BuildOptions } from "esbuild";
-import { build } from "esbuild";
-import { mergeAndConcat } from "merge-anything";
+import type { BuildOptions } from "esbuild"
+import { build } from "esbuild"
+import { mergeAndConcat } from "merge-anything"
 
-import type { Args } from "./args.js";
+import type { Args } from "./args.js"
 
 const DEFAULT_CONFIG: BuildOptions = {
 	allowOverwrite: true,
@@ -11,7 +11,7 @@ const DEFAULT_CONFIG: BuildOptions = {
 	metafile: true,
 	platform: "node",
 	target: "node16",
-};
+}
 
 export const createEsBuildConfig = (
   entryFile: string,
@@ -34,6 +34,10 @@ export const createEsBuildConfig = (
     },
   }) as BuildOptions
 
-export const bundleEntry = async (entryFile: string, outDir: string, args: Args) => {
-	await build(createEsBuildConfig(entryFile, outDir, args));
-};
+export const bundleEntry = async (
+	entryFile: string,
+	outDir: string,
+	args: Args,
+) => {
+	await build(createEsBuildConfig(entryFile, outDir, args))
+}

@@ -1,10 +1,14 @@
-import type { App } from "astro/app";
-import { beforeEach, describe, expect, test, vi } from "vitest";
-import { faker } from "@faker-js/faker";
+import type { App } from "astro/app"
+import { beforeEach, describe, expect, test, vi } from "vitest"
+import { faker } from "@faker-js/faker"
 
+<<<<<<< HEAD
 import { createLambdaFunctionResponse, createLambdaEdgeFunctionResponse } from "../helpers.js";
+=======
+import { createLambdaFunctionResponse } from "../helpers.js"
+>>>>>>> ddb6036 (chore: updated deps)
 
-const knownBinaryMediaTypes = new Set(["image/png", "image/jpeg"]);
+const knownBinaryMediaTypes = new Set(["image/png", "image/jpeg"])
 
 describe("helpers", () => {
 	describe("createFunctionResponse", () => {
@@ -12,29 +16,33 @@ describe("helpers", () => {
 			app: App,
 			fnResponse: Awaited<ReturnType<typeof createLambdaFunctionResponse>>,
 			body: string,
-			headers: Record<string, string>;
+			headers: Record<string, string>
 
 		beforeEach(async () => {
-			body = faker.datatype.string();
+			body = faker.datatype.string()
 			headers = {
 				"content-type": "text/plain",
-			};
+			}
 
 			response = new Response(body, {
 				headers,
 				status: 200,
-			});
+			})
 
 			app = {
 				setCookieHeaders: vi.fn(() => []),
-			} as unknown as App;
+			} as unknown as App
 
-			fnResponse = await createLambdaFunctionResponse(app, response, knownBinaryMediaTypes);
-		});
+			fnResponse = await createLambdaFunctionResponse(
+				app,
+				response,
+				knownBinaryMediaTypes,
+			)
+		})
 
 		test("creates function response", () => {
-			expect(app.setCookieHeaders).toHaveBeenCalledTimes(1);
-			expect(app.setCookieHeaders).toHaveBeenCalledWith(response);
+			expect(app.setCookieHeaders).toHaveBeenCalledTimes(1)
+			expect(app.setCookieHeaders).toHaveBeenCalledWith(response)
 
 			expect(fnResponse).toStrictEqual({
 				body,
@@ -42,6 +50,7 @@ describe("helpers", () => {
 				headers,
 				isBase64Encoded: false,
 				statusCode: 200,
+<<<<<<< HEAD
 			});
 		});
 	});
@@ -105,3 +114,9 @@ describe("helpers", () => {
 		});
 	});
 });
+=======
+			})
+		})
+	})
+})
+>>>>>>> ddb6036 (chore: updated deps)
