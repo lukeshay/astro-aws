@@ -18,3 +18,5 @@ yarn-debug.log*
 yarn-error.log*
 package.tgz
 apps/www/src/pages/docs/packages/*
+
+.idea
