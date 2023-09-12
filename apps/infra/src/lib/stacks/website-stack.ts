@@ -117,7 +117,7 @@ export class WebsiteStack extends Stack {
 					serverAccessLogsPrefix: "s3/",
 				},
 			},
-			outDir: `../www/dist/${output === "static" ? "static" : "server"}`,
+			outDir: `../docs/dist/${output === "static" ? "static" : "server"}`,
 			output,
 		})
 

@@ -29,6 +29,7 @@
 	},
 	"dependencies": {
 		"@astro-aws/constructs": "workspace:^",
+		"@astro-aws/docs": "workspace:^",
 		"@astro-aws/www": "workspace:^",
 		"@types/node": "^18.14.0",
 		"aws-cdk": "^2.94.0",
