@@ -1,5 +1,9 @@
 import { type Construct } from "constructs"
-import { Version, type Function } from "aws-cdk-lib/aws-lambda"
+import {
+	Version,
+	type Function,
+	type VersionProps,
+} from "aws-cdk-lib/aws-lambda"
 import {
 	AllowedMethods,
 	Distribution,
@@ -25,9 +29,10 @@ export type AstroAWSCloudfrontDistributionCdkProps = {
 		DistributionProps,
 		"apiBehavior" | "defaultBehavior"
 	> & {
-		defaultBehavior?: Omit<BehaviorOptions, "origin">
 		apiBehavior?: Omit<BehaviorOptions, "origin">
+		defaultBehavior?: Omit<BehaviorOptions, "origin">
 	}
+	version?: Omit<VersionProps, "lambda">
 }
 
 export type AstroAWSCloudfrontDistributionProps = {
@@ -94,6 +99,7 @@ export class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 
 		if (this.props.output === "edge" && this.props.lambdaFunction) {
 			const functionVersion = new Version(this, "LambdaVersion", {
+				...this.props.cdk?.version,
 				lambda: this.props.lambdaFunction,
 			})
 

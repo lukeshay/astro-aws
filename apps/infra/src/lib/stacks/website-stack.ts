@@ -1,5 +1,6 @@
-import { env } from "node:process"
+import { cwd, env } from "node:process"
 
+import { getYarnWorkspaces } from "workspace-tools"
 import { CfnOutput, Duration, Stack } from "aws-cdk-lib/core"
 import type { Certificate } from "aws-cdk-lib/aws-certificatemanager"
 import {
@@ -33,6 +34,8 @@ export type WebsiteStackProps = AstroAWSStackProps & {
 }
 
 export class WebsiteStack extends Stack {
+	private static WORKSPACE_INFO = getYarnWorkspaces(cwd())
+
 	public constructor(scope: Construct, id: string, props: WebsiteStackProps) {
 		super(scope, id, props)
 
@@ -83,7 +86,7 @@ export class WebsiteStack extends Stack {
 								securityHeadersBehavior: {
 									contentSecurityPolicy: {
 										contentSecurityPolicy:
-											"default-src 'self'; upgrade-insecure-requests",
+											"default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; upgrade-insecure-requests",
 										override: true,
 									},
 								},
@@ -117,7 +120,7 @@ export class WebsiteStack extends Stack {
 					serverAccessLogsPrefix: "s3/",
 				},
 			},
-			outDir: `../docs/dist/${output === "static" ? "static" : "server"}`,
+			outDir: `${this.#getWorkspacePath(props.package)}/dist`,
 			output,
 		})
 
@@ -207,5 +210,17 @@ export class WebsiteStack extends Stack {
 			value:
 				astroAwsConstruct.cdk.cloudfrontDistribution.distributionDomainName,
 		})
+	}
+
+	#getWorkspacePath(pkg: string): string {
+		const workspace = WebsiteStack.WORKSPACE_INFO.find(
+			(workspace) => workspace.name === pkg,
+		)
+
+		if (!workspace) {
+			throw new Error(`Unable to find workspace for ${pkg}`)
+		}
+
+		return workspace.path
 	}
 }

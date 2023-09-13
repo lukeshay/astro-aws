@@ -1,16 +1,16 @@
 ---
-export type Heading = {
+export type Heading={
 	depth: number;
 	slug: string;
 	text: string;
 };
 
-export type Props = {
+export type Props={
 	headings: Heading[];
 	url: string;
 };
 
-const depthPadding = {
+const depthPadding={
 	2: "pl-0",
 	3: "pl-4",
 } as const;

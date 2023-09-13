@@ -1,12 +1,12 @@
 {
-	"name": "@astro-aws/docs",
+	"name": "@astro-aws/examples-base",
 	"version": "0.0.0",
 	"private": true,
 	"homepage": "https://astro-aws.org/",
 	"repository": {
 		"type": "git",
 		"url": "ssh://git@github.com/lukeshay/astro-aws.git",
-		"directory": "apps/www"
+		"directory": "examples/base"
 	},
 	"license": "MIT",
 	"type": "module",
@@ -21,7 +21,7 @@
 	},
 	"scripts": {
 		"astro": "astro",
-		"build": "yarn clean && ./scripts/copy-package-readmes.sh && astro build",
+		"build": "yarn clean && astro build",
 		"check": "astro check && tsc",
 		"clean": "rimraf dist",
 		"dev": "astro dev",
@@ -30,15 +30,15 @@
 		"start": "astro dev"
 	},
 	"dependencies": {
-		"@astrojs/starlight": "^0.9.1",
-		"astro": "^3.0.6",
-		"sharp": "^0.32.5"
+		"astro": "^3.0.13"
 	},
 	"devDependencies": {
 		"@astro-aws/adapter": "workspace:^",
+		"@astrojs/check": "^0.2.0",
 		"eslint": "^8.49.0",
 		"prettier": "^3.0.3",
-		"rimraf": "^5.0.1"
+		"rimraf": "^5.0.1",
+		"typescript": "^5.2.2"
 	},
 	"engines": {
 		"node": "18.x"

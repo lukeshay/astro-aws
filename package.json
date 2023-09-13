@@ -1,5 +1,5 @@
 {
-	"name": "root",
+	"name": "@astro-aws/root",
 	"version": "0.0.0",
 	"private": true,
 	"homepage": "https://astro-aws.org/",
@@ -10,8 +10,9 @@
 	},
 	"license": "MIT",
 	"workspaces": [
-		"packages/*",
 		"apps/*",
+		"examples/*",
+		"packages/*",
 		"scripts"
 	],
 	"scripts": {

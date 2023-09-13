@@ -29,6 +29,7 @@ const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
 		environment: Environments.DEV,
 		hostedZoneName: "astro-aws.org",
 		output: "static",
+		package: "@astro-aws/docs",
 	},
 	[Environments.SSR]: {
 		...base,
@@ -36,6 +37,7 @@ const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
 		environment: Environments.SSR,
 		hostedZoneName: "astro-aws.org",
 		output: "server",
+		package: "@astro-aws/examples-base",
 	},
 	[Environments.EDGE]: {
 		...base,
@@ -47,17 +49,20 @@ const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
 		environment: Environments.EDGE,
 		hostedZoneName: "astro-aws.org",
 		output: "edge",
+		package: "@astro-aws/examples-base",
 	},
 	[Environments.PROD]: {
 		...base,
 		environment: Environments.PROD,
 		hostedZoneName: "astro-aws.org",
 		output: "static",
+		package: "@astro-aws/docs",
 	},
 	[Environments.PERSONAL]: {
 		...base,
 		environment: Environments.PERSONAL,
 		output: "static",
+		package: "@astro-aws/docs",
 	},
 } as const
 

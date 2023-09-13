@@ -2,7 +2,7 @@
 import Logo from "../Logo.astro";
 import { Icon } from "astro-icon";
 
-export type Link = {
+export type Link={
 	text: string;
 	href: string;
 };
@@ -11,7 +11,7 @@ export type Link = {
 // prettier-ignore
 export type Sections = (Record<string, { text: string; href: string }[]>);
 
-export type Props = {
+export type Props={
 	sections: Sections;
 };
 

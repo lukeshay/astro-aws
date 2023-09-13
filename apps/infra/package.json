@@ -37,7 +37,8 @@
 		"constructs": "^10.1.253",
 		"eslint": "^8.49.0",
 		"prettier": "^3.0.3",
-		"typescript": "^5.2.2"
+		"typescript": "^5.2.2",
+		"workspace-tools": "^0.35.2"
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",

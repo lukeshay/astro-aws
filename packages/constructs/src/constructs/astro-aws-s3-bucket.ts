@@ -6,7 +6,7 @@ import {
 } from "aws-cdk-lib/aws-s3"
 import { type Construct } from "constructs"
 import { OriginAccessIdentity } from "aws-cdk-lib/aws-cloudfront"
-import { CanonicalUserPrincipal, PolicyStatement } from "aws-cdk-lib/aws-iam"
+// import { CanonicalUserPrincipal, PolicyStatement } from "aws-cdk-lib/aws-iam"
 
 import { AstroAWSBaseConstruct } from "../types/astro-aws-construct.js"
 
@@ -48,17 +48,19 @@ export class AstroAWSS3Bucket extends AstroAWSBaseConstruct<
 			comment: `OAI for ${id}`,
 		})
 
-		this.#s3Bucket.addToResourcePolicy(
-			new PolicyStatement({
-				actions: ["s3:GetObject"],
-				principals: [
-					new CanonicalUserPrincipal(
-						this.#originAccessIdentity.cloudFrontOriginAccessIdentityS3CanonicalUserId,
-					).grantPrincipal,
-				],
-				resources: [this.#s3Bucket.arnForObjects("*")],
-			}),
-		)
+		this.#s3Bucket.grantRead(this.#originAccessIdentity)
+
+		// this.#s3Bucket.addToResourcePolicy(
+		// 	new PolicyStatement({
+		// 		actions: ["s3:GetObject"],
+		// 		principals: [
+		// 			new CanonicalUserPrincipal(
+		// 				this.#originAccessIdentity.cloudFrontOriginAccessIdentityS3CanonicalUserId,
+		// 			).grantPrincipal,
+		// 		],
+		// 		resources: [this.#s3Bucket.arnForObjects("*")],
+		// 	}),
+		// )
 	}
 
 	public get cdk() {

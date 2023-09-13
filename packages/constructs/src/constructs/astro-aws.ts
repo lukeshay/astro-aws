@@ -44,7 +44,6 @@ export type AstroAWSProps = {
 	websiteDir?: string
 	outDir?: string
 	output: Output
-	node16?: boolean
 	cdk?: AstroAWSCdkProps &
 		AstroAWSCloudfrontDistributionCdkProps &
 		AstroAWSOriginCdkProps &
@@ -134,7 +133,7 @@ export class AstroAWS extends AstroAWSBaseConstruct<
 		this.#lambdaFunction = new Function(this, "Function", {
 			description: "SSR Lambda Function",
 			memorySize: 512,
-			runtime: this.props.node16 ? Runtime.NODEJS_16_X : Runtime.NODEJS_18_X,
+			runtime: Runtime.NODEJS_18_X,
 			...this.props.cdk?.lambdaFunction,
 			code: Code.fromAsset(resolve(this.distDir, "lambda")),
 			handler: "entry.handler",

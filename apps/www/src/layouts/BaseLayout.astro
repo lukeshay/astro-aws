@@ -12,7 +12,7 @@ export type Props = SEOProps & {
 
 const { sections, ...props } = Astro.props;
 
-const seoProps: SEOProps = {
+const seoProps: SEOProps={
 	title: "Astro AWS",
 	description: "SSR adapter for Astro on AWS Lambda",
 	...props,

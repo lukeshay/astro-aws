@@ -7,14 +7,14 @@ import RightSideNav from "../components/layout/RightSideNav.astro";
 const { frontmatter, headings } = Astro.props;
 const docs = await Astro.glob("../pages/docs/**/*.md*");
 
-const sectionOrder = {
+const sectionOrder={
 	"Start Here": 0,
 	Packages: 1,
 } as const;
 
 type Section = keyof typeof sectionOrder;
 
-const sections: Record<Section, (Link & { order: number | undefined })[]> = {
+const sections: Record<Section, (Link & { order: number | undefined })[]>={
 	"Start Here": [],
 	Packages: [],
 };

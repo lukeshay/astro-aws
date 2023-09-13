@@ -8,7 +8,12 @@
 	],
 	"commit": false,
 	"fixed": [],
-	"ignore": ["@astro-aws/www", "@astro-aws/infra"],
+	"ignore": [
+		"@astro-aws/www",
+		"@astro-aws/infra",
+		"@astro-aws/docs",
+		"@astro-aws/examples-astro-ecommerce"
+	],
 	"linked": [["@astro-aws/adapter", "@astro-aws/constructs"]],
 	"updateInternalDependencies": "patch"
 }
