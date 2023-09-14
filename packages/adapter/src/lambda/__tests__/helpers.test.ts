@@ -67,7 +67,7 @@ describe("helpers", () => {
 			app = {
 				setCookieHeaders: vi.fn(() => [
 					"newCookie=newValue",
-					"deleteCookie=deleted; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+					"deleteCookie=deleted; Expires=Thu, 01 Jan 1970 00:00:00 GMT",
 				]),
 			} as unknown as App;
 
