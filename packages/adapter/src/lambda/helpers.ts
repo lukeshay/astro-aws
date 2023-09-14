@@ -69,12 +69,12 @@ export const createLambdaEdgeFunctionResponse = async (
 				]),
 		),
 		...(cookies.length > 0 && {
-			'set-cookie': cookies.map((cookie) => ({
-				key: 'set-cookie',
+			"set-cookie": cookies.map((cookie) => ({
+				key: "set-cookie",
 				value: cookie,
 			})),
 		}),
-	}
+	};
 	const responseContentType = parseContentType(response.headers.get("content-type"));
 	const bodyEncoding = knownBinaryMediaTypes.has(responseContentType) ? "base64" : "text";
 
