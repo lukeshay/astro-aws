@@ -101,6 +101,7 @@ export class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 			const functionVersion = new Version(this, "LambdaVersion", {
 				...this.props.cdk?.version,
 				lambda: this.props.lambdaFunction,
+				description: `Created by AstroAWS at ${new Date().toISOString()}`
 			})
 
 			edgeLambdas.push({

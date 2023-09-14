@@ -12,22 +12,9 @@ env:
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
 jobs:
-  prepare-yarn-cache:
-    name: Cache dependencies
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-          cache: "yarn"
-      - run: yarn install --mode=skip-build
-        env:
-          YARN_ENABLE_SCRIPTS: false
   check:
     name: Check
     runs-on: ubuntu-22.04
-    needs: prepare-yarn-cache
     strategy:
       fail-fast: false
       matrix:
@@ -38,16 +25,15 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node_version }}
-          cache: "yarn"
+          cache: "pnpm"
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-region: us-east-2
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - run: yarn install --mode=skip-build
-      - run: yarn build
-      - run: yarn constraints
-      - run: yarn test
-      - run: yarn lint
-      - run: yarn prettier
-      - run: yarn synth
+      - run: pnpm install
+      - run: pnpm run build
+      - run: pnpm run test
+      - run: pnpm run lint
+      - run: pnpm run prettier
+      - run: pnpm run synth

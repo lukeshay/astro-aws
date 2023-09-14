@@ -39,7 +39,7 @@ body:
         - Astro AWS version(s):
         - Astro version(s):
         - Node:
-        - npm/Yarn version: [e.g. npm 7/Yarn 2.3]
+        - pnpm/npm/yarn version: [e.g. npm 7/Yarn 2.3]
         - AWS CDK version(s):
     validations:
       required: true

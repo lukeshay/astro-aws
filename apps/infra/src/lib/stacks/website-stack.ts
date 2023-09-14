@@ -1,6 +1,6 @@
 import { cwd, env } from "node:process"
 
-import { getYarnWorkspaces } from "workspace-tools"
+import { getPnpmWorkspaces } from "workspace-tools"
 import { CfnOutput, Duration, Stack } from "aws-cdk-lib/core"
 import type { Certificate } from "aws-cdk-lib/aws-certificatemanager"
 import {
@@ -34,7 +34,7 @@ export type WebsiteStackProps = AstroAWSStackProps & {
 }
 
 export class WebsiteStack extends Stack {
-	private static WORKSPACE_INFO = getYarnWorkspaces(cwd())
+	private static WORKSPACE_INFO = getPnpmWorkspaces(cwd())
 
 	public constructor(scope: Construct, id: string, props: WebsiteStackProps) {
 		super(scope, id, props)

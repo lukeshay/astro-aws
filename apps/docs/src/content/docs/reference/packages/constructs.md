@@ -19,6 +19,9 @@ yarn add @astro-aws/constructs constructs aws-cdk-lib
 
 # Using PNPM
 pnpm add @astro-aws/constructs constructs aws-cdk-lib
+
+# Using Bun
+bun add @astro-aws/constructs constructs aws-cdk-lib
 ```
 
 2. Add the construct to your CDK stack.
@@ -55,6 +58,9 @@ yarn add @astro-aws/constructs constructs aws-cdk-lib
 
 # Using PNPM
 pnpm add @astro-aws/constructs constructs aws-cdk-lib
+
+# Using Bun
+bun add @astro-aws/constructs constructs aws-cdk-lib
 ```
 
 2. Add the construct to your CDK stack.
@@ -91,6 +97,9 @@ yarn add @astro-aws/constructs constructs aws-cdk-lib
 
 # Using PNPM
 pnpm add @astro-aws/constructs constructs aws-cdk-lib
+
+# Using Bun
+bun add @astro-aws/constructs constructs aws-cdk-lib
 ```
 
 2. Add the construct to your CDK stack.

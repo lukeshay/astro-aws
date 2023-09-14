@@ -38,6 +38,13 @@ pnpm create astro@latest
 pnpm astro add @astro-aws/adapter
 ```
 
+### Using Bun
+
+```sh
+bun create astro@latest
+bun x astro add @astro-aws/adapter
+```
+
 ## Build your Astro project
 
 ```sh
@@ -49,6 +56,9 @@ yarn build
 
 # Using PNPM
 pnpm run build
+
+# Using PNPM
+bun run build
 ```
 
 ## Start your first AWS CDK project
@@ -68,13 +78,16 @@ cdk init app --language typescript
 
 ```sh
 # Using NPM
-npm i @astro-aws/constructs
+npm install @astro-aws/constructs
 
 # Using Yarn
 yarn add @astro-aws/constructs
 
 # Using PNPM
-pnpm i @astro-aws/constructs
+pnpm add @astro-aws/constructs
+
+# Using Bun
+bun add @astro-aws/constructs
 ```
 
 ### Modify `lib/hello-cdk-stack.ts` to contain the following

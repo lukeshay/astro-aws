@@ -21,12 +21,12 @@
 	},
 	"scripts": {
 		"astro": "astro",
-		"build": "yarn clean && astro build",
+		"build": "pnpm run clean && astro build",
 		"check": "astro check && tsc",
 		"clean": "rimraf dist",
 		"dev": "astro dev",
 		"preview": "astro preview",
-		"release": "yarn build && yarn package",
+		"release": "pnpm run build && pnpm run package",
 		"start": "astro dev"
 	},
 	"dependencies": {

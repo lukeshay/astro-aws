@@ -20,21 +20,8 @@ permissions:
   deployments: write
 
 jobs:
-  prepare-yarn-cache:
-    name: Cache dependencies
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-          cache: "yarn"
-      - run: yarn install --mode=skip-build
-        env:
-          YARN_ENABLE_SCRIPTS: false
   deploy-dev:
     name: Deploy Dev
-    needs: [prepare-yarn-cache]
     concurrency:
       group: ${{ format('{0}-{1}', github.workflow, github.job) }}
     uses: ./.github/workflows/deploy.yml
@@ -45,7 +32,6 @@ jobs:
     secrets: inherit
   deploy-dev-ssr:
     name: Deploy Dev SSR
-    needs: [prepare-yarn-cache]
     concurrency:
       group: ${{ format('{0}-{1}', github.workflow, github.job) }}
     uses: ./.github/workflows/deploy.yml
@@ -56,7 +42,6 @@ jobs:
     secrets: inherit
   deploy-dev-edge:
     name: Deploy Dev Edge
-    needs: [prepare-yarn-cache]
     concurrency:
       group: ${{ format('{0}-{1}', github.workflow, github.job) }}
     uses: ./.github/workflows/deploy.yml

@@ -17,6 +17,9 @@ yarn astro add @astro-aws/adapter
 
 # Using PNPM
 pnpm astro add @astro-aws/adapter
+
+# Using Bun
+bun x astro add @astro-aws/adapter
 ```
 
 ### Manually
@@ -25,13 +28,16 @@ pnpm astro add @astro-aws/adapter
 
 ```
 # Using NPM
-npm install @astro-aws/adapter
+npm install -D @astro-aws/adapter
 
 # Using Yarn
-yarn add @astro-aws/adapter
+yarn add -D @astro-aws/adapter
 
 # Using PNPM
-pnpm add @astro-aws/adapter
+pnpm add -D @astro-aws/adapter
+
+# Using Bun
+bun add -D @astro-aws/adapter
 ```
 
 2. Add the following to your `astro.config.mjs` file.

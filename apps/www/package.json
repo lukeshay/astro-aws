@@ -15,12 +15,12 @@
 	],
 	"scripts": {
 		"astro": "astro",
-		"build": "yarn clean && ./scripts/copy-package-readmes.sh && astro build",
+		"build": "pnpm run clean && ./scripts/copy-package-readmes.sh && astro build",
 		"check": "astro check && tsc",
 		"clean": "rimraf dist",
 		"dev": "astro dev",
 		"preview": "astro preview",
-		"release": "yarn build && yarn package",
+		"release": "pnpm run build && pnpm run package",
 		"start": "astro dev"
 	},
 	"eslintConfig": {
