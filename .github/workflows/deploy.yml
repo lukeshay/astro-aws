@@ -81,13 +81,13 @@ jobs:
           aws-region: ${{ inputs.aws_region }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - uses: pnpm/action-setup@v2
+        with:
+          version: "8.7.5"
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node_version }}
           cache: "pnpm"
-      - uses: pnpm/action-setup@v2
-        with:
-          version: "8.7.5"
       - run: pnpm install
       - run: pnpm run deploy:one infra -- ${{ inputs.stack_environment }}
         env:
