@@ -21,7 +21,7 @@ export class GitHubOIDCStack extends cdk.Stack {
 		super(scope, id, props)
 
 		const gitHubOIDC = new OpenIdConnectProvider(this, "GitHubOIDC", {
-			clientIds: ["sts.amazonaws.com"],
+			clientIds: ["sts.amazonaws.com", "https://github.com/lukeshay/astro-aws"],
 			thumbprints: ["6938fd4d98bab03faadb97b34396831e3780aea1"],
 			url: "https://token.actions.githubusercontent.com",
 		})
