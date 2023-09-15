@@ -6843,11 +6843,11 @@ __metadata:
   linkType: hard
 
 "merge-anything@npm:^5.1.4":
-  version: 5.1.4
-  resolution: "merge-anything@npm:5.1.4"
+  version: 5.1.7
+  resolution: "merge-anything@npm:5.1.7"
   dependencies:
     is-what: ^4.1.8
-  checksum: b844251652b92d4672383ffdb3b5f77247c9d5012604bdc0d4dc610b4c0957b6446753a42b25c759e7beb7303427cda88fa86896aa58744c404fa7fc396ec7c3
+  checksum: 5b9d2bcec2dd7c0a748a84b2aabc5baeee535a8ea86af9a0154c2446298c1bf7c1746dd67757df5d4138553b8f24d46730263464fbc115fe6ef9056be9f51b04
   languageName: node
   linkType: hard
 
