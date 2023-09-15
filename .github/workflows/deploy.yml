@@ -43,18 +43,14 @@ on:
         required: false
         type: string
     secrets:
-      AWS_ACCESS_KEY_ID:
+      AWS_ROLE_TO_ASSUME:
         required: true
-      AWS_SECRET_ACCESS_KEY:
-        required: true
-      AWS_ACCOUNT_ID:
+      AWS_ACCOUNT:
         required: true
       TURBO_TOKEN:
         required: false
       TURBO_TEAM:
         required: false
-      WEB_ACL_ARN:
-        required: true
 
 env:
   CI: true
@@ -75,17 +71,16 @@ jobs:
       name: ${{ inputs.environment_name }}
       url: ${{ inputs.environment_url }}
     steps:
-      - run: echo "::add-mask::${{ secrets.AWS_ACCOUNT_ID }}"
+      - run: echo "::add-mask::${{ secrets.AWS_ACCOUNT }}"
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
           repository: ${{ inputs.repository }}
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ inputs.aws_region }}
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
       - uses: pnpm/action-setup@v2
         with:
           version: ${{ inputs.pnpm_version }}
@@ -96,7 +91,7 @@ jobs:
       - run: pnpm install
       - run: pnpm run deploy:one infra -- ${{ inputs.stack_environment }}
         env:
-          WEB_ACL_ARN: ${{ secrets.WEB_ACL_ARN }}
+          AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
       # - run: |
       #       export TIME="$(TZ=GMT date +'%Y-%m-%d_%H-%M-%S')"
       #       git tag "${{ inputs.stack_environment }}_latest" --force
