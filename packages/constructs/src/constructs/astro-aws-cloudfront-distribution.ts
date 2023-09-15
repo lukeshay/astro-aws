@@ -47,7 +47,7 @@ class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 	AstroAWSCloudfrontDistributionProps,
 	AstroAWSCloudfrontDistributionCdk
 > {
-	#redirectToIndexCloudfrontFunction?: CfFunction
+	#redirectToIndexCloudfrontFunction: CfFunction
 	#cloudfrontDistribution: Distribution
 
 	public constructor(
