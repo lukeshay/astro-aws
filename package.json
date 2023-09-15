@@ -23,7 +23,7 @@
 		"deploy:one": "turbo run deploy --filter",
 		"dev": "turbo run dev",
 		"dev:one": "turbo run dev --filter",
-		"lint": "eslint .",
+		"lint": "turbo run build && eslint .",
 		"lint:fix": "pnpm run lint --fix",
 		"prettier": "prettier --ignore-unknown --no-error-on-unmatched-pattern --check .",
 		"prettier:fix": "pnpm run prettier --write",

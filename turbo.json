@@ -3,8 +3,7 @@
 	"pipeline": {
 		"build": {
 			"dependsOn": ["^build"],
-			"outputs": ["dist/**", "cdk.out/**"],
-			"cache": false
+			"outputs": ["dist/**", "cdk.out/**"]
 		},
 		"test": {
 			"dependsOn": ["^build"]
