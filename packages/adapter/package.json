@@ -47,27 +47,27 @@
 		"root": false
 	},
 	"dependencies": {
-		"@astrojs/webapi": "^2.0.1",
-		"esbuild": "^0.17.8",
-		"merge-anything": "^5.1.4"
+		"@astrojs/webapi": "^2.2.0",
+		"esbuild": "^0.19.3",
+		"merge-anything": "^5.1.7"
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
-		"@faker-js/faker": "^7.6.0",
-		"@types/aws-lambda": "^8.10.110",
-		"@types/node": "^18.14.0",
-		"astro": "^2.0.14",
+		"@faker-js/faker": "^8.0.2",
+		"@types/aws-lambda": "^8.10.121",
+		"@types/node": "^18.17.6",
+		"astro": "^3.1.0",
 		"aws-lambda": "^1.0.7",
-		"eslint": "^8.34.0",
-		"prettier": "^2.8.4",
-		"typescript": "^4.9.5",
-		"vitest": "^0.28.5"
+		"eslint": "^8.49.0",
+		"prettier": "^3.0.3",
+		"typescript": "^5.2.2",
+		"vitest": "^0.34.4"
 	},
 	"peerDependencies": {
 		"astro": ">=1"
 	},
 	"engines": {
-		"node": "16.x || 18.x"
+		"node": "18.x"
 	},
 	"publishConfig": {
 		"access": "public"

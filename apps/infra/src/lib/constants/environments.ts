@@ -1,6 +1,6 @@
-import { env } from "node:process";
+import { env } from "node:process"
 
-import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js";
+import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
 
 const base = {
 	analyticsReporting: false,
@@ -10,40 +10,26 @@ const base = {
 		region: "us-west-2",
 	},
 	terminationProtection: false,
-};
+}
 
-export const Environments = {
+const Environments = {
 	DEV: "DEV",
-	DEV_NODE_16: "NODE16",
-	DEV_NODE_18: "NODE18",
 	EDGE: "EDGE",
 	PERSONAL: "PERSONAL",
 	PROD: "PROD",
-} as const;
+	SSR: "SSR",
+} as const
 
-export type Environment = (typeof Environments)[keyof typeof Environments];
+type Environment = (typeof Environments)[keyof typeof Environments]
 
-export const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
+const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
 	[Environments.DEV]: {
 		...base,
-		alias: "dev",
+		alias: "static.dev",
 		environment: Environments.DEV,
 		hostedZoneName: "astro-aws.org",
 		output: "static",
-	},
-	[Environments.DEV_NODE_16]: {
-		...base,
-		alias: "node16.dev",
-		environment: Environments.DEV_NODE_16,
-		hostedZoneName: "astro-aws.org",
-		output: "server",
-	},
-	[Environments.DEV_NODE_18]: {
-		...base,
-		alias: "node18.dev",
-		environment: Environments.DEV_NODE_18,
-		hostedZoneName: "astro-aws.org",
-		output: "server",
+		package: "@astro-aws/docs",
 	},
 	[Environments.EDGE]: {
 		...base,
@@ -55,16 +41,29 @@ export const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
 		environment: Environments.EDGE,
 		hostedZoneName: "astro-aws.org",
 		output: "edge",
+		package: "@astro-aws/examples-base",
 	},
 	[Environments.PROD]: {
 		...base,
 		environment: Environments.PROD,
 		hostedZoneName: "astro-aws.org",
 		output: "static",
+		package: "@astro-aws/docs",
 	},
 	[Environments.PERSONAL]: {
 		...base,
 		environment: Environments.PERSONAL,
 		output: "static",
+		package: "@astro-aws/docs",
 	},
-} as const;
+	[Environments.SSR]: {
+		...base,
+		alias: "ssr.dev",
+		environment: Environments.SSR,
+		hostedZoneName: "astro-aws.org",
+		output: "server",
+		package: "@astro-aws/examples-base",
+	},
+} as const
+
+export { Environments, ENVIRONMENT_PROPS, type Environment }

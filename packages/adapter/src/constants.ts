@@ -1,1 +1,1 @@
-export const ADAPTER_NAME = "@astro-aws/adapter";
+export const ADAPTER_NAME = "@astro-aws/adapter"

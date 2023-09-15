@@ -1,0 +1,46 @@
+{
+	"name": "@astro-aws/docs",
+	"version": "0.0.0",
+	"private": true,
+	"homepage": "https://astro-aws.org/",
+	"repository": {
+		"type": "git",
+		"url": "ssh://git@github.com/lukeshay/astro-aws.git",
+		"directory": "apps/www"
+	},
+	"license": "MIT",
+	"type": "module",
+	"files": [
+		"dist"
+	],
+	"eslintConfig": {
+		"extends": [
+			"../../.eslintrc.cjs"
+		],
+		"root": false
+	},
+	"scripts": {
+		"astro": "astro",
+		"build": "pnpm run clean && ./scripts/copy-package-readmes.sh && astro build",
+		"check": "astro check && tsc",
+		"clean": "rimraf dist",
+		"dev": "astro dev",
+		"preview": "astro preview",
+		"release": "pnpm run build && pnpm run package",
+		"start": "astro dev"
+	},
+	"dependencies": {
+		"@astrojs/starlight": "^0.9.1",
+		"astro": "^3.1.0",
+		"sharp": "^0.32.5"
+	},
+	"devDependencies": {
+		"@astro-aws/adapter": "workspace:^",
+		"eslint": "^8.49.0",
+		"prettier": "^3.0.3",
+		"rimraf": "^5.0.1"
+	},
+	"engines": {
+		"node": "18.x"
+	}
+}

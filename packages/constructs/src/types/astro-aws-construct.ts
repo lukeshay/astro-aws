@@ -1,17 +1,17 @@
-import { Construct } from "constructs";
+import { Construct } from "constructs"
 
 export abstract class AstroAWSBaseConstruct<Props, Cdk> extends Construct {
-	#props: Props;
+	#props: Props
 
 	public constructor(scope: Construct, id: string, props: Props) {
-		super(scope, id);
+		super(scope, id)
 
-		this.#props = props;
+		this.#props = props
 	}
 
 	public get props(): Props {
-		return this.#props;
+		return this.#props
 	}
 
-	public abstract get cdk(): Cdk;
+	public abstract get cdk(): Cdk
 }

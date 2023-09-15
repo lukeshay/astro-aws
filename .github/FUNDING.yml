@@ -1,8 +1,8 @@
 github:
-    - lukeshay
+  - lukeshay
 custom:
-    - https://account.venmo.com/u/LukeShay
-    - https://paypal.me/rlshay
+  - https://account.venmo.com/u/LukeShay
+  - https://paypal.me/rlshay
 open_collective: https://opencollective.com/astro-aws
 # patreon: # Replace with a single Patreon username
 # ko_fi: # Replace with a single Ko-fi username

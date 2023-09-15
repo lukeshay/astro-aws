@@ -2,10 +2,18 @@
 	"$schema": "https://unpkg.com/@changesets/config@2.2.0/schema.json",
 	"access": "public",
 	"baseBranch": "main",
-	"changelog": ["@changesets/changelog-github", { "repo": "lukeshay/astro-aws" }],
+	"changelog": [
+		"@changesets/changelog-github",
+		{ "repo": "lukeshay/astro-aws" }
+	],
 	"commit": false,
 	"fixed": [],
-	"ignore": ["@astro-aws/www", "@astro-aws/infra"],
+	"ignore": [
+		"@astro-aws/www",
+		"@astro-aws/infra",
+		"@astro-aws/docs",
+		"@astro-aws/examples-astro-ecommerce"
+	],
 	"linked": [["@astro-aws/adapter", "@astro-aws/constructs"]],
 	"updateInternalDependencies": "patch"
 }

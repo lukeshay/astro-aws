@@ -1,1 +1,1 @@
-export type Output = "edge" | "server" | "static";
+export type Output = "edge" | "server" | "static"

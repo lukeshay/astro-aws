@@ -1,5 +1,5 @@
 {
-	"name": "root",
+	"name": "@astro-aws/root",
 	"version": "0.0.0",
 	"private": true,
 	"homepage": "https://astro-aws.org/",
@@ -10,8 +10,9 @@
 	},
 	"license": "MIT",
 	"workspaces": [
-		"packages/*",
 		"apps/*",
+		"examples/*",
+		"packages/*",
 		"scripts"
 	],
 	"scripts": {
@@ -22,12 +23,12 @@
 		"deploy:one": "turbo run deploy --filter",
 		"dev": "turbo run dev",
 		"dev:one": "turbo run dev --filter",
-		"lint": "eslint .",
-		"lint:fix": "yarn lint --fix",
+		"lint": "turbo run build && eslint .",
+		"lint:fix": "pnpm run lint --fix",
 		"prettier": "prettier --ignore-unknown --no-error-on-unmatched-pattern --check .",
-		"prettier:fix": "yarn prettier --write",
-		"release:cut": "git add . && git commit -m 'new release' && WEB_ACL_ARN='' yarn deploy:one infra -- PROD && yarn changeset publish && git push && git push --follow-tags",
-		"release:prepare": "yarn build && yarn changeset version && yarn prettier:fix",
+		"prettier:fix": "pnpm run prettier --write",
+		"release:cut": "git add . && git commit -m 'new release' && WEB_ACL_ARN='' pnpm run deploy:one infra -- PROD && pnpm run changeset publish && git push && git push --follow-tags",
+		"release:prepare": "pnpm run build && pnpm run changeset version && pnpm run prettier:fix",
 		"synth": "turbo run synth",
 		"synth:one": "turbo run synth --filter",
 		"test": "turbo run test",
@@ -41,19 +42,19 @@
 	},
 	"dependencies": {
 		"@changesets/changelog-github": "^0.4.8",
-		"@changesets/cli": "^2.26.0",
-		"@lshay/eslint-config": "^0.2.2",
-		"@lshay/prettier-config": "^0.5.3",
-		"@rushstack/eslint-patch": "^1.2.0",
-		"eslint": "^8.34.0",
-		"eslint-import-resolver-typescript": "^3.5.3",
-		"eslint-plugin-import": "^2.27.5",
-		"prettier": "^2.8.4",
-		"turbo": "^1.8.0",
-		"typescript": "^4.9.5"
+		"@changesets/cli": "^2.26.2",
+		"@lshay/eslint-config": "^0.2.5",
+		"@lshay/prettier-config": "^0.6.0",
+		"@rushstack/eslint-patch": "^1.3.3",
+		"eslint": "^8.49.0",
+		"eslint-import-resolver-typescript": "^3.6.0",
+		"eslint-plugin-import": "^2.28.1",
+		"prettier": "^3.0.3",
+		"turbo": "^1.10.13",
+		"typescript": "^5.2.2"
 	},
-	"packageManager": "yarn@3.4.1",
+	"packageManager": "pnpm@8.7.5",
 	"engines": {
-		"node": "16.x || 18.x"
+		"node": "18.x"
 	}
 }

@@ -15,25 +15,28 @@ yarn add @astro-aws/constructs constructs aws-cdk-lib
 
 # Using PNPM
 pnpm add @astro-aws/constructs constructs aws-cdk-lib
+
+# Using Bun
+bun add @astro-aws/constructs constructs aws-cdk-lib
 ```
 
 2. Add the construct to your CDK stack.
 
 ```ts
-import { Stack } from "aws-cdk-lib";
-import type { StackProps } from "aws-cdk-lib";
-import { AstroAWS } from "@astro-aws/constructs";
+import { Stack } from "aws-cdk-lib/core"
+import type { StackProps } from "aws-cdk-lib/core"
+import { AstroAWS } from "@astro-aws/constructs"
 
 export interface MyAstroStackProps extends StackProps {}
 
 export class MyAstroStack extends Stack {
 	public constructor(scope: Construct, id: string, props: MyAstroStackProps) {
-		super(scope, id, props);
+		super(scope, id, props)
 
 		new AstroAWS(this, "AstroAWS", {
 			output: "server",
 			websitePath: "..", // Replace with the path to your website code.
-		});
+		})
 	}
 }
 ```
@@ -51,25 +54,28 @@ yarn add @astro-aws/constructs constructs aws-cdk-lib
 
 # Using PNPM
 pnpm add @astro-aws/constructs constructs aws-cdk-lib
+
+# Using Bun
+bun add @astro-aws/constructs constructs aws-cdk-lib
 ```
 
 2. Add the construct to your CDK stack.
 
 ```ts
-import { Stack } from "aws-cdk-lib";
-import type { StackProps } from "aws-cdk-lib";
-import { AstroAWS } from "@astro-aws/constructs";
+import { Stack } from "aws-cdk-lib/core"
+import type { StackProps } from "aws-cdk-lib/core"
+import { AstroAWS } from "@astro-aws/constructs"
 
 export interface MyAstroStackProps extends StackProps {}
 
 export class MyAstroStack extends Stack {
 	public constructor(scope: Construct, id: string, props: MyAstroStackProps) {
-		super(scope, id, props);
+		super(scope, id, props)
 
 		new AstroAWS(this, "AstroAWS", {
 			output: "edge",
 			websitePath: "..", // Replace with the path to your website code.
-		});
+		})
 	}
 }
 ```
@@ -87,25 +93,28 @@ yarn add @astro-aws/constructs constructs aws-cdk-lib
 
 # Using PNPM
 pnpm add @astro-aws/constructs constructs aws-cdk-lib
+
+# Using Bun
+bun add @astro-aws/constructs constructs aws-cdk-lib
 ```
 
 2. Add the construct to your CDK stack.
 
 ```ts
-import { Stack } from "aws-cdk-lib";
-import type { StackProps } from "aws-cdk-lib";
-import { AstroAWS } from "@astro-aws/constructs";
+import { Stack } from "aws-cdk-lib/core"
+import type { StackProps } from "aws-cdk-lib/core"
+import { AstroAWS } from "@astro-aws/constructs"
 
 export interface MyAstroStackProps extends StackProps {}
 
 export class MyAstroStack extends Stack {
 	public constructor(scope: Construct, id: string, props: MyAstroStackProps) {
-		super(scope, id, props);
+		super(scope, id, props)
 
 		new AstroAWS(this, "AstroAWS", {
 			output: "static",
 			websitePath: "..", // Replace with the path to your website code.
-		});
+		})
 	}
 }
 ```
@@ -115,15 +124,15 @@ export class MyAstroStack extends Stack {
 All the resources created by the `AstroAWS` construct can be customized. We expose every prop of the resources that is customizable. The props can be set by passing them in to the `cdk` field on the `AstroAWS` construct props. Depending on the deployment method, not all of the props will be used. The constructed can be access through the `cdk` field on the `AstroAWS` construct object.
 
 ```ts
-import { Stack, CfnOutput } from "aws-cdk-lib";
-import type { StackProps } from "aws-cdk-lib";
-import { AstroAWS } from "@astro-aws/constructs";
+import { Stack, CfnOutput } from "aws-cdk-lib/core"
+import type { StackProps } from "aws-cdk-lib/core"
+import { AstroAWS } from "@astro-aws/constructs"
 
 export interface MyAstroStackProps extends StackProps {}
 
 export class MyAstroStack extends Stack {
 	public constructor(scope: Construct, id: string, props: MyAstroStackProps) {
-		super(scope, id, props);
+		super(scope, id, props)
 
 		const astroAWS = new AstroAWS(this, "AstroAWS", {
 			cdk: {
@@ -133,11 +142,11 @@ export class MyAstroStack extends Stack {
 			},
 			output: "server",
 			websitePath: "..", // Replace with the path to your website code.
-		});
+		})
 
 		new CfnOutput(this, "DistributionDomainName", {
 			value: astroAWS.cdk.cloudfrontDistribution.distributionDomainName,
-		});
+		})
 	}
 }
 ```
