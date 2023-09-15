@@ -43,7 +43,7 @@
 		"@changesets/changelog-github": "^0.4.8",
 		"@changesets/cli": "^2.26.0",
 		"@lshay/eslint-config": "^0.2.2",
-		"@lshay/prettier-config": "^0.5.3",
+		"@lshay/prettier-config": "^0.6.0",
 		"@rushstack/eslint-patch": "^1.2.0",
 		"eslint": "^8.34.0",
 		"eslint-import-resolver-typescript": "^3.5.3",
