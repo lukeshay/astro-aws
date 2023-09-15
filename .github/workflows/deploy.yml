@@ -85,6 +85,9 @@ jobs:
         with:
           node-version: ${{ inputs.node_version }}
           cache: "pnpm"
+      - uses: pnpm/action-setup@v2
+        with:
+          version: "8.7.5"
       - run: pnpm install
       - run: pnpm run deploy:one infra -- ${{ inputs.stack_environment }}
         env:

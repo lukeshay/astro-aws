@@ -32,6 +32,9 @@ jobs:
         with:
           node-version: ${{ matrix.node_version }}
           cache: "pnpm"
+      - uses: pnpm/action-setup@v2
+        with:
+          version: "8.7.5"
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}

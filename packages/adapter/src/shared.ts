@@ -18,21 +18,21 @@ const createEsBuildConfig = (
 	outDir: string,
 	{ esBuildOptions = {} }: Args,
 ) =>
-  mergeAndConcat(DEFAULT_CONFIG, esBuildOptions, {
-    banner: {
-      js: [
-        "import { createRequire as topLevelCreateRequire } from 'module';",
-        'const require = topLevelCreateRequire(import.meta.url);',
-        esBuildOptions.banner?.js ?? '',
-      ].join(''),
-    },
-    entryPoints: [entryFile],
-    format: 'esm',
-    outdir: outDir,
-    outExtension: {
-      '.js': '.mjs',
-    },
-  }) as BuildOptions
+	mergeAndConcat(DEFAULT_CONFIG, esBuildOptions, {
+		banner: {
+			js: [
+				"import { createRequire as topLevelCreateRequire } from 'module';",
+				"const require = topLevelCreateRequire(import.meta.url);",
+				esBuildOptions.banner?.js ?? "",
+			].join(""),
+		},
+		entryPoints: [entryFile],
+		format: "esm",
+		outdir: outDir,
+		outExtension: {
+			".js": ".mjs",
+		},
+	}) as BuildOptions
 
 const bundleEntry = async (entryFile: string, outDir: string, args: Args) => {
 	await build(createEsBuildConfig(entryFile, outDir, args))
