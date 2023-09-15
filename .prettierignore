@@ -3,7 +3,7 @@
 .env*
 .turbo
 *.log*
-apps/docs/src/content/docs/references/packages/*
+apps/docs/src/content/docs/reference/packages/
 cdk.out/
 dist/
 node_modules/
