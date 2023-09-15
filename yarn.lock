@@ -248,24 +248,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-cdk/asset-awscli-v1@npm:^2.2.65":
-  version: 2.2.70
-  resolution: "@aws-cdk/asset-awscli-v1@npm:2.2.70"
-  checksum: 1d4ec566cb435459522ae03eddf9e21aa1c13ac0dc73f97c1937fe40563ce1a4636d4734ab67405be4a3b5a17567254c71a3156a5e7443cf0fd2e4f719240867
+"@aws-cdk/asset-awscli-v1@npm:^2.2.200":
+  version: 2.2.200
+  resolution: "@aws-cdk/asset-awscli-v1@npm:2.2.200"
+  checksum: 0de92336887957e188092dc62a9b8fa87b8e602b8678faa361cc12680cedde46a2592dc1c73b33a0d2067e1a000d2afa762b2a14c07fb47b3fcad288a24ce7ed
   languageName: node
   linkType: hard
 
-"@aws-cdk/asset-kubectl-v20@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "@aws-cdk/asset-kubectl-v20@npm:2.1.1"
-  checksum: f5883fae7b6d3d17e5125560a6efa5065d8b319c11ea6639caa68e315427c4fa266433db04b1a776cf12ccc8c8f8e9a3dfc0ac8cc3c0e73545f80b07808281e2
+"@aws-cdk/asset-kubectl-v20@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "@aws-cdk/asset-kubectl-v20@npm:2.1.2"
+  checksum: 987bce26f54ba64596b7d15adf0c09603814ed56f06b498d17dc4b8859f4708662c9c48f88bba2810d8fac04cf84b8f3e51806c93cf65aeb6148ad76bc250f84
   languageName: node
   linkType: hard
 
-"@aws-cdk/asset-node-proxy-agent-v5@npm:^2.0.54":
-  version: 2.0.59
-  resolution: "@aws-cdk/asset-node-proxy-agent-v5@npm:2.0.59"
-  checksum: 4629c09cf9f46854f2a3f28a0b1b4d83bff6d80f22cc16217d5e1c5f1c33e08caa175178e2c93532b947ff615c48c90b0be9c91bdedf77a0eedd668fe2c35da5
+"@aws-cdk/asset-node-proxy-agent-v6@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@aws-cdk/asset-node-proxy-agent-v6@npm:2.0.1"
+  checksum: 5d011a554e71212662e32ff5d9187a1733a07d5424bdedfef2f43e7a6075d4b5f316d696867cc5dcd9ed1a11731b0d6b3ae41872c454796c326983ab382e05d0
   languageName: node
   linkType: hard
 
@@ -2255,6 +2255,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ajv@npm:^8.0.1":
+  version: 8.12.0
+  resolution: "ajv@npm:8.12.0"
+  dependencies:
+    fast-deep-equal: ^3.1.1
+    json-schema-traverse: ^1.0.0
+    require-from-string: ^2.0.2
+    uri-js: ^4.2.2
+  checksum: 4dc13714e316e67537c8b31bc063f99a1d9d9a497eb4bbd55191ac0dcd5e4985bbb71570352ad6f1e76684fb6d790928f96ba3b2d4fd6e10024be9612fe3f001
+  languageName: node
+  linkType: hard
+
 "ansi-align@npm:^3.0.1":
   version: 3.0.1
   resolution: "ansi-align@npm:3.0.1"
@@ -2456,6 +2468,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"astral-regex@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "astral-regex@npm:2.0.0"
+  checksum: 876231688c66400473ba505731df37ea436e574dd524520294cc3bbc54ea40334865e01fa0d074d74d036ee874ee7e62f486ea38bc421ee8e6a871c06f011766
+  languageName: node
+  linkType: hard
+
 "astring@npm:^1.8.0":
   version: 1.8.4
   resolution: "astring@npm:1.8.4"
@@ -2552,13 +2571,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"at-least-node@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "at-least-node@npm:1.0.0"
-  checksum: 463e2f8e43384f1afb54bc68485c436d7622acec08b6fad269b421cb1d29cebb5af751426793d0961ed243146fe4dc983402f6d5a51b720b277818dbf6f2e49e
-  languageName: node
-  linkType: hard
-
 "autoprefixer@npm:^10.4.13":
   version: 10.4.13
   resolution: "autoprefixer@npm:10.4.13"
@@ -2585,24 +2597,25 @@ __metadata:
   linkType: hard
 
 "aws-cdk-lib@npm:^2.65.0":
-  version: 2.65.0
-  resolution: "aws-cdk-lib@npm:2.65.0"
+  version: 2.96.2
+  resolution: "aws-cdk-lib@npm:2.96.2"
   dependencies:
-    "@aws-cdk/asset-awscli-v1": ^2.2.65
-    "@aws-cdk/asset-kubectl-v20": ^2.1.1
-    "@aws-cdk/asset-node-proxy-agent-v5": ^2.0.54
+    "@aws-cdk/asset-awscli-v1": ^2.2.200
+    "@aws-cdk/asset-kubectl-v20": ^2.1.2
+    "@aws-cdk/asset-node-proxy-agent-v6": ^2.0.1
     "@balena/dockerignore": ^1.0.2
     case: 1.6.3
-    fs-extra: ^9.1.0
+    fs-extra: ^11.1.1
     ignore: ^5.2.4
     jsonschema: ^1.4.1
     minimatch: ^3.1.2
     punycode: ^2.3.0
-    semver: ^7.3.8
+    semver: ^7.5.4
+    table: ^6.8.1
     yaml: 1.10.2
   peerDependencies:
     constructs: ^10.0.0
-  checksum: 2a9b760e82e1c43875948d99620b8ed8d6cac9f9e6ba56c991aa6eff8acf2ad635207c1508b352273b0bee2633f51434e00719133c944caffae197690730ec17
+  checksum: 2d144001472ec5a38418a9ab4b55c2e8d60d269eda539d06e79a83013ab7314fed898666c828a2cf160d16011cd5e190305da2e5b00d67646774dacef040a56e
   languageName: node
   linkType: hard
 
@@ -4956,6 +4969,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fs-extra@npm:^11.1.1":
+  version: 11.1.1
+  resolution: "fs-extra@npm:11.1.1"
+  dependencies:
+    graceful-fs: ^4.2.0
+    jsonfile: ^6.0.1
+    universalify: ^2.0.0
+  checksum: fb883c68245b2d777fbc1f2082c9efb084eaa2bbf9fddaa366130d196c03608eebef7fb490541276429ee1ca99f317e2d73e96f5ca0999eefedf5a624ae1edfd
+  languageName: node
+  linkType: hard
+
 "fs-extra@npm:^7.0.1":
   version: 7.0.1
   resolution: "fs-extra@npm:7.0.1"
@@ -4975,18 +4999,6 @@ __metadata:
     jsonfile: ^4.0.0
     universalify: ^0.1.0
   checksum: bf44f0e6cea59d5ce071bba4c43ca76d216f89e402dc6285c128abc0902e9b8525135aa808adad72c9d5d218e9f4bcc63962815529ff2f684ad532172a284880
-  languageName: node
-  linkType: hard
-
-"fs-extra@npm:^9.1.0":
-  version: 9.1.0
-  resolution: "fs-extra@npm:9.1.0"
-  dependencies:
-    at-least-node: ^1.0.0
-    graceful-fs: ^4.2.0
-    jsonfile: ^6.0.1
-    universalify: ^2.0.0
-  checksum: ba71ba32e0faa74ab931b7a0031d1523c66a73e225de7426e275e238e312d07313d2da2d33e34a52aa406c8763ade5712eb3ec9ba4d9edce652bcacdc29e6b20
   languageName: node
   linkType: hard
 
@@ -6204,6 +6216,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-schema-traverse@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "json-schema-traverse@npm:1.0.0"
+  checksum: 02f2f466cdb0362558b2f1fd5e15cce82ef55d60cd7f8fa828cf35ba74330f8d767fcae5c5c2adb7851fa811766c694b9405810879bc4e1ddd78a7c0e03658ad
+  languageName: node
+  linkType: hard
+
 "json-stable-stringify-without-jsonify@npm:^1.0.1":
   version: 1.0.1
   resolution: "json-stable-stringify-without-jsonify@npm:1.0.1"
@@ -6408,6 +6427,13 @@ __metadata:
   version: 4.4.0
   resolution: "lodash.startcase@npm:4.4.0"
   checksum: c03a4a784aca653845fe09d0ef67c902b6e49288dc45f542a4ab345a9c406a6dc194c774423fa313ee7b06283950301c1221dd2a1d8ecb2dac8dfbb9ed5606b5
+  languageName: node
+  linkType: hard
+
+"lodash.truncate@npm:^4.4.2":
+  version: 4.4.2
+  resolution: "lodash.truncate@npm:4.4.2"
+  checksum: b463d8a382cfb5f0e71c504dcb6f807a7bd379ff1ea216669aa42c52fc28c54e404bfbd96791aa09e6df0de2c1d7b8f1b7f4b1a61f324d38fe98bc535aeee4f5
   languageName: node
   linkType: hard
 
@@ -8712,6 +8738,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"require-from-string@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "require-from-string@npm:2.0.2"
+  checksum: a03ef6895445f33a4015300c426699bc66b2b044ba7b670aa238610381b56d3f07c686251740d575e22f4c87531ba662d06937508f0f3c0f1ddc04db3130560b
+  languageName: node
+  linkType: hard
+
 "require-main-filename@npm:^2.0.0":
   version: 2.0.0
   resolution: "require-main-filename@npm:2.0.0"
@@ -9092,6 +9125,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"semver@npm:^7.5.4":
+  version: 7.5.4
+  resolution: "semver@npm:7.5.4"
+  dependencies:
+    lru-cache: ^6.0.0
+  bin:
+    semver: bin/semver.js
+  checksum: 12d8ad952fa353b0995bf180cdac205a4068b759a140e5d3c608317098b3575ac2f1e09182206bf2eb26120e1c0ed8fb92c48c592f6099680de56bb071423ca3
+  languageName: node
+  linkType: hard
+
 "server-destroy@npm:^1.0.1":
   version: 1.0.1
   resolution: "server-destroy@npm:1.0.1"
@@ -9224,6 +9268,17 @@ __metadata:
   version: 4.0.0
   resolution: "slash@npm:4.0.0"
   checksum: da8e4af73712253acd21b7853b7e0dbba776b786e82b010a5bfc8b5051a1db38ed8aba8e1e8f400dd2c9f373be91eb1c42b66e91abb407ff42b10feece5e1d2d
+  languageName: node
+  linkType: hard
+
+"slice-ansi@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "slice-ansi@npm:4.0.0"
+  dependencies:
+    ansi-styles: ^4.0.0
+    astral-regex: ^2.0.0
+    is-fullwidth-code-point: ^3.0.0
+  checksum: 4a82d7f085b0e1b070e004941ada3c40d3818563ac44766cca4ceadd2080427d337554f9f99a13aaeb3b4a94d9964d9466c807b3d7b7541d1ec37ee32d308756
   languageName: node
   linkType: hard
 
@@ -9665,6 +9720,19 @@ __metadata:
     "@pkgr/utils": ^2.3.1
     tslib: ^2.5.0
   checksum: 8a9560e5d8f3d94dc3cf5f7b9c83490ffa30d320093560a37b88f59483040771fd1750e76b9939abfbb1b5a23fd6dfbae77f6b338abffe7cae7329cd9b9bb86b
+  languageName: node
+  linkType: hard
+
+"table@npm:^6.8.1":
+  version: 6.8.1
+  resolution: "table@npm:6.8.1"
+  dependencies:
+    ajv: ^8.0.1
+    lodash.truncate: ^4.4.2
+    slice-ansi: ^4.0.0
+    string-width: ^4.2.3
+    strip-ansi: ^6.0.1
+  checksum: 08249c7046125d9d0a944a6e96cfe9ec66908d6b8a9db125531be6eb05fa0de047fd5542e9d43b4f987057f00a093b276b8d3e19af162a9c40db2681058fd306
   languageName: node
   linkType: hard
 
