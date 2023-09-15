@@ -20,6 +20,12 @@ jobs:
       matrix:
         node_version:
           - 18
+        cmd:
+          - build
+          - test
+          - lint
+          - prettier
+          - synth
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -32,8 +38,4 @@ jobs:
           aws-region: us-east-2
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - run: pnpm install
-      - run: pnpm run build
-      - run: pnpm run test
-      - run: pnpm run lint
-      - run: pnpm run prettier
-      - run: pnpm run synth
+      - run: pnpm run ${{ matrix.cmd }}

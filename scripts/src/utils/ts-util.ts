@@ -12,9 +12,9 @@ const findTsConfigPath = () =>
 		? "../tsconfig.base.json"
 		: "../../tsconfig.base.json"
 
-export const findTsConfig = () => resolve(findTsConfigPath())
+const findTsConfig = () => resolve(findTsConfigPath())
 
-export const runTsc = () => {
+const runTsc = () => {
 	runCommand(
 		"tsc",
 		"--project",
@@ -25,3 +25,5 @@ export const runTsc = () => {
 		"dist",
 	)
 }
+
+export { findTsConfig, runTsc }

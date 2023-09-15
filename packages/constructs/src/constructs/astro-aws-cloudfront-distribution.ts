@@ -1,9 +1,5 @@
 import { type Construct } from "constructs"
-import {
-	Version,
-	type Function,
-	type VersionProps,
-} from "aws-cdk-lib/aws-lambda"
+import { type Function } from "aws-cdk-lib/aws-lambda"
 import {
 	AllowedMethods,
 	Distribution,
@@ -24,7 +20,7 @@ import {
 import { AstroAWSBaseConstruct } from "../types/astro-aws-construct.js"
 import { type Output } from "../types/output.js"
 
-export type AstroAWSCloudfrontDistributionCdkProps = {
+type AstroAWSCloudfrontDistributionCdkProps = {
 	cloudfrontDistribution?: Omit<
 		DistributionProps,
 		"apiBehavior" | "defaultBehavior"
@@ -32,10 +28,9 @@ export type AstroAWSCloudfrontDistributionCdkProps = {
 		apiBehavior?: Omit<BehaviorOptions, "origin">
 		defaultBehavior?: Omit<BehaviorOptions, "origin">
 	}
-	version?: Omit<VersionProps, "lambda">
 }
 
-export type AstroAWSCloudfrontDistributionProps = {
+type AstroAWSCloudfrontDistributionProps = {
 	output: Output
 	lambdaFunction?: Function
 	origin: IOrigin
@@ -43,12 +38,12 @@ export type AstroAWSCloudfrontDistributionProps = {
 	cdk?: AstroAWSCloudfrontDistributionCdkProps
 }
 
-export type AstroAWSCloudfrontDistributionCdk = {
+type AstroAWSCloudfrontDistributionCdk = {
 	cloudfrontDistribution: Distribution
 	redirectToIndexCloudfrontFunction?: CfFunction
 }
 
-export class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
+class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 	AstroAWSCloudfrontDistributionProps,
 	AstroAWSCloudfrontDistributionCdk
 > {
@@ -66,12 +61,11 @@ export class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 			this.props.cdk?.cloudfrontDistribution?.defaultBehavior
 				?.functionAssociations ?? []
 
-		if (this.props.output === "static") {
-			this.#redirectToIndexCloudfrontFunction = new CfFunction(
-				this,
-				"RedirectToIndexFunction",
-				{
-					code: FunctionCode.fromInline(`
+		this.#redirectToIndexCloudfrontFunction = new CfFunction(
+			this,
+			"RedirectToIndexFunction",
+			{
+				code: FunctionCode.fromInline(`
 							function handler(event) {
 								var request = event.request;
 								var uri = request.uri;
@@ -85,28 +79,21 @@ export class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 								return request;
 						}
 					`),
-				},
-			)
+			},
+		)
 
-			functionAssociations.push({
-				eventType: FunctionEventType.VIEWER_REQUEST,
-				function: this.#redirectToIndexCloudfrontFunction,
-			})
-		}
+		functionAssociations.push({
+			eventType: FunctionEventType.VIEWER_REQUEST,
+			function: this.#redirectToIndexCloudfrontFunction,
+		})
 
 		const edgeLambdas: EdgeLambda[] =
 			this.props.cdk?.cloudfrontDistribution?.defaultBehavior?.edgeLambdas ?? []
 
 		if (this.props.output === "edge" && this.props.lambdaFunction) {
-			const functionVersion = new Version(this, "LambdaVersion", {
-				...this.props.cdk?.version,
-				lambda: this.props.lambdaFunction,
-				description: `Created by AstroAWS at ${new Date().toISOString()}`
-			})
-
 			edgeLambdas.push({
 				eventType: LambdaEdgeEventType.ORIGIN_REQUEST,
-				functionVersion,
+				functionVersion: this.props.lambdaFunction.currentVersion,
 				includeBody: true,
 			})
 		}
@@ -154,4 +141,11 @@ export class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 				this.#redirectToIndexCloudfrontFunction,
 		}
 	}
+}
+
+export {
+	type AstroAWSCloudfrontDistributionCdkProps,
+	type AstroAWSCloudfrontDistributionProps,
+	type AstroAWSCloudfrontDistributionCdk,
+	AstroAWSCloudfrontDistribution,
 }

@@ -1,4 +1,3 @@
-import { writeFile } from "node:fs/promises"
 import { fileURLToPath } from "node:url"
 
 import type { AstroAdapter, AstroConfig, AstroIntegration } from "astro"
@@ -8,14 +7,14 @@ import { bundleEntry } from "./shared.js"
 import { ADAPTER_NAME } from "./constants.js"
 import { warn } from "./log.js"
 
-export const getAdapter = (args: Args = {}): AstroAdapter => ({
+const getAdapter = (args: Args = {}): AstroAdapter => ({
 	args,
 	exports: ["handler"],
 	name: ADAPTER_NAME,
 	serverEntrypoint: `${ADAPTER_NAME}/lambda/index.js`,
 })
 
-export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
+const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 	let astroConfig: AstroConfig
 
 	/* eslint-disable sort-keys */
@@ -43,19 +42,7 @@ export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 					)
 				}
 			},
-			"astro:build:done": async ({ routes }) => {
-				await writeFile(
-					fileURLToPath(new URL("routes.json", astroConfig.outDir)),
-					JSON.stringify(routes, undefined, 2),
-				)
-
-				const invalidationPaths = routes.map((route) => route.route)
-
-				await writeFile(
-					fileURLToPath(new URL("invalidationPaths.json", astroConfig.outDir)),
-					JSON.stringify(invalidationPaths, undefined, 2),
-				)
-
+			"astro:build:done": async () => {
 				await bundleEntry(
 					fileURLToPath(
 						new URL(astroConfig.build.serverEntry, astroConfig.build.server),
@@ -70,3 +57,4 @@ export const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 }
 
 export default astroAWSFunctions
+export { getAdapter, astroAWSFunctions }

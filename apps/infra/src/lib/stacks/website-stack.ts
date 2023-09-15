@@ -34,7 +34,7 @@ export type WebsiteStackProps = AstroAWSStackProps & {
 }
 
 export class WebsiteStack extends Stack {
-	private static WORKSPACE_INFO = getPnpmWorkspaces(cwd())
+	private static readonly WORKSPACE_INFO = getPnpmWorkspaces(cwd())
 
 	public constructor(scope: Construct, id: string, props: WebsiteStackProps) {
 		super(scope, id, props)
@@ -214,7 +214,7 @@ export class WebsiteStack extends Stack {
 
 	#getWorkspacePath(pkg: string): string {
 		const workspace = WebsiteStack.WORKSPACE_INFO.find(
-			(workspace) => workspace.name === pkg,
+			(workspaceInfo) => workspaceInfo.name === pkg,
 		)
 
 		if (!workspace) {

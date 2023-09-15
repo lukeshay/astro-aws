@@ -9,10 +9,9 @@ import type { NodeApp } from "astro/app/node"
 
 import { DISALLOWED_EDGE_HEADERS } from "./constants.js"
 
-export const parseContentType = (header?: string | null) =>
-	header?.split(";")[0] ?? ""
+const parseContentType = (header?: string | null) => header?.split(";")[0] ?? ""
 
-export const createRequestBody = (
+const createRequestBody = (
 	method: string,
 	body: string | undefined,
 	isBase64Encoded: boolean | string,
@@ -31,7 +30,7 @@ export const createRequestBody = (
 	return undefined
 }
 
-export const createLambdaFunctionResponse = async (
+const createLambdaFunctionResponse = async (
 	app: NodeApp,
 	response: Response,
 	knownBinaryMediaTypes: Set<string>,
@@ -45,7 +44,7 @@ export const createLambdaFunctionResponse = async (
 	const isBase64Encoded = knownBinaryMediaTypes.has(responseContentType)
 	const body = isBase64Encoded
 		? Buffer.from(await response.arrayBuffer()).toString("base64")
-		: await response.text()
+		: ((await response.text()) as string)
 
 	return {
 		body,
@@ -56,7 +55,7 @@ export const createLambdaFunctionResponse = async (
 	}
 }
 
-export const createLambdaEdgeFunctionResponse = async (
+const createLambdaEdgeFunctionResponse = async (
 	app: NodeApp,
 	response: Response,
 	knownBinaryMediaTypes: Set<string>,
@@ -97,10 +96,17 @@ export const createLambdaEdgeFunctionResponse = async (
 		: "text"
 
 	return {
-		body: await response.text(),
+		body: (await response.text()) as string,
 		bodyEncoding,
 		headers,
 		status: String(response.status),
 		statusDescription: response.statusText,
 	}
+}
+
+export {
+	parseContentType,
+	createRequestBody,
+	createLambdaFunctionResponse,
+	createLambdaEdgeFunctionResponse,
 }

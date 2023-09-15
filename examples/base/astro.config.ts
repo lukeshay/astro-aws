@@ -7,5 +7,5 @@ export default defineConfig({
 		logFnRequest: true,
 		logFnResponse: true,
 	}),
-	output: "server",
+	output: "hybrid",
 })

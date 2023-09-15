@@ -7,9 +7,6 @@ export default defineConfig({
 		starlight({
 			customCss: ["./src/styles/base.css"],
 			pagination: true,
-			social: {
-				github: "https://github.com/lukeshay/astro-aws",
-			},
 			sidebar: [
 				{
 					autogenerate: {
@@ -24,8 +21,11 @@ export default defineConfig({
 					label: "Reference",
 				},
 			],
-			title: "Astro AWS",
+			social: {
+				github: "https://github.com/lukeshay/astro-aws",
+			},
 			tagline: "AWS CDK constructs for Astro",
+			title: "Astro AWS",
 		}),
 	],
 	output: "static",

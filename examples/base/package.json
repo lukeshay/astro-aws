@@ -30,7 +30,7 @@
 		"start": "astro dev"
 	},
 	"dependencies": {
-		"astro": "^3.0.13"
+		"astro": "^3.1.0"
 	},
 	"devDependencies": {
 		"@astro-aws/adapter": "workspace:^",

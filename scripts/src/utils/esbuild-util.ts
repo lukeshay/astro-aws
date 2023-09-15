@@ -14,12 +14,12 @@ const DEFAULT_CONFIG: BuildOptions = {
 	target: "node14",
 }
 
-export type CreateConfigOptions = {
+type CreateConfigOptions = {
 	bundle: boolean
 	fileGlob: string
 }
 
-export const createEsBuildConfig = async (
+const createEsBuildConfig = async (
 	pkgJson: PackageJson,
 	options: CreateConfigOptions,
 ): Promise<BuildOptions> => {
@@ -48,7 +48,7 @@ export const createEsBuildConfig = async (
 	}
 }
 
-export const runEsBuild = async (
-	pkgJson: PackageJson,
-	options: CreateConfigOptions,
-) => build(await createEsBuildConfig(pkgJson, options))
+const runEsBuild = async (pkgJson: PackageJson, options: CreateConfigOptions) =>
+	build(await createEsBuildConfig(pkgJson, options))
+
+export { type CreateConfigOptions, createEsBuildConfig, runEsBuild }

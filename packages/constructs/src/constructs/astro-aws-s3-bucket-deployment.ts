@@ -11,13 +11,13 @@ import { type Distribution } from "aws-cdk-lib/aws-cloudfront"
 import { type Output } from "../types/output.js"
 import { AstroAWSBaseConstruct } from "../types/astro-aws-construct.js"
 
-export type AstroAWSS3BucketDeploymentCdkProps = {
+type AstroAWSS3BucketDeploymentCdkProps = {
 	s3BucketDeployment?: Partial<
 		Omit<BucketDeploymentProps, "destinationBucket" | "distribution">
 	>
 }
 
-export type AstroAWSS3BucketDeploymentProps = {
+type AstroAWSS3BucketDeploymentProps = {
 	distDir: string
 	output: Output
 	bucket: BucketDeploymentProps["destinationBucket"]
@@ -25,11 +25,11 @@ export type AstroAWSS3BucketDeploymentProps = {
 	cdk?: AstroAWSS3BucketDeploymentCdkProps
 }
 
-export type AstroAWSS3BucketDeploymentCdk = {
+type AstroAWSS3BucketDeploymentCdk = {
 	s3BucketDeployment: BucketDeployment
 }
 
-export class AstroAWSS3BucketDeployment extends AstroAWSBaseConstruct<
+class AstroAWSS3BucketDeployment extends AstroAWSBaseConstruct<
 	AstroAWSS3BucketDeploymentProps,
 	AstroAWSS3BucketDeploymentCdk
 > {
@@ -64,4 +64,11 @@ export class AstroAWSS3BucketDeployment extends AstroAWSBaseConstruct<
 			s3BucketDeployment: this.#s3BucketDeployment,
 		}
 	}
+}
+
+export {
+	type AstroAWSS3BucketDeploymentCdkProps,
+	type AstroAWSS3BucketDeploymentProps,
+	type AstroAWSS3BucketDeploymentCdk,
+	AstroAWSS3BucketDeployment,
 }

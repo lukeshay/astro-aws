@@ -6,24 +6,24 @@ import {
 } from "aws-cdk-lib/aws-s3"
 import { type Construct } from "constructs"
 import { OriginAccessIdentity } from "aws-cdk-lib/aws-cloudfront"
-// import { CanonicalUserPrincipal, PolicyStatement } from "aws-cdk-lib/aws-iam"
+import { CanonicalUserPrincipal, PolicyStatement } from "aws-cdk-lib/aws-iam"
 
 import { AstroAWSBaseConstruct } from "../types/astro-aws-construct.js"
 
-export type AstroAWSS3BucketCdkProps = {
+type AstroAWSS3BucketCdkProps = {
 	s3Bucket?: Partial<BucketProps>
 }
 
-export type AstroAWSS3BucketProps = {
+type AstroAWSS3BucketProps = {
 	cdk?: AstroAWSS3BucketCdkProps
 }
 
-export type AstroAWSS3BucketCdk = {
+type AstroAWSS3BucketCdk = {
 	originAccessIdentity: OriginAccessIdentity
 	s3Bucket: Bucket
 }
 
-export class AstroAWSS3Bucket extends AstroAWSBaseConstruct<
+class AstroAWSS3Bucket extends AstroAWSBaseConstruct<
 	AstroAWSS3BucketProps,
 	AstroAWSS3BucketCdk
 > {
@@ -48,19 +48,17 @@ export class AstroAWSS3Bucket extends AstroAWSBaseConstruct<
 			comment: `OAI for ${id}`,
 		})
 
-		this.#s3Bucket.grantRead(this.#originAccessIdentity)
-
-		// this.#s3Bucket.addToResourcePolicy(
-		// 	new PolicyStatement({
-		// 		actions: ["s3:GetObject"],
-		// 		principals: [
-		// 			new CanonicalUserPrincipal(
-		// 				this.#originAccessIdentity.cloudFrontOriginAccessIdentityS3CanonicalUserId,
-		// 			).grantPrincipal,
-		// 		],
-		// 		resources: [this.#s3Bucket.arnForObjects("*")],
-		// 	}),
-		// )
+		this.#s3Bucket.addToResourcePolicy(
+			new PolicyStatement({
+				actions: ["s3:GetObject"],
+				principals: [
+					new CanonicalUserPrincipal(
+						this.#originAccessIdentity.cloudFrontOriginAccessIdentityS3CanonicalUserId,
+					).grantPrincipal,
+				],
+				resources: [this.#s3Bucket.arnForObjects("*")],
+			}),
+		)
 	}
 
 	public get cdk() {
@@ -69,4 +67,11 @@ export class AstroAWSS3Bucket extends AstroAWSBaseConstruct<
 			s3Bucket: this.#s3Bucket,
 		}
 	}
+}
+
+export {
+	type AstroAWSS3BucketCdkProps,
+	type AstroAWSS3BucketProps,
+	type AstroAWSS3BucketCdk,
+	AstroAWSS3Bucket,
 }

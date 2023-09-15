@@ -14,10 +14,10 @@ const base = {
 
 const Environments = {
 	DEV: "DEV",
-	SSR: "SSR",
 	EDGE: "EDGE",
 	PERSONAL: "PERSONAL",
 	PROD: "PROD",
+	SSR: "SSR",
 } as const
 
 type Environment = (typeof Environments)[keyof typeof Environments]
@@ -30,14 +30,6 @@ const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
 		hostedZoneName: "astro-aws.org",
 		output: "static",
 		package: "@astro-aws/docs",
-	},
-	[Environments.SSR]: {
-		...base,
-		alias: "ssr.dev",
-		environment: Environments.SSR,
-		hostedZoneName: "astro-aws.org",
-		output: "server",
-		package: "@astro-aws/examples-base",
 	},
 	[Environments.EDGE]: {
 		...base,
@@ -63,6 +55,14 @@ const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
 		environment: Environments.PERSONAL,
 		output: "static",
 		package: "@astro-aws/docs",
+	},
+	[Environments.SSR]: {
+		...base,
+		alias: "ssr.dev",
+		environment: Environments.SSR,
+		hostedZoneName: "astro-aws.org",
+		output: "server",
+		package: "@astro-aws/examples-base",
 	},
 } as const
 

@@ -3,7 +3,6 @@ title: "@astro-aws/constructs"
 description: "NPM package @astro-aws/constructs"
 ---
 
-
 Constructs for deploying your [Astro](https://astro.build/) project that is built using [@astro-aws/adapter](https://www.npmjs.com/package/@astro-aws/adapter).
 
 ## SSR Usage
@@ -158,6 +157,7 @@ export class MyAstroStack extends Stack {
 ## Example
 
 See [the source code of this site](https://github.com/lukeshay/astro-aws/blob/main/apps/infra/src/lib/stacks/website-stack.ts)
+
 ## More
 
 For more information, see the [documentation website](https://astro-aws.org/)

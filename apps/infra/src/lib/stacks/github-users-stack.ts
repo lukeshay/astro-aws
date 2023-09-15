@@ -8,9 +8,9 @@ import {
 	Effect,
 } from "aws-cdk-lib/aws-iam"
 import { SecretValue, Stack } from "aws-cdk-lib/core"
+import { Secret } from "aws-cdk-lib/aws-secretsmanager"
 
 import type { AstroAWSStackProps } from "../types/astro-aws-stack-props"
-import { Secret } from "aws-cdk-lib/aws-secretsmanager"
 
 export type GitHubUsersStackProps = AstroAWSStackProps
 

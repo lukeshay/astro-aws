@@ -13,10 +13,10 @@ const DEFAULT_CONFIG: BuildOptions = {
 	target: "node16",
 }
 
-export const createEsBuildConfig = (
-  entryFile: string,
-  outDir: string,
-  { esBuildOptions = {} }: Args
+const createEsBuildConfig = (
+	entryFile: string,
+	outDir: string,
+	{ esBuildOptions = {} }: Args,
 ) =>
   mergeAndConcat(DEFAULT_CONFIG, esBuildOptions, {
     banner: {
@@ -34,10 +34,8 @@ export const createEsBuildConfig = (
     },
   }) as BuildOptions
 
-export const bundleEntry = async (
-	entryFile: string,
-	outDir: string,
-	args: Args,
-) => {
+const bundleEntry = async (entryFile: string, outDir: string, args: Args) => {
 	await build(createEsBuildConfig(entryFile, outDir, args))
 }
+
+export { createEsBuildConfig, bundleEntry }

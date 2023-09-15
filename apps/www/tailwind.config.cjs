@@ -6,7 +6,7 @@ module.exports = {
 			"dracula",
 			{
 				"astro-aws": {
-					...require("daisyui/src/colors/themes")["[data-theme=dracula]"],
+					...require("daisyui/src/theming/themes")["[data-theme=dracula]"],
 					primary: "#9456e5",
 					"primary-content": "#290C4F",
 					"primary-focus": "#5C1BB0",

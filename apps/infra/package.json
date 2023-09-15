@@ -31,9 +31,9 @@
 		"@astro-aws/constructs": "workspace:^",
 		"@astro-aws/docs": "workspace:^",
 		"@astro-aws/www": "workspace:^",
-		"aws-cdk": "^2.94.0",
-		"aws-cdk-lib": "^2.94.0",
-		"constructs": "^10.1.253",
+		"aws-cdk": "^2.96.1",
+		"aws-cdk-lib": "^2.96.1",
+		"constructs": "^10.2.70",
 		"eslint": "^8.49.0",
 		"prettier": "^3.0.3",
 		"typescript": "^5.2.2",
@@ -41,7 +41,7 @@
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
-		"@types/node": "^18.14.0",
+		"@types/node": "^18.17.6",
 		"eslint-config-get-off-my-lawn": "^7.2.0"
 	},
 	"engines": {

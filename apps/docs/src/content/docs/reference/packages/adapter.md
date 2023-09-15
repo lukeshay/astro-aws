@@ -3,7 +3,6 @@ title: "@astro-aws/adapter"
 description: "NPM package @astro-aws/adapter"
 ---
 
-
 An [Astro](https://astro.build) adapter for building an SSR application and deploying it to AWS Lambda.
 
 ## Install
@@ -55,6 +54,7 @@ export default defineConfig({
 ## Example
 
 See [the source code of this site](https://github.com/lukeshay/astro-aws/blob/main/apps/www/astro.config.ts)
+
 ## More
 
 For more information, see the [documentation website](https://astro-aws.org/)
