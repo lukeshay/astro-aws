@@ -1,4 +1,4 @@
-name: CD
+name: CD - Dev
 
 on:
   workflow_run:
@@ -27,7 +27,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment_name: development
-      environment_url: https://dev.astro-aws.org/
+      environment_url: https://static.dev.astro-aws.org/
       stack_environment: DEV
     secrets: inherit
   deploy-dev-ssr:

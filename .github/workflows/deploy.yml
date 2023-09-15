@@ -8,6 +8,11 @@ on:
         required: false
         type: string
         default: "18"
+      pnpm_version:
+        description: The version of PNPM to use
+        required: false
+        type: string
+        default: "8.7.5"
       stack_environment:
         description: The stack environment to deploy
         required: true
@@ -83,7 +88,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - uses: pnpm/action-setup@v2
         with:
-          version: "8.7.5"
+          version: ${{ inputs.pnpm_version }}
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node_version }}
