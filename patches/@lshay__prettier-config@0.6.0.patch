@@ -1,0 +1,12 @@
+diff --git a/index.cjs b/index.cjs
+index dc5af5e9efbe0a50e91fff2ff77c0b87cd2653d2..b27670ca3f780624d0ce8256ae6c7380069348e3 100644
+--- a/index.cjs
++++ b/index.cjs
+@@ -33,7 +33,6 @@ const config = {
+ 	plugins: [
+ 		require.resolve("prettier-plugin-tailwindcss"),
+ 		require.resolve("prettier-plugin-sh"),
+-		require.resolve("prettier-plugin-jsdoc"),
+ 	],
+ 	printWidth: 80,
+ 	proseWrap: "preserve",

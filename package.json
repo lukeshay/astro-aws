@@ -28,11 +28,12 @@
 		"prettier": "prettier --ignore-unknown --no-error-on-unmatched-pattern --check .",
 		"prettier:fix": "pnpm run prettier --write",
 		"release:cut": "git add . && git commit -m 'new release' && WEB_ACL_ARN='' pnpm run deploy:one infra -- PROD && pnpm run changeset publish && git push && git push --follow-tags",
-		"release:prepare": "pnpm run build && pnpm run changeset version && pnpm run prettier:fix",
+		"release:prepare": "pnpm run build && pnpm exec -- changeset version && pnpm run prettier:fix",
 		"synth": "turbo run synth",
 		"synth:one": "turbo run synth --filter",
 		"test": "turbo run test",
-		"test:one": "turbo run test --filter"
+		"test:one": "turbo run test --filter",
+		"changeset": "changeset"
 	},
 	"prettier": "@lshay/prettier-config",
 	"eslintConfig": {
@@ -56,5 +57,10 @@
 	"packageManager": "pnpm@8.7.5",
 	"engines": {
 		"node": "18.x"
+	},
+	"pnpm": {
+		"patchedDependencies": {
+			"@lshay/prettier-config@0.6.0": "patches/@lshay__prettier-config@0.6.0.patch"
+		}
 	}
 }
