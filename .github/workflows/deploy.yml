@@ -72,7 +72,7 @@ jobs:
       url: ${{ inputs.environment_url }}
     steps:
       - run: echo "::add-mask::${{ secrets.AWS_ACCOUNT }}"
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.ref }}
           repository: ${{ inputs.repository }}
