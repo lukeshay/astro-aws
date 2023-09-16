@@ -1,6 +1,6 @@
 {
 	"name": "@astro-aws/scripts",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"private": true,
 	"homepage": "https://astro-aws.org/",
 	"repository": {

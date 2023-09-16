@@ -27,8 +27,8 @@
 		"lint:fix": "pnpm run lint --fix",
 		"prettier": "prettier --ignore-unknown --no-error-on-unmatched-pattern --check .",
 		"prettier:fix": "pnpm run prettier --write",
-		"release:cut": "git add . && git commit -m 'new release' && WEB_ACL_ARN='' pnpm run deploy:one infra -- PROD && pnpm run changeset publish && git push && git push --follow-tags",
-		"release:prepare": "pnpm run build && pnpm exec -- changeset version && pnpm run prettier:fix",
+		"release:cut": "git add . && git commit -m 'new release' && pnpm run deploy:one infra -- PROD && pnpm run changeset publish && git push && git push --follow-tags",
+		"release:prepare": "pnpm run build && pnpm run changeset version && pnpm run prettier:fix",
 		"synth": "turbo run synth",
 		"synth:one": "turbo run synth --filter",
 		"test": "turbo run test",
@@ -42,6 +42,7 @@
 		]
 	},
 	"dependencies": {
+		"@changesets/changelog-git": "^0.1.14",
 		"@changesets/changelog-github": "^0.4.8",
 		"@changesets/cli": "^2.26.2",
 		"@lshay/eslint-config": "^0.2.5",

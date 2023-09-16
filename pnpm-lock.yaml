@@ -45,6 +45,10 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
+    devDependencies:
+      "@changesets/changelog-git":
+        specifier: ^0.1.14
+        version: 0.1.14
 
   apps/docs:
     dependencies:
@@ -992,7 +996,6 @@ packages:
       }
     dependencies:
       "@changesets/types": 5.2.1
-    dev: false
 
   /@changesets/changelog-github@0.4.8:
     resolution:
@@ -1195,7 +1198,6 @@ packages:
       {
         integrity: sha512-myLfHbVOqaq9UtUKqR/nZA/OY7xFjQMdfgfqeZIBK4d0hA6pgxArvdv8M+6NUzzBsjWLOtvApv8YHr4qM+Kpfg==,
       }
-    dev: false
 
   /@changesets/write@0.2.3:
     resolution:

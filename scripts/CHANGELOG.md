@@ -1,5 +1,11 @@
 # @astro-aws/scripts
 
+## 0.1.0
+
+### Minor Changes
+
+- e2adca1: Upgraded dependencies
+
 ## 0.0.1
 
 ### Patch Changes

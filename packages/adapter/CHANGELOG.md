@@ -1,5 +1,16 @@
 # @astro-aws/adapter
 
+## 0.4.0
+
+### Minor Changes
+
+- e2adca1: Upgraded dependencies
+
+### Patch Changes
+
+- e2adca1: Set Astro cookies in LambdaEdge function response
+- e2adca1: Allow extending the ESBuild JS banner
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,5 +1,12 @@
 # @astro-aws/constructs
 
+## 0.4.0
+
+### Minor Changes
+
+- e2adca1: Upgraded dependencies
+- e2adca1: Support hybrid output
+
 ## 0.3.0
 
 ### Minor Changes
