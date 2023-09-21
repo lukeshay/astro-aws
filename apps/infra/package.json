@@ -30,8 +30,8 @@
 	"dependencies": {
 		"@astro-aws/constructs": "workspace:^",
 		"@astro-aws/docs": "workspace:^",
-		"aws-cdk": "^2.96.1",
-		"aws-cdk-lib": "^2.96.1",
+		"aws-cdk": "^2.96.2",
+		"aws-cdk-lib": "^2.96.2",
 		"constructs": "^10.2.70",
 		"eslint": "^8.49.0",
 		"prettier": "^3.0.3",
