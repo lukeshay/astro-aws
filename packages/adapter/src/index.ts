@@ -1,4 +1,5 @@
 import { fileURLToPath } from "node:url"
+import { writeFile } from "node:fs/promises"
 
 import type { AstroAdapter, AstroConfig, AstroIntegration } from "astro"
 
@@ -6,7 +7,6 @@ import type { Args } from "./args.js"
 import { bundleEntry } from "./shared.js"
 import { ADAPTER_NAME } from "./constants.js"
 import { warn } from "./log.js"
-import { writeFile } from "node:fs/promises"
 
 const getAdapter = (args: Args = {}): AstroAdapter => ({
 	adapterFeatures: {

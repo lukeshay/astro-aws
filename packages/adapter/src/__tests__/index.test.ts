@@ -1,4 +1,5 @@
 import { URL, fileURLToPath } from "node:url"
+import { writeFile } from "node:fs/promises"
 
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest"
 import { faker } from "@faker-js/faker"
@@ -9,6 +10,10 @@ import { ADAPTER_NAME } from "../constants.js"
 import { astroAWSFunctions, getAdapter } from "../index.js"
 import * as shared from "../shared.js"
 
+vi.mock("node:fs/promises", () => ({
+	writeFile: vi.fn(),
+}))
+
 describe("index.ts", () => {
 	afterEach(() => {
 		vi.clearAllMocks()
@@ -16,7 +21,7 @@ describe("index.ts", () => {
 
 	describe("getAdapter", () => {
 		const args: Args = {
-			binaryMediaTypes: [faker.datatype.string()],
+			binaryMediaTypes: [faker.string.sample()],
 		}
 
 		describe("when there are arguments", () => {
@@ -24,10 +29,24 @@ describe("index.ts", () => {
 				const result = getAdapter(args)
 
 				expect(result).toStrictEqual({
+					adapterFeatures: {
+						edgeMiddleware: false,
+						functionPerRoute: false,
+					},
 					args,
 					exports: ["handler"],
 					name: ADAPTER_NAME,
 					serverEntrypoint: `${ADAPTER_NAME}/lambda/index.js`,
+					supportedAstroFeatures: {
+						assets: {
+							isSharpCompatible: false,
+							isSquooshCompatible: false,
+							supportKind: "stable",
+						},
+						hybridOutput: "stable",
+						serverOutput: "stable",
+						staticOutput: "unsupported",
+					},
 				})
 			})
 		})
@@ -37,10 +56,24 @@ describe("index.ts", () => {
 				const result = getAdapter()
 
 				expect(result).toStrictEqual({
+					adapterFeatures: {
+						edgeMiddleware: false,
+						functionPerRoute: false,
+					},
 					args: {},
 					exports: ["handler"],
 					name: ADAPTER_NAME,
 					serverEntrypoint: `${ADAPTER_NAME}/lambda/index.js`,
+					supportedAstroFeatures: {
+						assets: {
+							isSharpCompatible: false,
+							isSquooshCompatible: false,
+							supportKind: "stable",
+						},
+						hybridOutput: "stable",
+						serverOutput: "stable",
+						staticOutput: "unsupported",
+					},
 				})
 			})
 		})
@@ -48,7 +81,7 @@ describe("index.ts", () => {
 
 	describe("astroAWSFunctions", () => {
 		const args: Args = {
-			binaryMediaTypes: [faker.datatype.string()],
+			binaryMediaTypes: [faker.string.sample()],
 		}
 
 		describe("always", () => {
@@ -92,13 +125,13 @@ describe("index.ts", () => {
 				} as unknown as AstroConfig
 				routes = [
 					{
-						route: faker.datatype.string(),
+						route: faker.string.sample(),
 					} as unknown as RouteData,
 					{
-						route: faker.datatype.string(),
+						route: faker.string.sample(),
 					} as unknown as RouteData,
 					{
-						route: faker.datatype.string(),
+						route: faker.string.sample(),
 					} as unknown as RouteData,
 				]
 
@@ -157,6 +190,13 @@ describe("index.ts", () => {
 						routes,
 					} as unknown as Parameters<typeof astroBuildDone>[0])
 
+					expect(writeFile).toHaveBeenCalledTimes(1)
+					expect(writeFile).toHaveBeenCalledWith(
+						fileURLToPath(new URL("metadata.json", config.outDir)),
+						JSON.stringify({
+							routes,
+						}),
+					)
 					expect(bundleEntry).toHaveBeenCalledTimes(1)
 					expect(bundleEntry).toHaveBeenCalledWith(
 						fileURLToPath(
