@@ -6,12 +6,27 @@ import type { Args } from "./args.js"
 import { bundleEntry } from "./shared.js"
 import { ADAPTER_NAME } from "./constants.js"
 import { warn } from "./log.js"
+import { writeFile } from "node:fs/promises"
 
 const getAdapter = (args: Args = {}): AstroAdapter => ({
+	adapterFeatures: {
+		edgeMiddleware: false,
+		functionPerRoute: false,
+	},
 	args,
 	exports: ["handler"],
 	name: ADAPTER_NAME,
 	serverEntrypoint: `${ADAPTER_NAME}/lambda/index.js`,
+	supportedAstroFeatures: {
+		assets: {
+			isSharpCompatible: false,
+			isSquooshCompatible: false,
+			supportKind: "stable",
+		},
+		hybridOutput: "stable",
+		serverOutput: "stable",
+		staticOutput: "unsupported",
+	},
 })
 
 const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
@@ -42,7 +57,12 @@ const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 					)
 				}
 			},
-			"astro:build:done": async () => {
+			"astro:build:done": async (options) => {
+				await writeFile(
+					fileURLToPath(new URL("metadata.json", astroConfig.outDir)),
+					JSON.stringify(options),
+				)
+
 				await bundleEntry(
 					fileURLToPath(
 						new URL(astroConfig.build.serverEntry, astroConfig.build.server),
