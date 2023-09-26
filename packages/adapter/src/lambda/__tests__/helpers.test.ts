@@ -18,7 +18,7 @@ describe("helpers", () => {
 			headers: Record<string, string>
 
 		beforeEach(async () => {
-			body = faker.datatype.string()
+			body = faker.string.sample()
 			headers = {
 				"content-type": "text/plain",
 			}
@@ -61,7 +61,7 @@ describe("helpers", () => {
 			headers: Record<string, string>
 
 		beforeEach(async () => {
-			body = faker.datatype.string()
+			body = faker.string.sample()
 			headers = {
 				"content-type": "text/plain",
 			}
