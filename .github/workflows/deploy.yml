@@ -12,7 +12,7 @@ on:
         description: The version of PNPM to use
         required: false
         type: string
-        default: "8.7.5"
+        default: "8.7.6"
       stack_environment:
         description: The stack environment to deploy
         required: true
