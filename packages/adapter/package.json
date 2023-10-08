@@ -55,7 +55,7 @@
 		"@astro-aws/scripts": "workspace:^",
 		"@faker-js/faker": "^8.1.0",
 		"@types/aws-lambda": "^8.10.124",
-		"@types/node": "^18.17.6",
+		"@types/node": "^18.18.0",
 		"astro": "^3.2.3",
 		"aws-lambda": "^1.0.7",
 		"eslint": "^8.51.0",

@@ -19,7 +19,7 @@
 		"bin.js"
 	],
 	"scripts": {
-		"build": "ts-node-esm ./src/index.ts build"
+		"build": "tsx ./src/index.ts build"
 	},
 	"eslintConfig": {
 		"extends": [
@@ -34,10 +34,10 @@
 		"globby": "^13.2.2"
 	},
 	"devDependencies": {
-		"@types/node": "^18.17.6",
+		"@types/node": "^18.18.0",
 		"eslint": "^8.51.0",
 		"prettier": "^3.0.3",
-		"ts-node": "^10.9.1",
+		"tsx": "^3.13.0",
 		"typescript": "^5.2.2"
 	},
 	"peerDependencies": {

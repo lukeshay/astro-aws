@@ -40,7 +40,7 @@
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
-		"@types/node": "^18.17.6",
+		"@types/node": "^18.18.0",
 		"eslint-config-get-off-my-lawn": "^7.2.0"
 	},
 	"engines": {
