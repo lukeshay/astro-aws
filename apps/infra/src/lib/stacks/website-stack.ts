@@ -44,7 +44,7 @@ export class WebsiteStack extends Stack {
 			alias,
 			cloudwatchDashboard,
 			environment,
-			output,
+			edge,
 			certificate,
 			hostedZone,
 		} = props
@@ -112,16 +112,15 @@ export class WebsiteStack extends Stack {
 							: undefined,
 				},
 				lambdaFunction: {
-					architecture:
-						output === "edge" ? Architecture.X86_64 : Architecture.ARM_64,
+					architecture: edge ? Architecture.X86_64 : Architecture.ARM_64,
 				},
 				s3Bucket: {
 					serverAccessLogsBucket: accessLogBucket,
 					serverAccessLogsPrefix: "s3/",
 				},
 			},
+			edge,
 			outDir: `${this.#getWorkspacePath(props.package)}/dist`,
-			output,
 		})
 
 		if (hostedZone) {

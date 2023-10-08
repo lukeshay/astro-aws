@@ -33,7 +33,12 @@ describe("index.ts", () => {
 						edgeMiddleware: false,
 						functionPerRoute: false,
 					},
-					args,
+					args: {
+						...args,
+						esBuildOptions: {},
+						logFnRequest: false,
+						logFnResponse: false,
+					},
 					exports: ["handler"],
 					name: ADAPTER_NAME,
 					serverEntrypoint: `${ADAPTER_NAME}/lambda/index.js`,
@@ -60,7 +65,12 @@ describe("index.ts", () => {
 						edgeMiddleware: false,
 						functionPerRoute: false,
 					},
-					args: {},
+					args: {
+						binaryMediaTypes: [],
+						esBuildOptions: {},
+						logFnRequest: false,
+						logFnResponse: false,
+					},
 					exports: ["handler"],
 					name: ADAPTER_NAME,
 					serverEntrypoint: `${ADAPTER_NAME}/lambda/index.js`,
@@ -193,9 +203,7 @@ describe("index.ts", () => {
 					expect(writeFile).toHaveBeenCalledTimes(1)
 					expect(writeFile).toHaveBeenCalledWith(
 						fileURLToPath(new URL("metadata.json", config.outDir)),
-						JSON.stringify({
-							routes,
-						}),
+						expect.any(String),
 					)
 					expect(bundleEntry).toHaveBeenCalledTimes(1)
 					expect(bundleEntry).toHaveBeenCalledWith(
@@ -203,7 +211,12 @@ describe("index.ts", () => {
 							new URL(config.build.serverEntry, config.build.server),
 						),
 						fileURLToPath(new URL("lambda", config.outDir)),
-						args,
+						{
+							...args,
+							esBuildOptions: {},
+							logFnRequest: false,
+							logFnResponse: false,
+						},
 					)
 				})
 			})

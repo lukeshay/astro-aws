@@ -48,20 +48,20 @@
 	},
 	"dependencies": {
 		"@astrojs/webapi": "^2.2.0",
-		"esbuild": "^0.19.3",
+		"esbuild": "^0.19.4",
 		"merge-anything": "^5.1.7"
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
 		"@faker-js/faker": "^8.1.0",
-		"@types/aws-lambda": "^8.10.121",
-		"@types/node": "^18.17.6",
-		"astro": "^3.1.1",
+		"@types/aws-lambda": "^8.10.124",
+		"@types/node": "^18.18.0",
+		"astro": "^3.2.3",
 		"aws-lambda": "^1.0.7",
-		"eslint": "^8.49.0",
+		"eslint": "^8.51.0",
 		"prettier": "^3.0.3",
 		"typescript": "^5.2.2",
-		"vitest": "^0.34.5"
+		"vitest": "^0.34.6"
 	},
 	"peerDependencies": {
 		"astro": ">=1"

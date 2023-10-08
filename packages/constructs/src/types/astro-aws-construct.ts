@@ -1,17 +1,74 @@
+import { existsSync, readFileSync } from "node:fs"
+import { resolve } from "node:path"
+import { URL, fileURLToPath } from "node:url"
+
 import { Construct } from "constructs"
 
-export abstract class AstroAWSBaseConstruct<Props, Cdk> extends Construct {
-	#props: Props
+const __dirname = fileURLToPath(new URL(".", import.meta.url))
+
+type Config = {
+	output: "hybrid" | "server" | "static"
+}
+
+type Args = {
+	/** Specifies what media types need to be base64 encoded. */
+	binaryMediaTypes: string[]
+	/** Configures ESBuild options that are not configured automatically. */
+	esBuildOptions: Record<string, unknown>
+	/** Enables a log message that prints the request the lambda receives. */
+	logFnRequest: boolean
+	/** Enables a log message that prints the response the lambda returns. */
+	logFnResponse: boolean
+}
+
+type Metadata = {
+	args: Args
+	config: Config
+}
+
+type AstroAWSBaseConstructProps = {
+	outDir?: string
+	websiteDir?: string
+}
+
+abstract class AstroAWSBaseConstruct<
+	Props extends AstroAWSBaseConstructProps,
+	Cdk,
+> extends Construct {
+	public readonly distDir: string
+	public readonly props: Props
+	public readonly metadata?: Metadata
 
 	public constructor(scope: Construct, id: string, props: Props) {
 		super(scope, id)
 
-		this.#props = props
+		const { outDir, websiteDir = __dirname } = props
+
+		this.props = props
+
+		this.distDir = outDir ? resolve(outDir) : resolve(websiteDir, "dist")
+
+		this.metadata = existsSync(resolve(this.distDir, "metadata.json"))
+			? (JSON.parse(
+					readFileSync(resolve(this.distDir, "metadata.json")).toString("utf8"),
+			  ) as Metadata)
+			: undefined
 	}
 
-	public get props(): Props {
-		return this.#props
+	public get isStatic(): boolean {
+		return !this.metadata
+	}
+
+	public get isSSR(): boolean {
+		return Boolean(this.metadata)
 	}
 
 	public abstract get cdk(): Cdk
+}
+
+export {
+	type Args,
+	type Metadata,
+	type AstroAWSBaseConstructProps,
+	AstroAWSBaseConstruct,
 }

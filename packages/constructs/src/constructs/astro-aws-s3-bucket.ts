@@ -8,13 +8,16 @@ import { type Construct } from "constructs"
 import { OriginAccessIdentity } from "aws-cdk-lib/aws-cloudfront"
 import { CanonicalUserPrincipal, PolicyStatement } from "aws-cdk-lib/aws-iam"
 
-import { AstroAWSBaseConstruct } from "../types/astro-aws-construct.js"
+import {
+	AstroAWSBaseConstruct,
+	type AstroAWSBaseConstructProps,
+} from "../types/astro-aws-construct.js"
 
 type AstroAWSS3BucketCdkProps = {
 	s3Bucket?: Partial<BucketProps>
 }
 
-type AstroAWSS3BucketProps = {
+type AstroAWSS3BucketProps = AstroAWSBaseConstructProps & {
 	cdk?: AstroAWSS3BucketCdkProps
 }
 

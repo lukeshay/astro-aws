@@ -1,4 +1,3 @@
-import { fileURLToPath } from "node:url"
 import { resolve } from "node:path"
 
 import {
@@ -9,7 +8,6 @@ import {
 } from "aws-cdk-lib/aws-lambda"
 import { type Construct } from "constructs"
 
-import { type Output } from "../types/output.js"
 import { AstroAWSBaseConstruct } from "../types/astro-aws-construct.js"
 
 import {
@@ -33,8 +31,6 @@ import type {
 } from "./astro-aws-cloudfront-distribution.js"
 import { AstroAWSCloudfrontDistribution } from "./astro-aws-cloudfront-distribution.js"
 
-const __dirname = fileURLToPath(new URL(".", import.meta.url))
-
 type AstroAWSCdkProps = {
 	lambdaFunction?: Omit<FunctionProps, "code" | "handler" | "runtime">
 }
@@ -43,7 +39,7 @@ type AstroAWSProps = {
 	/** Passed through to the Bucket Origin. */
 	websiteDir?: string
 	outDir?: string
-	output: Output
+	edge?: boolean
 	cdk?: AstroAWSCdkProps &
 		AstroAWSCloudfrontDistributionCdkProps &
 		AstroAWSOriginCdkProps &
@@ -70,8 +66,6 @@ type AstroAWSCdk = AstroAWSCloudfrontDistributionCdk &
  * a 404 response, the Cloudfront distribution falls back to the S3 bucket.
  */
 class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> {
-	public readonly distDir: string
-
 	#lambdaFunction?: Function
 	#astroAWSS3BucketDeployment: AstroAWSS3BucketDeployment
 	#astroAWSS3Bucket: AstroAWSS3Bucket
@@ -81,22 +75,19 @@ class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> {
 	public constructor(scope: Construct, id: string, props: AstroAWSProps) {
 		super(scope, id, props)
 
-		const { outDir, websiteDir = __dirname, output } = props
+		this.#astroAWSS3Bucket = new AstroAWSS3Bucket(
+			this,
+			"AstroAWSS3Bucket",
+			this.props,
+		)
 
-		this.#astroAWSS3Bucket = new AstroAWSS3Bucket(this, "AstroAWSS3Bucket", {
-			cdk: this.props.cdk,
-		})
-
-		this.distDir = outDir ? resolve(outDir) : resolve(websiteDir, "dist")
-
-		if (["server", "edge"].includes(output)) {
+		if (this.isSSR) {
 			this.createSSROnlyResources()
 		}
 
 		this.#astroAWSOrigin = new AstroAWSOrigin(this, "AstroAWSOrigin", {
-			cdk: this.props.cdk,
+			...this.props,
 			lambdaFunction: this.#lambdaFunction,
-			output,
 			s3Bucket: this.#astroAWSS3Bucket.cdk.s3Bucket,
 		})
 
@@ -104,11 +95,10 @@ class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> {
 			this,
 			"AstroAWSCloudfrontDistribution",
 			{
-				cdk: this.props.cdk,
+				...this.props,
 				lambdaFunction: this.#lambdaFunction,
 				lambdaFunctionOrigin: this.#astroAWSOrigin.cdk.lambdaFunctionOrigin,
 				origin: this.#astroAWSOrigin.cdk.origin,
-				output,
 			},
 		)
 
@@ -116,12 +106,10 @@ class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> {
 			this,
 			"AstroAWSS3BucketDeployment",
 			{
+				...this.props,
 				bucket: this.#astroAWSS3Bucket.cdk.s3Bucket,
-				cdk: this.props.cdk,
-				distDir: this.distDir,
 				distribution:
 					this.#astroAWSCloudfrontDistribution.cdk.cloudfrontDistribution,
-				output: this.props.output,
 			},
 		)
 	}
