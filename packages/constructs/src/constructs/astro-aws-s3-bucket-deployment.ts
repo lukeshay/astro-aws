@@ -8,8 +8,10 @@ import {
 import { type Construct } from "constructs"
 import { type Distribution } from "aws-cdk-lib/aws-cloudfront"
 
-import { type Output } from "../types/output.js"
-import { AstroAWSBaseConstruct } from "../types/astro-aws-construct.js"
+import {
+	AstroAWSBaseConstruct,
+	type AstroAWSBaseConstructProps,
+} from "../types/astro-aws-construct.js"
 
 type AstroAWSS3BucketDeploymentCdkProps = {
 	s3BucketDeployment?: Partial<
@@ -17,12 +19,10 @@ type AstroAWSS3BucketDeploymentCdkProps = {
 	>
 }
 
-type AstroAWSS3BucketDeploymentProps = {
-	distDir: string
-	output: Output
+type AstroAWSS3BucketDeploymentProps = AstroAWSBaseConstructProps & {
 	bucket: BucketDeploymentProps["destinationBucket"]
-	distribution: Distribution
 	cdk?: AstroAWSS3BucketDeploymentCdkProps
+	distribution: Distribution
 }
 
 type AstroAWSS3BucketDeploymentCdk = {
@@ -42,11 +42,11 @@ class AstroAWSS3BucketDeployment extends AstroAWSBaseConstruct<
 	) {
 		super(scope, id, props)
 
-		const { output, distDir, bucket, cdk = {}, distribution } = this.props
+		const { bucket, cdk = {}, distribution } = this.props
 
-		const source = ["server", "edge"].includes(output)
-			? resolve(distDir, "client")
-			: resolve(distDir)
+		const source = this.metadata
+			? resolve(this.distDir, "client")
+			: resolve(this.distDir)
 
 		this.#s3BucketDeployment = new BucketDeployment(this, "BucketDeployment", {
 			...cdk.s3BucketDeployment,

@@ -7,6 +7,8 @@ description: Getting started guide
 
 Astro AWS is an [Astro](https://astro.build/) SSR adapter and constructs for deploying your Astro application to AWS.
 
+> **IMPORTANT NOTE:** These packages only provide the bare minimum AWS CDK configuration to get your application running. Everything that does not need to be configured uses the default values AWS provides.
+
 ## Start your first Astro project
 
 Create a new Astro project using the `create-astro` CLI then add the Astro AWS adapter.

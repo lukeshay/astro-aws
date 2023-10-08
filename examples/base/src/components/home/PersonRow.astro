@@ -1,0 +1,18 @@
+---
+import { generateRandomPersonAsync } from "../../mocks/person";
+
+export type Props = {
+  row: number;
+}
+
+const { row } = Astro.props;
+
+const person = await generateRandomPersonAsync();
+---
+
+<tr>
+  <th>{row}</th>
+  <td>{person.name}</td>
+  <td>{person.email}</td>
+  <td>{person.phone}</td>
+</tr>

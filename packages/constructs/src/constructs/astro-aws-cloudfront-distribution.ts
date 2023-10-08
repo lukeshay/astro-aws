@@ -17,8 +17,10 @@ import {
 	ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront"
 
-import { AstroAWSBaseConstruct } from "../types/astro-aws-construct.js"
-import { type Output } from "../types/output.js"
+import {
+	AstroAWSBaseConstruct,
+	type AstroAWSBaseConstructProps,
+} from "../types/astro-aws-construct.js"
 
 type AstroAWSCloudfrontDistributionCdkProps = {
 	cloudfrontDistribution?: Omit<
@@ -30,8 +32,8 @@ type AstroAWSCloudfrontDistributionCdkProps = {
 	}
 }
 
-type AstroAWSCloudfrontDistributionProps = {
-	output: Output
+type AstroAWSCloudfrontDistributionProps = AstroAWSBaseConstructProps & {
+	edge?: boolean
 	lambdaFunction?: Function
 	origin: IOrigin
 	lambdaFunctionOrigin?: IOrigin
@@ -90,7 +92,7 @@ class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 		const edgeLambdas: EdgeLambda[] =
 			this.props.cdk?.cloudfrontDistribution?.defaultBehavior?.edgeLambdas ?? []
 
-		if (this.props.output === "edge" && this.props.lambdaFunction) {
+		if (this.props.edge && this.props.lambdaFunction) {
 			edgeLambdas.push({
 				eventType: LambdaEdgeEventType.ORIGIN_REQUEST,
 				functionVersion: this.props.lambdaFunction.currentVersion,

@@ -17,8 +17,10 @@ import {
 } from "aws-cdk-lib/aws-cloudfront-origins"
 import { Fn } from "aws-cdk-lib/core"
 
-import { AstroAWSBaseConstruct } from "../types/astro-aws-construct.js"
-import { type Output } from "../types/output.js"
+import {
+	AstroAWSBaseConstruct,
+	type AstroAWSBaseConstructProps,
+} from "../types/astro-aws-construct.js"
 
 type AstroAWSOriginCdkProps = {
 	lambdaFunctionOrigin?: HttpOriginProps
@@ -27,8 +29,8 @@ type AstroAWSOriginCdkProps = {
 	s3Origin?: S3OriginProps
 }
 
-type AstroAWSOriginProps = {
-	output: Output
+type AstroAWSOriginProps = AstroAWSBaseConstructProps & {
+	edge?: boolean
 	lambdaFunction?: Function
 	s3Bucket: Bucket
 	cdk?: AstroAWSOriginCdkProps
@@ -57,7 +59,7 @@ class AstroAWSOrigin extends AstroAWSBaseConstruct<
 
 		this.#s3Origin = new S3Origin(this.props.s3Bucket, this.props.cdk?.s3Origin)
 
-		if (this.props.lambdaFunction && this.props.output !== "static") {
+		if (this.props.lambdaFunction && this.isSSR) {
 			this.#lambdaFunctionUrl = this.props.lambdaFunction.addFunctionUrl({
 				authType: FunctionUrlAuthType.NONE,
 				...this.props.cdk?.lambdaFunctionUrl,
@@ -68,7 +70,7 @@ class AstroAWSOrigin extends AstroAWSBaseConstruct<
 				this.props.cdk?.lambdaFunctionOrigin,
 			)
 
-			if (this.props.output === "server") {
+			if (!this.props.edge) {
 				this.#originGroup = new OriginGroup({
 					...this.props.cdk?.originGroup,
 					fallbackOrigin: this.#s3Origin,

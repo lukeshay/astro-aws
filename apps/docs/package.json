@@ -30,17 +30,17 @@
 		"start": "astro dev"
 	},
 	"dependencies": {
-		"@astrojs/starlight": "^0.10.1",
-		"astro": "^3.1.1",
+		"@astrojs/starlight": "^0.11.0",
+		"astro": "^3.2.3",
 		"sharp": "^0.32.6"
 	},
 	"devDependencies": {
 		"@astro-aws/adapter": "workspace:^",
-		"eslint": "^8.49.0",
+		"eslint": "^8.51.0",
 		"prettier": "^3.0.3",
-		"rimraf": "^5.0.1"
+		"rimraf": "^5.0.5"
 	},
 	"engines": {
-		"node": "18.x"
+		"node": "18.x || 20.x"
 	}
 }

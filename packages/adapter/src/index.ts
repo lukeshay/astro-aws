@@ -8,12 +8,22 @@ import { bundleEntry } from "./shared.js"
 import { ADAPTER_NAME } from "./constants.js"
 import { warn } from "./log.js"
 
-const getAdapter = (args: Args = {}): AstroAdapter => ({
+const DEFAULT_ARGS: Args = {
+	binaryMediaTypes: [],
+	esBuildOptions: {},
+	logFnRequest: false,
+	logFnResponse: false,
+}
+
+const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 	adapterFeatures: {
 		edgeMiddleware: false,
 		functionPerRoute: false,
 	},
-	args,
+	args: {
+		...DEFAULT_ARGS,
+		...args,
+	},
 	exports: ["handler"],
 	name: ADAPTER_NAME,
 	serverEntrypoint: `${ADAPTER_NAME}/lambda/index.js`,
@@ -25,12 +35,17 @@ const getAdapter = (args: Args = {}): AstroAdapter => ({
 		},
 		hybridOutput: "stable",
 		serverOutput: "stable",
-		staticOutput: "unsupported",
+		staticOutput: "stable",
 	},
 })
 
-const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
+const astroAWSFunctions = (args: Partial<Args> = {}): AstroIntegration => {
 	let astroConfig: AstroConfig
+
+	const argsWithDefault: Args = {
+		...DEFAULT_ARGS,
+		...args,
+	}
 
 	/* eslint-disable sort-keys */
 	return {
@@ -46,7 +61,7 @@ const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 				})
 			},
 			"astro:config:done": ({ config, setAdapter }) => {
-				setAdapter(getAdapter(args))
+				setAdapter(getAdapter(argsWithDefault))
 
 				astroConfig = config
 
@@ -60,7 +75,11 @@ const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 			"astro:build:done": async (options) => {
 				await writeFile(
 					fileURLToPath(new URL("metadata.json", astroConfig.outDir)),
-					JSON.stringify(options),
+					JSON.stringify({
+						args: argsWithDefault,
+						options,
+						config: astroConfig,
+					}),
 				)
 
 				await bundleEntry(
@@ -68,7 +87,7 @@ const astroAWSFunctions = (args: Args = {}): AstroIntegration => {
 						new URL(astroConfig.build.serverEntry, astroConfig.build.server),
 					),
 					fileURLToPath(new URL("lambda", astroConfig.outDir)),
-					args,
+					argsWithDefault,
 				)
 			},
 		},
