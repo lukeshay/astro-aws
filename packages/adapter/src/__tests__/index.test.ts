@@ -36,8 +36,6 @@ describe("index.ts", () => {
 					args: {
 						...args,
 						esBuildOptions: {},
-						logFnRequest: false,
-						logFnResponse: false,
 					},
 					exports: ["handler"],
 					name: ADAPTER_NAME,
@@ -68,8 +66,6 @@ describe("index.ts", () => {
 					args: {
 						binaryMediaTypes: [],
 						esBuildOptions: {},
-						logFnRequest: false,
-						logFnResponse: false,
 					},
 					exports: ["handler"],
 					name: ADAPTER_NAME,
@@ -214,8 +210,6 @@ describe("index.ts", () => {
 						{
 							...args,
 							esBuildOptions: {},
-							logFnRequest: false,
-							logFnResponse: false,
 						},
 					)
 				})

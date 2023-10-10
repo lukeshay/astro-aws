@@ -6,7 +6,7 @@ description: "NPM package @astro-aws/constructs"
 
 Constructs for deploying your [Astro](https://astro.build/) project that is built using [@astro-aws/adapter](https://www.npmjs.com/package/@astro-aws/adapter).
 
-## SSR Usage
+## Usage
 
 1. Install this package and it's peer dependencies in your AWS CDK project.
 
@@ -38,85 +38,6 @@ export class MyAstroStack extends Stack {
 		super(scope, id, props)
 
 		new AstroAWS(this, "AstroAWS", {
-			output: "server",
-			websitePath: "..", // Replace with the path to your website code.
-		})
-	}
-}
-```
-
-## SSR Edge Usage
-
-1. Install this package and it's peer dependencies in your AWS CDK project.
-
-```sh
-# Using NPM
-npm install @astro-aws/constructs constructs aws-cdk-lib
-
-# Using Yarn
-yarn add @astro-aws/constructs constructs aws-cdk-lib
-
-# Using PNPM
-pnpm add @astro-aws/constructs constructs aws-cdk-lib
-
-# Using Bun
-bun add @astro-aws/constructs constructs aws-cdk-lib
-```
-
-2. Add the construct to your CDK stack.
-
-```ts
-import { Stack } from "aws-cdk-lib/core"
-import type { StackProps } from "aws-cdk-lib/core"
-import { AstroAWS } from "@astro-aws/constructs"
-
-export interface MyAstroStackProps extends StackProps {}
-
-export class MyAstroStack extends Stack {
-	public constructor(scope: Construct, id: string, props: MyAstroStackProps) {
-		super(scope, id, props)
-
-		new AstroAWS(this, "AstroAWS", {
-			output: "edge",
-			websitePath: "..", // Replace with the path to your website code.
-		})
-	}
-}
-```
-
-## Static Usage
-
-1. Install this package and it's peer dependencies in your AWS CDK project.
-
-```sh
-# Using NPM
-npm install @astro-aws/constructs constructs aws-cdk-lib
-
-# Using Yarn
-yarn add @astro-aws/constructs constructs aws-cdk-lib
-
-# Using PNPM
-pnpm add @astro-aws/constructs constructs aws-cdk-lib
-
-# Using Bun
-bun add @astro-aws/constructs constructs aws-cdk-lib
-```
-
-2. Add the construct to your CDK stack.
-
-```ts
-import { Stack } from "aws-cdk-lib/core"
-import type { StackProps } from "aws-cdk-lib/core"
-import { AstroAWS } from "@astro-aws/constructs"
-
-export interface MyAstroStackProps extends StackProps {}
-
-export class MyAstroStack extends Stack {
-	public constructor(scope: Construct, id: string, props: MyAstroStackProps) {
-		super(scope, id, props)
-
-		new AstroAWS(this, "AstroAWS", {
-			output: "static",
 			websitePath: "..", // Replace with the path to your website code.
 		})
 	}
@@ -144,7 +65,6 @@ export class MyAstroStack extends Stack {
 					memorySize: 1024,
 				},
 			},
-			output: "server",
 			websitePath: "..", // Replace with the path to your website code.
 		})
 

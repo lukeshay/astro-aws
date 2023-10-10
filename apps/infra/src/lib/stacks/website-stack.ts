@@ -11,7 +11,8 @@ import {
 import { Architecture } from "aws-cdk-lib/aws-lambda"
 import type { Construct } from "constructs"
 import { AstroAWS } from "@astro-aws/constructs"
-import type { Dashboard } from "aws-cdk-lib/aws-cloudwatch"
+import { LogQueryWidget } from "aws-cdk-lib/aws-cloudwatch"
+import type { ConcreteWidget, Dashboard } from "aws-cdk-lib/aws-cloudwatch"
 import type { IHostedZone } from "aws-cdk-lib/aws-route53"
 import { AaaaRecord, ARecord, RecordTarget } from "aws-cdk-lib/aws-route53"
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets"
@@ -40,13 +41,13 @@ export class WebsiteStack extends Stack {
 		super(scope, id, props)
 
 		const {
-			hostedZoneName,
 			alias,
-			cloudwatchDashboard,
-			environment,
-			edge,
 			certificate,
+			cloudwatchDashboard,
+			distDir,
+			environment,
 			hostedZone,
+			hostedZoneName,
 		} = props
 
 		const domainName = [alias, hostedZoneName].filter(Boolean).join(".")
@@ -112,15 +113,19 @@ export class WebsiteStack extends Stack {
 							: undefined,
 				},
 				lambdaFunction: {
-					architecture: edge ? Architecture.X86_64 : Architecture.ARM_64,
+					architecture: Architecture.ARM_64,
+					environment: {
+						ASTRO_AWS_LOG_LEVEL: "trace",
+					},
 				},
 				s3Bucket: {
 					serverAccessLogsBucket: accessLogBucket,
 					serverAccessLogsPrefix: "s3/",
 				},
 			},
-			edge,
-			outDir: `${this.#getWorkspacePath(props.package)}/dist`,
+			outDir: [this.#getWorkspacePath(props.package), distDir ?? "dist"].join(
+				"/",
+			),
 		})
 
 		if (hostedZone) {
@@ -157,12 +162,22 @@ export class WebsiteStack extends Stack {
 			statistic: "Sum",
 		})
 
-		const widgets = [
+		const widgets: ConcreteWidget[] = [
 			new BasicGraphWidget({ metric: distribution5xxErrorRateMetric }),
 			new BasicGraphWidget({ metric: distributionRequestsMetric }),
 		]
 
 		if (astroAwsConstruct.cdk.lambdaFunction) {
+			const lambdaLogQueryWidget = new LogQueryWidget({
+				height: 12,
+				logGroupNames: [
+					astroAwsConstruct.cdk.lambdaFunction.logGroup.logGroupName,
+				],
+				queryLines: ["fields @timestamp, @message", "sort @timestamp desc"],
+				title: "Lambda logs",
+				width: 24,
+			})
+
 			const lambdaFailureRateMetric =
 				astroAwsConstruct.cdk.lambdaFunction.metricErrors({
 					label: "Lambda failure rate",
@@ -190,6 +205,8 @@ export class WebsiteStack extends Stack {
 					period: Duration.minutes(5),
 					statistic: "sum",
 				})
+
+			widgets.unshift(lambdaLogQueryWidget)
 
 			widgets.push(
 				new BasicGraphWidget({ metric: lambdaFailureRateMetric }),

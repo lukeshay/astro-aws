@@ -20,8 +20,11 @@
 		"root": false
 	},
 	"scripts": {
+		"build:edge": "MODE=edge astro build",
+		"build:ssr": "MODE=ssr astro build",
+		"build:ssr-stream": "MODE=ssr-stream astro build",
 		"astro": "astro",
-		"build": "pnpm run clean && astro build",
+		"build": "pnpm run clean && run-p build:*",
 		"check": "astro check && tsc",
 		"clean": "rimraf dist",
 		"dev": "astro dev",
@@ -30,9 +33,9 @@
 		"start": "astro dev"
 	},
 	"dependencies": {
-		"@astrojs/tailwind": "^5.0.1",
+		"@astrojs/tailwind": "^5.0.2",
 		"@faker-js/faker": "^8.1.0",
-		"astro": "^3.2.3",
+		"astro": "^3.2.4",
 		"daisyui": "^3.9.2",
 		"tailwindcss": "^3.3.3"
 	},
@@ -40,6 +43,7 @@
 		"@astro-aws/adapter": "workspace:^",
 		"@astrojs/check": "^0.2.0",
 		"eslint": "^8.51.0",
+		"npm-run-all": "^4.1.5",
 		"prettier": "^3.0.3",
 		"rimraf": "^5.0.5",
 		"typescript": "^5.2.2"

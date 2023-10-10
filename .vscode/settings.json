@@ -1,11 +1,11 @@
 {
-	"cSpell.words": ["astro"],
+	"cSpell.words": ["astro", "awslambda", "streamify"],
 	"files.associations": {
 		"*.mdx": "markdown"
 	},
 	"search.exclude": {
-		"**/.yarn": true,
-		"**/.pnp.*": true
+		"**/.pnp.*": true,
+		"**/.yarn": true
 	},
 	"typescript.enablePromptUseWorkspaceTsdk": true,
 	"typescript.tsdk": "node_modules/typescript/lib"

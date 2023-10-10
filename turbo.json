@@ -2,28 +2,27 @@
 	"$schema": "https://turbo.build/schema.json",
 	"pipeline": {
 		"build": {
-			"cache": false,
 			"dependsOn": ["^build"],
 			"outputs": ["dist/**", "cdk.out/**"]
 		},
-		"test": {
+		"deploy": {
+			"cache": false,
+			"dependsOn": ["synth"]
+		},
+		"dev": {
+			"cache": false,
 			"dependsOn": ["^build"]
 		},
 		"lint": {
 			"dependsOn": ["^build"]
 		},
+		"lint:fix": {
+			"dependsOn": ["^build"]
+		},
 		"synth": {
 			"dependsOn": ["build"]
 		},
-		"deploy": {
-			"dependsOn": ["synth"],
-			"cache": false
-		},
-		"dev": {
-			"dependsOn": ["^build"],
-			"cache": false
-		},
-		"lint:fix": {
+		"test": {
 			"dependsOn": ["^build"]
 		}
 	}

@@ -87,7 +87,6 @@ export class HelloCdkStack extends Stack {
 		super(scope, id, props)
 
 		new AstroAWSConstruct(this, "AstroAWSConstruct", {
-			output: "server",
 			websiteDir: "../my-astro-project",
 		})
 	}

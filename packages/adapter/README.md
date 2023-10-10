@@ -48,6 +48,102 @@ export default defineConfig({
 })
 ```
 
+### SSR Usage
+
+1. Install the package.
+
+```
+# Using NPM
+npm install -D @astro-aws/adapter
+
+# Using Yarn
+yarn add -D @astro-aws/adapter
+
+# Using PNPM
+pnpm add -D @astro-aws/adapter
+
+# Using Bun
+bun add -D @astro-aws/adapter
+```
+
+2. Add the following to your `astro.config.mjs` file.
+
+```js
+import { defineConfig } from "astro/config"
+import astroAws from "@astro-aws/adapter"
+
+export default defineConfig({
+	output: "server",
+	adapter: astroAws({
+		mode: "ssr",
+	}),
+})
+```
+
+### SSR Stream Usage
+
+1. Install the package.
+
+```
+# Using NPM
+npm install -D @astro-aws/adapter
+
+# Using Yarn
+yarn add -D @astro-aws/adapter
+
+# Using PNPM
+pnpm add -D @astro-aws/adapter
+
+# Using Bun
+bun add -D @astro-aws/adapter
+```
+
+2. Add the following to your `astro.config.mjs` file.
+
+```js
+import { defineConfig } from "astro/config"
+import astroAws from "@astro-aws/adapter"
+
+export default defineConfig({
+	output: "server",
+	adapter: astroAws({
+		mode: "ssr-stream",
+	}),
+})
+```
+
+### Edge Usage
+
+1. Install the package.
+
+```
+# Using NPM
+npm install -D @astro-aws/adapter
+
+# Using Yarn
+yarn add -D @astro-aws/adapter
+
+# Using PNPM
+pnpm add -D @astro-aws/adapter
+
+# Using Bun
+bun add -D @astro-aws/adapter
+```
+
+2. Add the following to your `astro.config.mjs` file.
+
+```js
+import { defineConfig } from "astro/config"
+import astroAws from "@astro-aws/adapter"
+
+export default defineConfig({
+	output: "server",
+	adapter: astroAws({
+		mode: "edge",
+	}),
+})
+```
+
 ## Example
 
 See [the source code of this site](https://github.com/lukeshay/astro-aws/blob/main/apps/www/astro.config.ts)

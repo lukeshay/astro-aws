@@ -5,6 +5,7 @@ import {
 	Code,
 	Function,
 	Runtime,
+	Architecture,
 } from "aws-cdk-lib/aws-lambda"
 import { type Construct } from "constructs"
 
@@ -39,7 +40,6 @@ type AstroAWSProps = {
 	/** Passed through to the Bucket Origin. */
 	websiteDir?: string
 	outDir?: string
-	edge?: boolean
 	cdk?: AstroAWSCdkProps &
 		AstroAWSCloudfrontDistributionCdkProps &
 		AstroAWSOriginCdkProps &
@@ -125,13 +125,29 @@ class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> {
 	}
 
 	private createSSROnlyResources() {
+		const {
+			environment = {},
+			architecture,
+			...givenProps
+		} = this.props.cdk?.lambdaFunction ?? {}
+
 		this.#lambdaFunction = new Function(this, "Function", {
 			description: "SSR Lambda Function",
 			memorySize: 512,
 			runtime: Runtime.NODEJS_18_X,
-			...this.props.cdk?.lambdaFunction,
+			...givenProps,
+			architecture:
+				this.metadata?.args.mode === "edge"
+					? Architecture.X86_64
+					: architecture,
 			code: Code.fromAsset(resolve(this.distDir, "lambda")),
 			handler: "entry.handler",
+		})
+
+		Object.entries(environment).forEach(([key, value]) => {
+			this.#lambdaFunction?.addEnvironment(key, value, {
+				removeInEdge: true,
+			})
 		})
 	}
 }

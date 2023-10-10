@@ -18,6 +18,7 @@ const Environments = {
 	PERSONAL: "PERSONAL",
 	PROD: "PROD",
 	SSR: "SSR",
+	STREAM: "STREAM",
 } as const
 
 type Environment = (typeof Environments)[keyof typeof Environments]
@@ -33,7 +34,7 @@ const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
 	[Environments.EDGE]: {
 		...base,
 		alias: "edge.dev",
-		edge: true,
+		distDir: "dist/edge",
 		env: {
 			...base.env,
 			region: "us-east-1",
@@ -56,7 +57,16 @@ const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
 	[Environments.SSR]: {
 		...base,
 		alias: "ssr.dev",
+		distDir: "dist/ssr",
 		environment: Environments.SSR,
+		hostedZoneName: "astro-aws.org",
+		package: "@astro-aws/examples-base",
+	},
+	[Environments.STREAM]: {
+		...base,
+		alias: "stream.dev",
+		distDir: "dist/ssr-stream",
+		environment: Environments.STREAM,
 		hostedZoneName: "astro-aws.org",
 		package: "@astro-aws/examples-base",
 	},

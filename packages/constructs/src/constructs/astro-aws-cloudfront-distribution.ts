@@ -33,7 +33,6 @@ type AstroAWSCloudfrontDistributionCdkProps = {
 }
 
 type AstroAWSCloudfrontDistributionProps = AstroAWSBaseConstructProps & {
-	edge?: boolean
 	lambdaFunction?: Function
 	origin: IOrigin
 	lambdaFunctionOrigin?: IOrigin
@@ -92,7 +91,7 @@ class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 		const edgeLambdas: EdgeLambda[] =
 			this.props.cdk?.cloudfrontDistribution?.defaultBehavior?.edgeLambdas ?? []
 
-		if (this.props.edge && this.props.lambdaFunction) {
+		if (this.metadata?.args.mode === "edge" && this.props.lambdaFunction) {
 			edgeLambdas.push({
 				eventType: LambdaEdgeEventType.ORIGIN_REQUEST,
 				functionVersion: this.props.lambdaFunction.currentVersion,

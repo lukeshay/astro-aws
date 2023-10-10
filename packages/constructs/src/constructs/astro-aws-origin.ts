@@ -2,6 +2,7 @@ import { type Construct } from "constructs"
 import {
 	type FunctionUrl,
 	FunctionUrlAuthType,
+	InvokeMode,
 	type FunctionUrlOptions,
 	type Function,
 } from "aws-cdk-lib/aws-lambda"
@@ -30,7 +31,6 @@ type AstroAWSOriginCdkProps = {
 }
 
 type AstroAWSOriginProps = AstroAWSBaseConstructProps & {
-	edge?: boolean
 	lambdaFunction?: Function
 	s3Bucket: Bucket
 	cdk?: AstroAWSOriginCdkProps
@@ -62,6 +62,10 @@ class AstroAWSOrigin extends AstroAWSBaseConstruct<
 		if (this.props.lambdaFunction && this.isSSR) {
 			this.#lambdaFunctionUrl = this.props.lambdaFunction.addFunctionUrl({
 				authType: FunctionUrlAuthType.NONE,
+				invokeMode:
+					this.metadata?.args.mode === "ssr-stream"
+						? InvokeMode.RESPONSE_STREAM
+						: InvokeMode.BUFFERED,
 				...this.props.cdk?.lambdaFunctionUrl,
 			})
 
@@ -70,7 +74,7 @@ class AstroAWSOrigin extends AstroAWSBaseConstruct<
 				this.props.cdk?.lambdaFunctionOrigin,
 			)
 
-			if (!this.props.edge) {
+			if (this.metadata?.args.mode.includes("ssr")) {
 				this.#originGroup = new OriginGroup({
 					...this.props.cdk?.originGroup,
 					fallbackOrigin: this.#s3Origin,

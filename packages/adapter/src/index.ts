@@ -11,8 +11,7 @@ import { warn } from "./log.js"
 const DEFAULT_ARGS: Args = {
 	binaryMediaTypes: [],
 	esBuildOptions: {},
-	logFnRequest: false,
-	logFnResponse: false,
+	mode: "ssr",
 }
 
 const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({

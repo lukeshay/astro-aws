@@ -30,11 +30,11 @@ const createRequestBody = (
 	return undefined
 }
 
-const createLambdaFunctionResponse = async (
+const createLambdaFunctionHeaders = (
 	app: NodeApp,
 	response: Response,
 	knownBinaryMediaTypes: Set<string>,
-): Promise<APIGatewayProxyResultV2> => {
+) => {
 	const cookies = [...app.setCookieHeaders(response)]
 
 	response.headers.delete("Set-Cookie")
@@ -42,6 +42,25 @@ const createLambdaFunctionResponse = async (
 	const headers = Object.fromEntries(response.headers.entries())
 	const responseContentType = parseContentType(headers["content-type"])
 	const isBase64Encoded = knownBinaryMediaTypes.has(responseContentType)
+
+	return {
+		cookies,
+		headers,
+		isBase64Encoded,
+		responseContentType,
+	}
+}
+
+const createLambdaFunctionResponse = async (
+	app: NodeApp,
+	response: Response,
+	knownBinaryMediaTypes: Set<string>,
+): Promise<APIGatewayProxyResultV2> => {
+	const { cookies, headers, isBase64Encoded } = createLambdaFunctionHeaders(
+		app,
+		response,
+		knownBinaryMediaTypes,
+	)
 	const body = isBase64Encoded
 		? Buffer.from(await response.arrayBuffer()).toString("base64")
 		: ((await response.text()) as string)
@@ -109,4 +128,5 @@ export {
 	createRequestBody,
 	createLambdaFunctionResponse,
 	createLambdaEdgeFunctionResponse,
+	createLambdaFunctionHeaders,
 }

@@ -15,10 +15,8 @@ type Args = {
 	binaryMediaTypes: string[]
 	/** Configures ESBuild options that are not configured automatically. */
 	esBuildOptions: Record<string, unknown>
-	/** Enables a log message that prints the request the lambda receives. */
-	logFnRequest: boolean
-	/** Enables a log message that prints the response the lambda returns. */
-	logFnResponse: boolean
+	/** Specifies where you want your app deployed to. */
+	mode: "edge" | "ssr-stream" | "ssr"
 }
 
 type Metadata = {

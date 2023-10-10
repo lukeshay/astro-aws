@@ -4,7 +4,10 @@ import { NodeApp } from "astro/app/node"
 
 import type { Args } from "../args.js"
 
-import { createHandler } from "./handler.js"
+import {
+	createAPIGatewayProxyEventV2Handler,
+	createCloudFrontRequestEvent,
+} from "./handler.js"
 
 polyfill(globalThis, {
 	exclude: "window document",
@@ -13,7 +16,7 @@ polyfill(globalThis, {
 export const createExports = (manifest: SSRManifest, args: Args) => {
 	const app = new NodeApp(manifest)
 
-	const { binaryMediaTypes = [] } = args
+	const { binaryMediaTypes, mode } = args
 
 	const knownBinaryMediaTypes = new Set([
 		"application/epub+zip",
@@ -68,7 +71,10 @@ export const createExports = (manifest: SSRManifest, args: Args) => {
 		...binaryMediaTypes,
 	])
 
-	const handler = createHandler(app, knownBinaryMediaTypes, args)
+	const handler =
+		mode === "edge"
+			? createCloudFrontRequestEvent(app, knownBinaryMediaTypes)
+			: createAPIGatewayProxyEventV2Handler(args, app, knownBinaryMediaTypes)
 
 	return { handler }
 }
