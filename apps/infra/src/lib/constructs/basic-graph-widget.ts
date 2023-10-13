@@ -1,5 +1,5 @@
 import type { GraphWidgetProps, Metric } from "aws-cdk-lib/aws-cloudwatch"
-import { GraphWidget } from "aws-cdk-lib/aws-cloudwatch"
+import { GRID_WIDTH, GraphWidget } from "aws-cdk-lib/aws-cloudwatch"
 
 export type BasicGraphWidgetProps = Omit<
 	GraphWidgetProps,
@@ -13,7 +13,7 @@ export class BasicGraphWidget extends GraphWidget {
 		const { metric, ...graphWidgetProps } = props
 
 		super({
-			width: 12,
+			width: GRID_WIDTH / 2,
 			...graphWidgetProps,
 			left: [metric],
 			title: metric.label,

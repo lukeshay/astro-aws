@@ -77,12 +77,19 @@ class AstroAWSOrigin extends AstroAWSBaseConstruct<
 			if (this.metadata?.args.mode.includes("ssr")) {
 				this.#originGroup = new OriginGroup({
 					...this.props.cdk?.originGroup,
-					fallbackOrigin: this.#s3Origin,
+					fallbackOrigin: this.#lambdaFunctionOrigin,
 					fallbackStatusCodes: [
+						400,
+						403,
 						404,
+						416,
+						500,
+						502,
+						503,
+						504,
 						...(this.props.cdk?.originGroup?.fallbackStatusCodes ?? []),
 					],
-					primaryOrigin: this.#lambdaFunctionOrigin,
+					primaryOrigin: this.#s3Origin,
 				})
 
 				this.#origin = this.#originGroup

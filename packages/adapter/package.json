@@ -24,13 +24,37 @@
 			"import": "./dist/index.js",
 			"types": "./dist/index.d.ts"
 		},
-		"./lambda/index": {
-			"import": "./dist/lambda/index.js",
-			"types": "./dist/lambda/index.d.ts"
+		"./powertools": {
+			"import": "./dist/powertools.js",
+			"types": "./dist/powertools.d.ts"
 		},
-		"./lambda/index.js": {
-			"import": "./dist/lambda/index.js",
-			"types": "./dist/lambda/index.d.ts"
+		"./powertools.js": {
+			"import": "./dist/powertools.js",
+			"types": "./dist/powertools.d.ts"
+		},
+		"./lambda/handlers/ssr": {
+			"import": "./dist/lambda/handlers/ssr.js",
+			"types": "./dist/lambda/handlers/ssr.d.ts"
+		},
+		"./lambda/handlers/ssr.js": {
+			"import": "./dist/lambda/handlers/ssr.js",
+			"types": "./dist/lambda/handlers/ssr.d.ts"
+		},
+		"./lambda/handlers/ssr-stream": {
+			"import": "./dist/lambda/handlers/ssr-stream.js",
+			"types": "./dist/lambda/handlers/ssr-stream.d.ts"
+		},
+		"./lambda/handlers/ssr-stream.js": {
+			"import": "./dist/lambda/handlers/ssr-stream.js",
+			"types": "./dist/lambda/handlers/ssr-stream.d.ts"
+		},
+		"./lambda/handlers/edge": {
+			"import": "./dist/lambda/handlers/edge.js",
+			"types": "./dist/lambda/handlers/edge.d.ts"
+		},
+		"./lambda/handlers/edge.js": {
+			"import": "./dist/lambda/handlers/edge.js",
+			"types": "./dist/lambda/handlers/edge.d.ts"
 		}
 	},
 	"files": [
@@ -48,7 +72,13 @@
 	},
 	"dependencies": {
 		"@astrojs/webapi": "^2.2.0",
+		"@aws-lambda-powertools/commons": "^1.14.0",
+		"@aws-lambda-powertools/logger": "^1.14.0",
+		"@aws-lambda-powertools/metrics": "^1.14.0",
+		"@aws-lambda-powertools/tracer": "^1.14.0",
+		"@middy/core": "^4.6.5",
 		"esbuild": "^0.19.4",
+		"http-status-codes": "^2.3.0",
 		"merge-anything": "^5.1.7",
 		"pino": "^8.16.0"
 	},

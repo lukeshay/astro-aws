@@ -10,6 +10,7 @@ import { HostedZone } from "aws-cdk-lib/aws-route53"
 import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
 
 export type CertificateStackProps = AstroAWSStackProps & {
+	aliases: readonly [string, ...string[]]
 	hostedZoneName: string
 }
 
@@ -30,9 +31,10 @@ export class CertificateStack extends Stack {
 			},
 		})
 
-		const { hostedZoneName, alias } = props
-
-		const domainName = [alias, hostedZoneName].filter(Boolean).join(".")
+		const { hostedZoneName, aliases } = props
+		const [domainName, ...restDomainNames] = aliases.map((alias) =>
+			[alias, hostedZoneName].join("."),
+		) as [string, ...string[]]
 
 		this.hostedZone = HostedZone.fromLookup(this, "HostedZone", {
 			domainName: hostedZoneName,
@@ -40,6 +42,7 @@ export class CertificateStack extends Stack {
 
 		this.certificate = new Certificate(this, "Certificate", {
 			domainName,
+			subjectAlternativeNames: restDomainNames,
 			validation: CertificateValidation.fromDns(this.hostedZone),
 		})
 	}

@@ -35,8 +35,10 @@
 	"dependencies": {
 		"@astrojs/tailwind": "^5.0.2",
 		"@faker-js/faker": "^8.1.0",
+		"@middy/core": "^4.6.5",
 		"astro": "^3.2.4",
 		"daisyui": "^3.9.2",
+		"http-status-codes": "^2.3.0",
 		"tailwindcss": "^3.3.3"
 	},
 	"devDependencies": {

@@ -15,6 +15,7 @@ module.exports = {
 	rules: {
 		"import/no-useless-path-segments": "off",
 		"no-console": "off",
+		"no-warning-comments": "off",
 	},
 	settings: {
 		"import/parsers": {
