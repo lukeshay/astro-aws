@@ -67,21 +67,11 @@ class WebsiteStack extends Stack {
 			minTtl: Duration.days(365),
 		})
 
-		// const cfLogInjestFunction = Function.fromFunctionAttributes(this, "CfLogInjestLambda", {
-		// 	architecture: Architecture.ARM_64,
-		// 	functionArn: "arn:aws:lambda:us-east-1:738697399292:function:CfLogIngestStack-LambdaD247545B-IHTgL5hMPXUT",
-		// 	sameEnvironment: false,
-		// });
-
 		const accessLogBucket = new Bucket(this, "AccessLogBucket", {
 			accessControl: BucketAccessControl.LOG_DELIVERY_WRITE,
 			blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
 			encryption: BucketEncryption.S3_MANAGED,
 		})
-
-		// accessLogBucket.addObjectCreatedNotification(new LambdaDestination(cfLogInjestFunction), {
-		// 	prefix: "cloudfront/",
-		// });
 
 		const astroAwsConstruct = new AstroAWS(this, "AstroAWSConstruct", {
 			cdk: {

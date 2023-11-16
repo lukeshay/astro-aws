@@ -68,13 +68,13 @@ export class RedirectStack extends Stack {
 		})
 
 		new ARecord(this, "ARecord", {
-			recordName: domainName,
+			recordName: `www.${domainName}`,
 			target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
 			zone: hostedZone,
 		})
 
 		new AaaaRecord(this, "AaaaRecord", {
-			recordName: domainName,
+			recordName: `www.${domainName}`,
 			target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
 			zone: hostedZone,
 		})
