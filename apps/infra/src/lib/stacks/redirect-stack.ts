@@ -8,8 +8,12 @@ import {
 } from "aws-cdk-lib/aws-cloudfront"
 import type { Construct } from "constructs"
 import type { Dashboard } from "aws-cdk-lib/aws-cloudwatch"
-import type { IHostedZone } from "aws-cdk-lib/aws-route53"
-import { AaaaRecord, ARecord, RecordTarget } from "aws-cdk-lib/aws-route53"
+import {
+	AaaaRecord,
+	ARecord,
+	RecordTarget,
+	type IHostedZone,
+} from "aws-cdk-lib/aws-route53"
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets"
 import { HttpOrigin } from "aws-cdk-lib/aws-cloudfront-origins"
 
@@ -68,13 +72,13 @@ export class RedirectStack extends Stack {
 		})
 
 		new ARecord(this, "ARecord", {
-			recordName: domainName,
+			recordName: `www.${domainName}`,
 			target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
 			zone: hostedZone,
 		})
 
 		new AaaaRecord(this, "AaaaRecord", {
-			recordName: domainName,
+			recordName: `www.${domainName}`,
 			target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
 			zone: hostedZone,
 		})

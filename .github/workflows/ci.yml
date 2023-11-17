@@ -20,6 +20,7 @@ jobs:
       matrix:
         node_version:
           - 18
+          - 20
         cmd:
           - build
           - test

@@ -11,6 +11,7 @@ import { warn } from "./log.js"
 const DEFAULT_ARGS: Args = {
 	binaryMediaTypes: [],
 	esBuildOptions: {},
+	locals: {},
 	mode: "ssr",
 }
 
@@ -25,7 +26,9 @@ const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 	},
 	exports: ["handler"],
 	name: ADAPTER_NAME,
-	serverEntrypoint: `${ADAPTER_NAME}/lambda/index.js`,
+	serverEntrypoint: `${ADAPTER_NAME}/lambda/handlers/${
+		args.mode ?? DEFAULT_ARGS.mode
+	}.js`,
 	supportedAstroFeatures: {
 		assets: {
 			isSharpCompatible: false,

@@ -22,6 +22,9 @@ describe("index.ts", () => {
 	describe("getAdapter", () => {
 		const args: Args = {
 			binaryMediaTypes: [faker.string.sample()],
+			esBuildOptions: {},
+			locals: {},
+			mode: "ssr",
 		}
 
 		describe("when there are arguments", () => {
@@ -36,10 +39,12 @@ describe("index.ts", () => {
 					args: {
 						...args,
 						esBuildOptions: {},
+						locals: {},
+						mode: "ssr",
 					},
 					exports: ["handler"],
 					name: ADAPTER_NAME,
-					serverEntrypoint: `${ADAPTER_NAME}/lambda/index.js`,
+					serverEntrypoint: `${ADAPTER_NAME}/lambda/handlers/ssr.js`,
 					supportedAstroFeatures: {
 						assets: {
 							isSharpCompatible: false,
@@ -66,10 +71,12 @@ describe("index.ts", () => {
 					args: {
 						binaryMediaTypes: [],
 						esBuildOptions: {},
+						locals: {},
+						mode: "ssr",
 					},
 					exports: ["handler"],
 					name: ADAPTER_NAME,
-					serverEntrypoint: `${ADAPTER_NAME}/lambda/index.js`,
+					serverEntrypoint: `${ADAPTER_NAME}/lambda/handlers/ssr.js`,
 					supportedAstroFeatures: {
 						assets: {
 							isSharpCompatible: false,
@@ -210,6 +217,8 @@ describe("index.ts", () => {
 						{
 							...args,
 							esBuildOptions: {},
+							locals: {},
+							mode: "ssr",
 						},
 					)
 				})

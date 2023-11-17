@@ -13,17 +13,13 @@ const DEFAULT_CONFIG: BuildOptions = {
 	target: "node16",
 }
 
-const createEsBuildConfig = (
-	entryFile: string,
-	outDir: string,
-	{ esBuildOptions = {} }: Args,
-) =>
-	mergeAndConcat(DEFAULT_CONFIG, esBuildOptions, {
+const bundleEntry = async (entryFile: string, outDir: string, args: Args) => {
+	const config = mergeAndConcat(DEFAULT_CONFIG, args.esBuildOptions, {
 		banner: {
 			js: [
 				"import { createRequire as topLevelCreateRequire } from 'module';",
 				"const require = topLevelCreateRequire(import.meta.url);",
-				esBuildOptions.banner?.js ?? "",
+				args.esBuildOptions.banner?.js ?? "",
 			].join(""),
 		},
 		entryPoints: [entryFile],
@@ -32,10 +28,9 @@ const createEsBuildConfig = (
 		outExtension: {
 			".js": ".mjs",
 		},
-	}) as BuildOptions
+	} satisfies BuildOptions)
 
-const bundleEntry = async (entryFile: string, outDir: string, args: Args) => {
-	await build(createEsBuildConfig(entryFile, outDir, args))
+	await build(config)
 }
 
-export { createEsBuildConfig, bundleEntry }
+export { bundleEntry }

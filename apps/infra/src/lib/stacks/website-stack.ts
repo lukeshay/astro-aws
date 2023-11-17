@@ -8,7 +8,7 @@ import {
 	PriceClass,
 	ResponseHeadersPolicy,
 } from "aws-cdk-lib/aws-cloudfront"
-import { Architecture } from "aws-cdk-lib/aws-lambda"
+import { Architecture, Runtime, Tracing } from "aws-cdk-lib/aws-lambda"
 import type { Construct } from "constructs"
 import { AstroAWS } from "@astro-aws/constructs"
 import { LogQueryWidget } from "aws-cdk-lib/aws-cloudwatch"
@@ -28,50 +28,52 @@ import { BasicGraphWidget } from "../constructs/basic-graph-widget.js"
 import { Environments } from "../constants/environments.js"
 import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
 
-export type WebsiteStackProps = AstroAWSStackProps & {
-	cloudwatchDashboard: Dashboard
-	certificate?: Certificate
-	hostedZone?: IHostedZone
+type StaticWebsiteStackProps = {
+	aliases?: readonly [string, ...string[]]
+	mode: string
+	hostedZoneName?: string
+	package: string
+	runtime: string
 }
 
-export class WebsiteStack extends Stack {
+type WebsiteStackProps = AstroAWSStackProps &
+	StaticWebsiteStackProps & {
+		cloudwatchDashboard?: Dashboard
+		certificate?: Certificate
+		hostedZone?: IHostedZone
+	}
+
+class WebsiteStack extends Stack {
 	private static readonly WORKSPACE_INFO = getPnpmWorkspaces(cwd())
 
 	public constructor(scope: Construct, id: string, props: WebsiteStackProps) {
 		super(scope, id, props)
 
 		const {
-			alias,
+			aliases,
 			certificate,
 			cloudwatchDashboard,
-			distDir,
+			mode,
 			environment,
 			hostedZone,
 			hostedZoneName,
+			runtime,
 		} = props
 
-		const domainName = [alias, hostedZoneName].filter(Boolean).join(".")
-		const domainNames = [domainName].filter(Boolean)
+		const distDir = mode === "static" ? "dist" : `dist/${mode}`
+		const domainNames = aliases?.map((alias) =>
+			[alias, hostedZoneName].filter(Boolean).join("."),
+		)
 
 		const cachePolicy = new CachePolicy(this, "CachePolicy", {
 			minTtl: Duration.days(365),
 		})
-
-		// const cfLogInjestFunction = Function.fromFunctionAttributes(this, "CfLogInjestLambda", {
-		// 	architecture: Architecture.ARM_64,
-		// 	functionArn: "arn:aws:lambda:us-east-1:738697399292:function:CfLogIngestStack-LambdaD247545B-IHTgL5hMPXUT",
-		// 	sameEnvironment: false,
-		// });
 
 		const accessLogBucket = new Bucket(this, "AccessLogBucket", {
 			accessControl: BucketAccessControl.LOG_DELIVERY_WRITE,
 			blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
 			encryption: BucketEncryption.S3_MANAGED,
 		})
-
-		// accessLogBucket.addObjectCreatedNotification(new LambdaDestination(cfLogInjestFunction), {
-		// 	prefix: "cloudfront/",
-		// });
 
 		const astroAwsConstruct = new AstroAWS(this, "AstroAWSConstruct", {
 			cdk: {
@@ -115,40 +117,42 @@ export class WebsiteStack extends Stack {
 				lambdaFunction: {
 					architecture: Architecture.ARM_64,
 					environment: {
-						ASTRO_AWS_LOG_LEVEL: "trace",
+						DOMAIN: String(domainNames?.[0]),
 					},
+					runtime: new Runtime(`${runtime}.x`),
+					tracing: Tracing.ACTIVE,
 				},
 				s3Bucket: {
 					serverAccessLogsBucket: accessLogBucket,
 					serverAccessLogsPrefix: "s3/",
 				},
 			},
-			outDir: [this.#getWorkspacePath(props.package), distDir ?? "dist"].join(
-				"/",
-			),
+			outDir: [this.#getWorkspacePath(props.package), distDir].join("/"),
 		})
 
-		if (hostedZone) {
-			new ARecord(this, "ARecord", {
-				recordName: domainName,
-				target: RecordTarget.fromAlias(
-					new CloudFrontTarget(astroAwsConstruct.cdk.cloudfrontDistribution),
-				),
-				zone: hostedZone,
-			})
+		if (hostedZone && domainNames) {
+			domainNames.forEach((domainName) => {
+				new ARecord(this, `ARecord-${domainName}`, {
+					recordName: domainName,
+					target: RecordTarget.fromAlias(
+						new CloudFrontTarget(astroAwsConstruct.cdk.cloudfrontDistribution),
+					),
+					zone: hostedZone,
+				})
 
-			new AaaaRecord(this, "AaaaRecord", {
-				recordName: domainName,
-				target: RecordTarget.fromAlias(
-					new CloudFrontTarget(astroAwsConstruct.cdk.cloudfrontDistribution),
-				),
-				zone: hostedZone,
+				new AaaaRecord(this, `AaaaRecord-${domainName}`, {
+					recordName: domainName,
+					target: RecordTarget.fromAlias(
+						new CloudFrontTarget(astroAwsConstruct.cdk.cloudfrontDistribution),
+					),
+					zone: hostedZone,
+				})
 			})
 		}
 
 		const distribution5xxErrorRateMetric = new DistributionMetric({
 			distribution: astroAwsConstruct.cdk.cloudfrontDistribution,
-			label: "CloudFront 5xx error rate",
+			label: `${mode.toUpperCase()} - CloudFront 5xx error rate`,
 			metricName: "5xxErrorRate",
 			period: Duration.minutes(5),
 			statistic: "Sum",
@@ -156,7 +160,7 @@ export class WebsiteStack extends Stack {
 
 		const distributionRequestsMetric = new DistributionMetric({
 			distribution: astroAwsConstruct.cdk.cloudfrontDistribution,
-			label: "CloudFront requests",
+			label: `${mode.toUpperCase()} - CloudFront requests`,
 			metricName: "Requests",
 			period: Duration.minutes(5),
 			statistic: "Sum",
@@ -174,34 +178,34 @@ export class WebsiteStack extends Stack {
 					astroAwsConstruct.cdk.lambdaFunction.logGroup.logGroupName,
 				],
 				queryLines: ["fields @timestamp, @message", "sort @timestamp desc"],
-				title: "Lambda logs",
+				title: `${mode.toUpperCase()} - Lambda logs`,
 				width: 24,
 			})
 
 			const lambdaFailureRateMetric =
 				astroAwsConstruct.cdk.lambdaFunction.metricErrors({
-					label: "Lambda failure rate",
+					label: `${mode.toUpperCase()} - Lambda failure rate`,
 					period: Duration.minutes(5),
 					statistic: "sum",
 				})
 
 			const lambdaInvocationsMetric =
 				astroAwsConstruct.cdk.lambdaFunction.metricInvocations({
-					label: "Lambda invocations",
+					label: `${mode.toUpperCase()} - Lambda invocations`,
 					period: Duration.minutes(5),
 					statistic: "sum",
 				})
 
 			const lambdaDurationMetric =
 				astroAwsConstruct.cdk.lambdaFunction.metricDuration({
-					label: "Lambda duration",
+					label: `${mode.toUpperCase()} - Lambda duration`,
 					period: Duration.minutes(5),
 					statistic: "avg",
 				})
 
 			const lambdaThrottlesMetric =
 				astroAwsConstruct.cdk.lambdaFunction.metricThrottles({
-					label: "Lambda throttles",
+					label: `${mode.toUpperCase()} - Lambda throttles`,
 					period: Duration.minutes(5),
 					statistic: "sum",
 				})
@@ -216,7 +220,7 @@ export class WebsiteStack extends Stack {
 			)
 		}
 
-		cloudwatchDashboard.addWidgets(...widgets)
+		cloudwatchDashboard?.addWidgets(...widgets)
 
 		new CfnOutput(this, "CloudFrontDistributionId", {
 			value: astroAwsConstruct.cdk.cloudfrontDistribution.distributionId,
@@ -240,3 +244,5 @@ export class WebsiteStack extends Stack {
 		return workspace.path
 	}
 }
+
+export { type StaticWebsiteStackProps, type WebsiteStackProps, WebsiteStack }

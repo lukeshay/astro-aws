@@ -9,12 +9,12 @@ import {
 	LambdaEdgeEventType,
 	OriginRequestPolicy,
 	ResponseHeadersPolicy,
+	ViewerProtocolPolicy,
 	type BehaviorOptions,
 	type DistributionProps,
 	type EdgeLambda,
 	type FunctionAssociation,
 	type IOrigin,
-	ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront"
 
 import {
@@ -92,11 +92,17 @@ class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 			this.props.cdk?.cloudfrontDistribution?.defaultBehavior?.edgeLambdas ?? []
 
 		if (this.metadata?.args.mode === "edge" && this.props.lambdaFunction) {
-			edgeLambdas.push({
-				eventType: LambdaEdgeEventType.ORIGIN_REQUEST,
-				functionVersion: this.props.lambdaFunction.currentVersion,
-				includeBody: true,
-			})
+			edgeLambdas.push(
+				{
+					eventType: LambdaEdgeEventType.ORIGIN_REQUEST,
+					functionVersion: this.props.lambdaFunction.currentVersion,
+					includeBody: true,
+				},
+				{
+					eventType: LambdaEdgeEventType.ORIGIN_RESPONSE,
+					functionVersion: this.props.lambdaFunction.currentVersion,
+				},
+			)
 		}
 
 		this.#cloudfrontDistribution = new Distribution(this, "Distribution", {

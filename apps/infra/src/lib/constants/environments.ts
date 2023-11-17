@@ -1,6 +1,7 @@
 import { env } from "node:process"
 
 import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
+import { type StaticWebsiteStackProps } from "../stacks/website-stack.js"
 
 const base = {
 	analyticsReporting: false,
@@ -14,61 +15,111 @@ const base = {
 
 const Environments = {
 	DEV: "DEV",
-	EDGE: "EDGE",
 	PERSONAL: "PERSONAL",
 	PROD: "PROD",
-	SSR: "SSR",
-	STREAM: "STREAM",
 } as const
 
 type Environment = (typeof Environments)[keyof typeof Environments]
 
-const ENVIRONMENT_PROPS: Record<Environment, AstroAWSStackProps> = {
+type EnvironmentProps = Readonly<
+	AstroAWSStackProps & {
+		websites: readonly (Partial<AstroAWSStackProps> & StaticWebsiteStackProps)[]
+	}
+>
+
+const ENVIRONMENT_PROPS: Record<Environment, EnvironmentProps> = {
 	[Environments.DEV]: {
 		...base,
-		alias: "static.dev",
 		environment: Environments.DEV,
-		hostedZoneName: "astro-aws.org",
-		package: "@astro-aws/docs",
-	},
-	[Environments.EDGE]: {
-		...base,
-		alias: "edge.dev",
-		distDir: "dist/edge",
-		env: {
-			...base.env,
-			region: "us-east-1",
-		},
-		environment: Environments.EDGE,
-		hostedZoneName: "astro-aws.org",
-		package: "@astro-aws/examples-base",
+		websites: [
+			{
+				aliases: ["www.static.dev", "static.dev"],
+				hostedZoneName: "astro-aws.org",
+				mode: "static",
+				package: "@astro-aws/docs",
+				runtime: "nodejs20",
+			},
+			{
+				aliases: ["www.ssr.nodejs18.dev", "ssr.nodejs18.dev"],
+				hostedZoneName: "astro-aws.org",
+				mode: "ssr",
+				package: "@astro-aws/examples-base",
+				runtime: "nodejs18",
+			},
+			{
+				aliases: ["www.stream.nodejs18.dev", "stream.nodejs18.dev"],
+				hostedZoneName: "astro-aws.org",
+				mode: "ssr-stream",
+				package: "@astro-aws/examples-base",
+				runtime: "nodejs18",
+			},
+			{
+				aliases: ["www.edge.nodejs18.dev", "edge.nodejs18.dev"],
+				env: {
+					...base.env,
+					region: "us-east-1",
+				},
+				hostedZoneName: "astro-aws.org",
+				mode: "edge",
+				package: "@astro-aws/examples-base",
+				runtime: "nodejs18",
+			},
+			{
+				aliases: ["www.ssr.nodejs20.dev", "ssr.nodejs20.dev"],
+				hostedZoneName: "astro-aws.org",
+				mode: "ssr",
+				package: "@astro-aws/examples-base",
+				runtime: "nodejs20",
+			},
+			{
+				aliases: ["www.stream.nodejs20.dev", "stream.nodejs20.dev"],
+				hostedZoneName: "astro-aws.org",
+				mode: "ssr-stream",
+				package: "@astro-aws/examples-base",
+				runtime: "nodejs20",
+			},
+			{
+				aliases: ["www.edge.nodejs20.dev", "edge.nodejs20.dev"],
+				env: {
+					...base.env,
+					region: "us-east-1",
+				},
+				hostedZoneName: "astro-aws.org",
+				mode: "edge",
+				package: "@astro-aws/examples-base",
+				runtime: "nodejs20",
+			},
+		],
 	},
 	[Environments.PROD]: {
 		...base,
 		environment: Environments.PROD,
-		hostedZoneName: "astro-aws.org",
-		package: "@astro-aws/docs",
+		websites: [
+			{
+				aliases: ["www", "*"],
+				hostedZoneName: "astro-aws.org",
+				mode: "static",
+				package: "@astro-aws/docs",
+			},
+		],
 	},
 	[Environments.PERSONAL]: {
 		...base,
 		environment: Environments.PERSONAL,
-		package: "@astro-aws/docs",
-	},
-	[Environments.SSR]: {
-		...base,
-		alias: "ssr.dev",
-		distDir: "dist/ssr",
-		environment: Environments.SSR,
-		hostedZoneName: "astro-aws.org",
-		package: "@astro-aws/examples-base",
-	},
-	[Environments.STREAM]: {
-		...base,
-		alias: "stream.dev",
-		distDir: "dist/ssr-stream",
-		environment: Environments.STREAM,
-		hostedZoneName: "astro-aws.org",
-		package: "@astro-aws/examples-base",
+		websites: [
+			{
+				mode: "static",
+				package: "@astro-aws/docs",
+			},
+			{
+				mode: "ssr",
+				package: "@astro-aws/examples-base",
+			},
+			{
+				mode: "ssr-stream",
+				package: "@astro-aws/examples-base",
+			},
+		],
 	},
 } as const
 
