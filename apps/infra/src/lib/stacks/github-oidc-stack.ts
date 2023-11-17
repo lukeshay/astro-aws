@@ -7,8 +7,8 @@ import {
 	Role,
 } from "aws-cdk-lib/aws-iam"
 
-import type { AstroAWSStackProps } from "../types/astro-aws-stack-props"
-import { Environments } from "../constants/environments"
+import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
+import { Environments } from "../constants/environments.js"
 
 export type GitHubOIDCStackProps = AstroAWSStackProps
 

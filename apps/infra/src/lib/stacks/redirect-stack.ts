@@ -8,8 +8,12 @@ import {
 } from "aws-cdk-lib/aws-cloudfront"
 import type { Construct } from "constructs"
 import type { Dashboard } from "aws-cdk-lib/aws-cloudwatch"
-import type { IHostedZone } from "aws-cdk-lib/aws-route53"
-import { AaaaRecord, ARecord, RecordTarget } from "aws-cdk-lib/aws-route53"
+import {
+	AaaaRecord,
+	ARecord,
+	RecordTarget,
+	type IHostedZone,
+} from "aws-cdk-lib/aws-route53"
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets"
 import { HttpOrigin } from "aws-cdk-lib/aws-cloudfront-origins"
 

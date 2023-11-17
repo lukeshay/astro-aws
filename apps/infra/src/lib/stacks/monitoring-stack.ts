@@ -2,7 +2,7 @@ import { Stack } from "aws-cdk-lib/core"
 import { Dashboard } from "aws-cdk-lib/aws-cloudwatch"
 import type { Construct } from "constructs"
 
-import type { AstroAWSStackProps } from "../types/astro-aws-stack-props"
+import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
 
 export type MonitoringStackProps = AstroAWSStackProps
 

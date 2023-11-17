@@ -10,7 +10,7 @@ import {
 import { SecretValue, Stack } from "aws-cdk-lib/core"
 import { Secret } from "aws-cdk-lib/aws-secretsmanager"
 
-import type { AstroAWSStackProps } from "../types/astro-aws-stack-props"
+import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
 
 export type GitHubUsersStackProps = AstroAWSStackProps
 

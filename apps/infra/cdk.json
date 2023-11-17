@@ -1,5 +1,5 @@
 {
-	"app": "node --enable-source-maps --es-module-specifier-resolution node dist/bin/infra.js",
+	"app": "node --enable-source-maps dist/bin/infra.js",
 	"context": {
 		"@aws-cdk-containers/ecs-service-extensions:enableDefaultLogDriver": true,
 		"@aws-cdk/aws-apigateway:disableCloudWatchRole": true,

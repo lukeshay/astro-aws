@@ -4,8 +4,7 @@ import {
 	CertificateValidation,
 } from "aws-cdk-lib/aws-certificatemanager"
 import type { Construct } from "constructs"
-import type { IHostedZone } from "aws-cdk-lib/aws-route53"
-import { HostedZone } from "aws-cdk-lib/aws-route53"
+import { HostedZone, type IHostedZone } from "aws-cdk-lib/aws-route53"
 
 import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
 
