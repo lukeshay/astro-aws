@@ -33,7 +33,7 @@ import type {
 import { AstroAWSCloudfrontDistribution } from "./astro-aws-cloudfront-distribution.js"
 
 type AstroAWSCdkProps = {
-	lambdaFunction?: Omit<FunctionProps, "code" | "handler" | "runtime">
+	lambdaFunction?: Omit<FunctionProps, "code" | "handler">
 }
 
 type AstroAWSProps = {
@@ -128,20 +128,23 @@ class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> {
 		const {
 			environment = {},
 			architecture,
+			runtime = Runtime.NODEJS_18_X,
+			memorySize = 512,
+			description = "SSR Lambda Function",
 			...givenProps
 		} = this.props.cdk?.lambdaFunction ?? {}
 
 		this.#lambdaFunction = new Function(this, "Function", {
-			description: "SSR Lambda Function",
-			memorySize: 512,
-			runtime: Runtime.NODEJS_18_X,
 			...givenProps,
 			architecture:
 				this.metadata?.args.mode === "edge"
 					? Architecture.X86_64
 					: architecture,
 			code: Code.fromAsset(resolve(this.distDir, "lambda")),
+			description,
 			handler: "entry.handler",
+			memorySize,
+			runtime,
 		})
 
 		Object.entries(environment).forEach(([key, value]) => {

@@ -1,10 +1,9 @@
 // eslint-disable-next-line import/no-unresolved
 import { defineMiddleware } from "astro:middleware"
-import { logger } from "@astro-aws/adapter/powertools"
 import { StatusCodes } from "http-status-codes"
 
 export const onRequest = defineMiddleware(async ({ locals, url }, next) => {
-	logger.info("Running middleware for base")
+	console.log("Running middleware for base")
 
 	// eslint-disable-next-line no-param-reassign
 	locals.title = "Example"
@@ -20,7 +19,7 @@ export const onRequest = defineMiddleware(async ({ locals, url }, next) => {
 			import.meta.env.DOMAIN,
 		)
 
-		logger.info(`Redirecting to ${redirectUrl.toString()}`)
+		console.log(`Redirecting to ${redirectUrl.toString()}`)
 
 		return Response.redirect(redirectUrl, StatusCodes.PERMANENT_REDIRECT)
 	}

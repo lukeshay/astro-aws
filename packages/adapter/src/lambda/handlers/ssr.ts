@@ -7,19 +7,15 @@ import type {
 } from "aws-lambda"
 import middy from "@middy/core"
 import { type SSRManifest } from "astro"
-import { Logger } from "@aws-lambda-powertools/logger"
-import { Metrics } from "@aws-lambda-powertools/metrics"
-import { Tracer } from "@aws-lambda-powertools/tracer"
 import { polyfill } from "@astrojs/webapi"
 
 import type { Args } from "../../args.js"
-import { setLogger, setMetrics, setTracer } from "../../powertools.js"
 import {
 	createReadableStream,
 	createRequestBody,
 	parseContentType,
 } from "../helpers.js"
-import { withLogger, withTracer } from "../middleware.js"
+import { withLogger } from "../middleware.js"
 import { KNOWN_BINARY_MEDIA_TYPES } from "../constants.js"
 import { type CloudfrontResult } from "../types.js"
 
@@ -103,18 +99,6 @@ const createExports = (
 		...args.binaryMediaTypes,
 	])
 
-	if (args.powertools?.options?.logger) {
-		setLogger(new Logger(args.powertools.options.logger))
-	}
-
-	if (args.powertools?.options?.metrics) {
-		setMetrics(new Metrics(args.powertools.options.metrics))
-	}
-
-	if (args.powertools?.options?.tracer) {
-		setTracer(new Tracer(args.powertools.options.tracer))
-	}
-
 	const handler: APIGatewayProxyHandlerV2<CloudfrontResult> = async (
 		event: APIGatewayProxyEventV2,
 	) => {
@@ -185,10 +169,7 @@ const createExports = (
 
 	return {
 		handler: middy({ streamifyResponse: shouldStream }).handler(
-			withLogger(
-				args.powertools?.middleware?.logger,
-				withTracer(args.powertools?.middleware?.tracer, handler),
-			),
+			withLogger(args.logger, handler),
 		),
 	}
 }

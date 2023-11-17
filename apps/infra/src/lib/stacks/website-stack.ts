@@ -8,7 +8,7 @@ import {
 	PriceClass,
 	ResponseHeadersPolicy,
 } from "aws-cdk-lib/aws-cloudfront"
-import { Architecture, Tracing } from "aws-cdk-lib/aws-lambda"
+import { Architecture, Runtime, Tracing } from "aws-cdk-lib/aws-lambda"
 import type { Construct } from "constructs"
 import { AstroAWS } from "@astro-aws/constructs"
 import { LogQueryWidget } from "aws-cdk-lib/aws-cloudwatch"
@@ -32,6 +32,7 @@ type StaticWebsiteStackProps = {
 	aliases?: readonly [string, ...string[]]
 	mode: string
 	hostedZoneName?: string
+	runtime?: string
 	package: string
 }
 
@@ -56,6 +57,7 @@ class WebsiteStack extends Stack {
 			environment,
 			hostedZone,
 			hostedZoneName,
+			runtime = "nodejs18",
 		} = props
 
 		const distDir = mode === "static" ? "dist" : `dist/${mode}`
@@ -117,6 +119,7 @@ class WebsiteStack extends Stack {
 					environment: {
 						DOMAIN: String(domainNames?.[0]),
 					},
+					runtime: new Runtime(`${runtime}.x`),
 					tracing: Tracing.ACTIVE,
 				},
 				s3Bucket: {

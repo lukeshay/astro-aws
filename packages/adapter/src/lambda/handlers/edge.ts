@@ -9,19 +9,15 @@ import type {
 	CloudFrontResponseResult,
 } from "aws-lambda"
 import { type SSRManifest } from "astro"
-import { Logger } from "@aws-lambda-powertools/logger"
-import { Metrics } from "@aws-lambda-powertools/metrics"
-import { Tracer } from "@aws-lambda-powertools/tracer"
 import { polyfill } from "@astrojs/webapi"
 
 import type { Args } from "../../args.js"
-import { setLogger, setMetrics, setTracer } from "../../powertools.js"
 import { createRequestBody, parseContentType } from "../helpers.js"
 import {
 	DISALLOWED_EDGE_HEADERS,
 	KNOWN_BINARY_MEDIA_TYPES,
 } from "../constants.js"
-import { withLogger, withTracer } from "../middleware.js"
+import { withLogger } from "../middleware.js"
 
 polyfill(globalThis, {
 	exclude: "window document",
@@ -86,18 +82,6 @@ const createExports = (
 		...KNOWN_BINARY_MEDIA_TYPES,
 		...args.binaryMediaTypes,
 	])
-
-	if (args.powertools?.options?.logger) {
-		setLogger(new Logger(args.powertools.options.logger))
-	}
-
-	if (args.powertools?.options?.metrics) {
-		setMetrics(new Metrics(args.powertools.options.metrics))
-	}
-
-	if (args.powertools?.options?.tracer) {
-		setTracer(new Tracer(args.powertools.options.tracer))
-	}
 
 	const handleRequest = async (
 		request: Request,
@@ -179,10 +163,7 @@ const createExports = (
 	}
 
 	return {
-		handler: withLogger(
-			args.powertools?.middleware?.logger,
-			withTracer(args.powertools?.middleware?.tracer, handler),
-		),
+		handler: withLogger(args.logger, handler),
 	}
 }
 
