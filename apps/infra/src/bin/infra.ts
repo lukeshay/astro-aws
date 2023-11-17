@@ -4,7 +4,6 @@ import {
 	Environments,
 	ENVIRONMENT_PROPS,
 } from "../lib/constants/environments.js"
-import { MonitoringStack } from "../lib/stacks/monitoring-stack.js"
 import { WebsiteStack } from "../lib/stacks/website-stack.js"
 import { CertificateStack } from "../lib/stacks/certificate-stack.js"
 import { GitHubOIDCStack } from "../lib/stacks/github-oidc-stack.js"
@@ -20,12 +19,6 @@ const createStackName = (
 ) => ["AstroAWS", environment, stack, runtime, mode].filter(Boolean).join("-")
 
 Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
-	const monitoringStack = new MonitoringStack(
-		app,
-		createStackName(environment, "Monitoring"),
-		environmentProps,
-	)
-
 	environmentProps.websites.forEach((websiteProps) => {
 		let certificateStack: CertificateStack | undefined
 
@@ -42,7 +35,7 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 				createStackName(
 					environment,
 					"Certificate",
-					"nodejs18",
+					websiteProps.runtime,
 					websiteProps.mode,
 				),
 				{
@@ -55,12 +48,16 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 
 		new WebsiteStack(
 			app,
-			createStackName(environment, "Website", "nodejs18", websiteProps.mode),
+			createStackName(
+				environment,
+				"Website",
+				websiteProps.runtime,
+				websiteProps.mode,
+			),
 			{
 				...environmentProps,
 				...websiteProps,
 				certificate: certificateStack?.certificate,
-				cloudwatchDashboard: monitoringStack.cloudwatchDashboard,
 				hostedZone: certificateStack?.hostedZone,
 			},
 		)

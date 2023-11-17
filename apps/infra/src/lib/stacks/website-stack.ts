@@ -32,13 +32,13 @@ type StaticWebsiteStackProps = {
 	aliases?: readonly [string, ...string[]]
 	mode: string
 	hostedZoneName?: string
-	runtime?: string
 	package: string
+	runtime: string
 }
 
 type WebsiteStackProps = AstroAWSStackProps &
 	StaticWebsiteStackProps & {
-		cloudwatchDashboard: Dashboard
+		cloudwatchDashboard?: Dashboard
 		certificate?: Certificate
 		hostedZone?: IHostedZone
 	}
@@ -57,7 +57,7 @@ class WebsiteStack extends Stack {
 			environment,
 			hostedZone,
 			hostedZoneName,
-			runtime = "nodejs18",
+			runtime,
 		} = props
 
 		const distDir = mode === "static" ? "dist" : `dist/${mode}`
@@ -220,7 +220,7 @@ class WebsiteStack extends Stack {
 			)
 		}
 
-		cloudwatchDashboard.addWidgets(...widgets)
+		cloudwatchDashboard?.addWidgets(...widgets)
 
 		new CfnOutput(this, "CloudFrontDistributionId", {
 			value: astroAwsConstruct.cdk.cloudfrontDistribution.distributionId,
