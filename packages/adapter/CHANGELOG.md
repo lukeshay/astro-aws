@@ -1,5 +1,19 @@
 # @astro-aws/adapter
 
+## 0.5.0
+
+### Minor Changes
+
+- 942d062: Added support for AWS Lambda response streaming
+- 51c3296: Added support for response streaming
+- 48d293a: Added support for 404 pages
+
+### Patch Changes
+
+- a96a6c4: Write a metadata file for constructs package
+- 4054f82: Set supported features
+- 374f1b9: Upgraded dependencies
+
 ## 0.4.0
 
 ### Minor Changes
