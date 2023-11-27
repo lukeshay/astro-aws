@@ -111,26 +111,17 @@ const ENVIRONMENT_PROPS: Record<Environment, EnvironmentProps> = {
 			{
 				mode: "static",
 				package: "@astro-aws/docs",
-<<<<<<< HEAD
-=======
 				runtime: "nodejs20",
->>>>>>> stream
 			},
 			{
 				mode: "ssr",
 				package: "@astro-aws/examples-base",
-<<<<<<< HEAD
-=======
 				runtime: "nodejs20",
->>>>>>> stream
 			},
 			{
 				mode: "ssr-stream",
 				package: "@astro-aws/examples-base",
-<<<<<<< HEAD
-=======
 				runtime: "nodejs20",
->>>>>>> stream
 			},
 		],
 	},

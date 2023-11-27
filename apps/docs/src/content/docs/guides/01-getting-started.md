@@ -78,7 +78,7 @@ pnpm i @astro-aws/constructs
 ```ts
 import { Stack } from "aws-cdk-lib/core"
 import type { StackProps } from "aws-cdk-lib/core"
-import { AstroAWSConstruct } from "@astro-aws/constructs"
+import { AstroAWS } from "@astro-aws/constructs"
 
 export interface HelloCdkStackProps extends StackProps {}
 
@@ -86,7 +86,7 @@ export class HelloCdkStack extends Stack {
 	public constructor(scope: Construct, id: string, props: HelloCdkStackProps) {
 		super(scope, id, props)
 
-		new AstroAWSConstruct(this, "AstroAWSConstruct", {
+		new AstroAWS(this, "AstroAWS", {
 			websiteDir: "../my-astro-project",
 		})
 	}

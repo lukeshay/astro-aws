@@ -78,6 +78,9 @@ class WebsiteStack extends Stack {
 		const astroAwsConstruct = new AstroAWS(this, "AstroAWSConstruct", {
 			cdk: {
 				cloudfrontDistribution: {
+					apiBehavior: {
+						cachePolicy,
+					},
 					certificate,
 					comment: environment,
 					defaultBehavior: {
