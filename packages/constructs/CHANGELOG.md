@@ -1,5 +1,18 @@
 # @astro-aws/constructs
 
+## 0.5.0
+
+### Minor Changes
+
+- 942d062: Added support for AWS Lambda response streaming
+- 51c3296: Added support for response streaming
+- 48d293a: Added support for 404 pages
+
+### Patch Changes
+
+- a96a6c4: Use metadata file from adapter to configure constructs
+- 374f1b9: Upgraded dependencies
+
 ## 0.4.0
 
 ### Minor Changes

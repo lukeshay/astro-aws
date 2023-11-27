@@ -96,10 +96,11 @@ const ENVIRONMENT_PROPS: Record<Environment, EnvironmentProps> = {
 		environment: Environments.PROD,
 		websites: [
 			{
-				aliases: ["www", "*"],
+				aliases: ["www.docs", "docs"],
 				hostedZoneName: "astro-aws.org",
 				mode: "static",
 				package: "@astro-aws/docs",
+				runtime: "nodejs20",
 			},
 		],
 	},
@@ -110,14 +111,17 @@ const ENVIRONMENT_PROPS: Record<Environment, EnvironmentProps> = {
 			{
 				mode: "static",
 				package: "@astro-aws/docs",
+				runtime: "nodejs20",
 			},
 			{
 				mode: "ssr",
 				package: "@astro-aws/examples-base",
+				runtime: "nodejs20",
 			},
 			{
 				mode: "ssr-stream",
 				package: "@astro-aws/examples-base",
+				runtime: "nodejs20",
 			},
 		],
 	},
