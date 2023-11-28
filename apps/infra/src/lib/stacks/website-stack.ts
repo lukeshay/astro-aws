@@ -2,19 +2,24 @@ import { cwd, env } from "node:process"
 
 import { getPnpmWorkspaces } from "workspace-tools"
 import { CfnOutput, Duration, Stack } from "aws-cdk-lib/core"
-import type { Certificate } from "aws-cdk-lib/aws-certificatemanager"
+import type { ICertificate } from "aws-cdk-lib/aws-certificatemanager"
 import {
 	CachePolicy,
 	PriceClass,
 	ResponseHeadersPolicy,
+	ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront"
 import { Architecture, Runtime, Tracing } from "aws-cdk-lib/aws-lambda"
 import type { Construct } from "constructs"
 import { AstroAWS } from "@astro-aws/constructs"
 import { LogQueryWidget } from "aws-cdk-lib/aws-cloudwatch"
 import type { ConcreteWidget, Dashboard } from "aws-cdk-lib/aws-cloudwatch"
-import type { IHostedZone } from "aws-cdk-lib/aws-route53"
-import { AaaaRecord, ARecord, RecordTarget } from "aws-cdk-lib/aws-route53"
+import {
+	AaaaRecord,
+	ARecord,
+	HostedZone,
+	RecordTarget,
+} from "aws-cdk-lib/aws-route53"
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets"
 import {
 	BlockPublicAccess,
@@ -27,6 +32,7 @@ import { DistributionMetric } from "../constructs/distribution-metric.js"
 import { BasicGraphWidget } from "../constructs/basic-graph-widget.js"
 import { Environments } from "../constants/environments.js"
 import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
+import { CrossRegionCertificate } from "../constructs/cross-region-certificate.js"
 
 type StaticWebsiteStackProps = {
 	aliases?: readonly [string, ...string[]]
@@ -39,8 +45,6 @@ type StaticWebsiteStackProps = {
 type WebsiteStackProps = AstroAWSStackProps &
 	StaticWebsiteStackProps & {
 		cloudwatchDashboard?: Dashboard
-		certificate?: Certificate
-		hostedZone?: IHostedZone
 	}
 
 class WebsiteStack extends Stack {
@@ -51,19 +55,44 @@ class WebsiteStack extends Stack {
 
 		const {
 			aliases,
-			certificate,
 			cloudwatchDashboard,
 			mode,
 			environment,
-			hostedZone,
 			hostedZoneName,
 			runtime,
 		} = props
+
+		const hostedZone = hostedZoneName
+			? HostedZone.fromLookup(this, "HostedZone", {
+					domainName: hostedZoneName,
+			  })
+			: undefined
 
 		const distDir = mode === "static" ? "dist" : `dist/${mode}`
 		const domainNames = aliases?.map((alias) =>
 			[alias, hostedZoneName].filter(Boolean).join("."),
 		)
+
+		let certificate: ICertificate | undefined
+
+		if (hostedZone && domainNames?.length) {
+			const [domainName, ...alternateNames] = domainNames as [
+				string,
+				...string[],
+			]
+
+			const crossRegionCertificate = new CrossRegionCertificate(
+				this,
+				"Certificate",
+				{
+					alternateNames,
+					domainName,
+					region: "us-east-1",
+				},
+			)
+
+			certificate = crossRegionCertificate.certificate
+		}
 
 		const cachePolicy = new CachePolicy(this, "CachePolicy", {
 			minTtl: Duration.days(365),
@@ -80,6 +109,7 @@ class WebsiteStack extends Stack {
 				cloudfrontDistribution: {
 					apiBehavior: {
 						cachePolicy,
+						viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 					},
 					certificate,
 					comment: environment,
@@ -98,6 +128,7 @@ class WebsiteStack extends Stack {
 								},
 							},
 						),
+						viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 					},
 					domainNames,
 					errorResponses: [
@@ -133,7 +164,7 @@ class WebsiteStack extends Stack {
 			outDir: [this.#getWorkspacePath(props.package), distDir].join("/"),
 		})
 
-		if (hostedZone && domainNames) {
+		if (hostedZone && domainNames?.length) {
 			domainNames.forEach((domainName) => {
 				new ARecord(this, `ARecord-${domainName}`, {
 					recordName: domainName,

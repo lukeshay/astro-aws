@@ -5,9 +5,9 @@ import {
 	ENVIRONMENT_PROPS,
 } from "../lib/constants/environments.js"
 import { WebsiteStack } from "../lib/stacks/website-stack.js"
-import { CertificateStack } from "../lib/stacks/certificate-stack.js"
 import { GitHubOIDCStack } from "../lib/stacks/github-oidc-stack.js"
 import { GitHubUsersStack } from "../lib/stacks/github-users-stack.js"
+import { RedirectStack } from "../lib/stacks/redirect-stack.js"
 
 const app = new App()
 
@@ -20,30 +20,13 @@ const createStackName = (
 
 Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 	environmentProps.websites.forEach((websiteProps) => {
-		let certificateStack: CertificateStack | undefined
-
 		if (environment === Environments.DEV) {
 			// eslint-disable-next-line no-param-reassign
 			delete websiteProps.hostedZoneName
 			// eslint-disable-next-line no-param-reassign
 			delete websiteProps.aliases
-		}
-
-		if (websiteProps.hostedZoneName && websiteProps.aliases) {
-			certificateStack = new CertificateStack(
-				app,
-				createStackName(
-					environment,
-					"Certificate",
-					websiteProps.runtime,
-					websiteProps.mode,
-				),
-				{
-					...environmentProps,
-					aliases: websiteProps.aliases,
-					hostedZoneName: websiteProps.hostedZoneName,
-				},
-			)
+			// eslint-disable-next-line no-param-reassign
+			delete websiteProps.redirectAliases
 		}
 
 		new WebsiteStack(
@@ -57,10 +40,25 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 			{
 				...environmentProps,
 				...websiteProps,
-				certificate: certificateStack?.certificate,
-				hostedZone: certificateStack?.hostedZone,
 			},
 		)
+
+		if (websiteProps.redirectAliases && websiteProps.hostedZoneName) {
+			new RedirectStack(
+				app,
+				createStackName(
+					environment,
+					"Redirect",
+					websiteProps.runtime,
+					websiteProps.mode,
+				),
+				{
+					...environmentProps,
+					aliases: websiteProps.redirectAliases,
+					hostedZoneName: websiteProps.hostedZoneName,
+				},
+			)
+		}
 	})
 
 	if (environment === Environments.DEV) {

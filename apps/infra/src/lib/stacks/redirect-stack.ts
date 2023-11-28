@@ -1,60 +1,61 @@
-import { Stack, Duration } from "aws-cdk-lib/core"
-import type { Certificate } from "aws-cdk-lib/aws-certificatemanager"
+import * as path from "node:path"
+
+import { Stack } from "aws-cdk-lib/core"
 import {
 	Distribution,
 	Function,
 	FunctionCode,
 	FunctionEventType,
+	ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront"
 import type { Construct } from "constructs"
-import type { Dashboard } from "aws-cdk-lib/aws-cloudwatch"
 import {
 	AaaaRecord,
 	ARecord,
+	HostedZone,
 	RecordTarget,
-	type IHostedZone,
 } from "aws-cdk-lib/aws-route53"
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets"
-import { HttpOrigin } from "aws-cdk-lib/aws-cloudfront-origins"
+import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins"
+import { BlockPublicAccess, Bucket, BucketEncryption } from "aws-cdk-lib/aws-s3"
 
-import { DistributionMetric } from "../constructs/distribution-metric.js"
-import { BasicGraphWidget } from "../constructs/basic-graph-widget.js"
 import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
+import { CrossRegionCertificate } from "../constructs/cross-region-certificate.js"
 
 export type RedirectStackProps = AstroAWSStackProps & {
-	cloudwatchDashboard: Dashboard
-	certificate: Certificate
-	hostedZone: IHostedZone
+	hostedZoneName: string
+	aliases: [string, ...string[]]
 }
 
 export class RedirectStack extends Stack {
 	public constructor(scope: Construct, id: string, props: RedirectStackProps) {
 		super(scope, id, props)
 
-		const {
-			hostedZoneName,
-			alias,
-			cloudwatchDashboard,
-			hostedZone,
-			certificate,
-		} = props
+		const { hostedZoneName, aliases } = props
 
-		const domainName = [alias, hostedZoneName].filter(Boolean).join(".")
+		const domainNames = aliases.map((alias) =>
+			[alias, hostedZoneName].filter(Boolean).join("."),
+		) as [string, ...string[]]
 
 		const wwwRedirectFunction = new Function(this, "WwwRedirectFunction", {
-			code: FunctionCode.fromInline(`
-        function handler(event) {
-          return {
-            statusCode: 301,
-            statusDescription: "Moved Permanently",
-            headers: {
-              location: {
-                value: "https://${domainName}" + event.request.uri,
-              }
-            }
-          }
-        }
-      `),
+			code: FunctionCode.fromFile({
+				filePath: path.resolve(".", "support", "redirect", "index.js"),
+			}),
+		})
+
+		const [domainName, ...alternateNames] = domainNames
+
+		const { certificate } = new CrossRegionCertificate(this, "Certificate", {
+			alternateNames,
+			domainName,
+			region: "us-east-1",
+		})
+
+		const bucket = new Bucket(this, "RedirectBucket", {
+			blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+			encryption: BucketEncryption.S3_MANAGED,
+			enforceSSL: true,
+			versioned: true,
 		})
 
 		const distribution = new Distribution(this, "WWWRedirectDistribution", {
@@ -66,42 +67,28 @@ export class RedirectStack extends Stack {
 						function: wwwRedirectFunction,
 					},
 				],
-				origin: new HttpOrigin(domainName.replace("www.", "")),
+				origin: new S3Origin(bucket),
+				viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 			},
-			domainNames: [domainName],
+			domainNames,
 		})
 
-		new ARecord(this, "ARecord", {
-			recordName: `www.${domainName}`,
-			target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
-			zone: hostedZone,
+		const hostedZone = HostedZone.fromLookup(this, "HostedZone", {
+			domainName: hostedZoneName,
 		})
 
-		new AaaaRecord(this, "AaaaRecord", {
-			recordName: `www.${domainName}`,
-			target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
-			zone: hostedZone,
-		})
+		domainNames.forEach((domain) => {
+			new ARecord(this, `${domain}-ARecord`, {
+				recordName: domain,
+				target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
+				zone: hostedZone,
+			})
 
-		const distribution5xxErrorRateMetric = new DistributionMetric({
-			distribution,
-			label: "Redirect CloudFront 5xx error rate",
-			metricName: "5xxErrorRate",
-			period: Duration.minutes(5),
-			statistic: "Sum",
+			new AaaaRecord(this, `${domain}-AaaaRecord`, {
+				recordName: domain,
+				target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
+				zone: hostedZone,
+			})
 		})
-
-		const distributionRequestsMetric = new DistributionMetric({
-			distribution,
-			label: "Redirect CloudFront requests",
-			metricName: "Requests",
-			period: Duration.minutes(5),
-			statistic: "Sum",
-		})
-
-		cloudwatchDashboard.addWidgets(
-			new BasicGraphWidget({ metric: distribution5xxErrorRateMetric }),
-			new BasicGraphWidget({ metric: distributionRequestsMetric }),
-		)
 	}
 }

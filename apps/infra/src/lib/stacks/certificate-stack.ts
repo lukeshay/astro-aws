@@ -32,7 +32,7 @@ export class CertificateStack extends Stack {
 
 		const { hostedZoneName, aliases } = props
 		const [domainName, ...restDomainNames] = aliases.map((alias) =>
-			[alias, hostedZoneName].join("."),
+			[alias, hostedZoneName].filter(Boolean).join("."),
 		) as [string, ...string[]]
 
 		this.hostedZone = HostedZone.fromLookup(this, "HostedZone", {

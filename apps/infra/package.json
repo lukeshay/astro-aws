@@ -30,6 +30,7 @@
 	"dependencies": {
 		"@astro-aws/constructs": "workspace:^",
 		"@astro-aws/docs": "workspace:^",
+		"@aws-sdk/client-acm": "^3.460.0",
 		"aws-cdk": "^2.109.0",
 		"aws-cdk-lib": "^2.109.0",
 		"constructs": "^10.3.0",
@@ -40,6 +41,7 @@
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
+		"@types/aws-lambda": "^8.10.126",
 		"@types/node": "^18.18.0",
 		"eslint-config-get-off-my-lawn": "^7.2.0"
 	},

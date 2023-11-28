@@ -21,11 +21,12 @@ const Environments = {
 
 type Environment = (typeof Environments)[keyof typeof Environments]
 
-type EnvironmentProps = Readonly<
-	AstroAWSStackProps & {
-		websites: readonly (Partial<AstroAWSStackProps> & StaticWebsiteStackProps)[]
-	}
->
+type EnvironmentProps = AstroAWSStackProps & {
+	websites: readonly (Partial<AstroAWSStackProps> &
+		StaticWebsiteStackProps & {
+			redirectAliases?: [string, ...string[]]
+		})[]
+}
 
 const ENVIRONMENT_PROPS: Record<Environment, EnvironmentProps> = {
 	[Environments.DEV]: {
@@ -96,10 +97,11 @@ const ENVIRONMENT_PROPS: Record<Environment, EnvironmentProps> = {
 		environment: Environments.PROD,
 		websites: [
 			{
-				aliases: ["www.docs", "docs"],
+				aliases: ["www.docs"],
 				hostedZoneName: "astro-aws.org",
 				mode: "static",
 				package: "@astro-aws/docs",
+				redirectAliases: ["", "www", "docs"],
 				runtime: "nodejs20",
 			},
 		],
@@ -125,6 +127,6 @@ const ENVIRONMENT_PROPS: Record<Environment, EnvironmentProps> = {
 			},
 		],
 	},
-} as const
+}
 
 export { Environments, ENVIRONMENT_PROPS, type Environment }
