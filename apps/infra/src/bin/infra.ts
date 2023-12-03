@@ -11,12 +11,8 @@ import { RedirectStack } from "../lib/stacks/redirect-stack.js"
 
 const app = new App()
 
-const createStackName = (
-	environment: string,
-	stack: string,
-	runtime?: string,
-	mode?: string,
-) => ["AstroAWS", environment, stack, runtime, mode].filter(Boolean).join("-")
+const createStackName = (environment: string, stack: string, mode?: string) =>
+	["AstroAWS", environment, stack, mode].filter(Boolean).join("-")
 
 Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 	environmentProps.websites.forEach((websiteProps) => {
@@ -31,12 +27,7 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 
 		new WebsiteStack(
 			app,
-			createStackName(
-				environment,
-				"Website",
-				websiteProps.runtime,
-				websiteProps.mode,
-			),
+			createStackName(environment, "Website", websiteProps.mode),
 			{
 				...environmentProps,
 				...websiteProps,
@@ -46,12 +37,7 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 		if (websiteProps.redirectAliases && websiteProps.hostedZoneName) {
 			new RedirectStack(
 				app,
-				createStackName(
-					environment,
-					"Redirect",
-					websiteProps.runtime,
-					websiteProps.mode,
-				),
+				createStackName(environment, "Redirect", websiteProps.mode),
 				{
 					...environmentProps,
 					aliases: websiteProps.redirectAliases,

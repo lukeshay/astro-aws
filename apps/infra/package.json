@@ -31,6 +31,7 @@
 		"@astro-aws/constructs": "workspace:^",
 		"@astro-aws/docs": "workspace:^",
 		"@aws-sdk/client-acm": "^3.460.0",
+		"@lshay/constructs": "file:../../../npm/packages/lshay-constructs",
 		"aws-cdk": "^2.109.0",
 		"aws-cdk-lib": "^2.109.0",
 		"constructs": "^10.3.0",

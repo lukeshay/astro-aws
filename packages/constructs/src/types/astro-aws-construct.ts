@@ -22,6 +22,7 @@ type Args = {
 type Metadata = {
 	args: Args
 	config: Config
+	nodeVersion: number
 }
 
 type AstroAWSBaseConstructProps = {
@@ -59,6 +60,20 @@ abstract class AstroAWSBaseConstruct<
 
 	public get isSSR(): boolean {
 		return Boolean(this.metadata)
+	}
+
+	protected get nodeVersion(): number {
+		if (this.metadata) {
+			return this.metadata.nodeVersion
+		}
+
+		const [nodeVersion] = process.versions.node.split(".").map(Number) as [
+			number,
+			number,
+			number,
+		]
+
+		return nodeVersion
 	}
 
 	public abstract get cdk(): Cdk

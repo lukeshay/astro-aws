@@ -10,7 +10,6 @@ const DEFAULT_CONFIG: BuildOptions = {
 	external: ["aws-sdk"],
 	metafile: true,
 	platform: "node",
-	target: "node16",
 }
 
 const bundleEntry = async (entryFile: string, outDir: string, args: Args) => {

@@ -9,7 +9,7 @@ import {
 	ResponseHeadersPolicy,
 	ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront"
-import { Architecture, Runtime, Tracing } from "aws-cdk-lib/aws-lambda"
+import { Architecture, Tracing } from "aws-cdk-lib/aws-lambda"
 import type { Construct } from "constructs"
 import { AstroAWS } from "@astro-aws/constructs"
 import { LogQueryWidget } from "aws-cdk-lib/aws-cloudwatch"
@@ -27,19 +27,18 @@ import {
 	BucketAccessControl,
 	BucketEncryption,
 } from "aws-cdk-lib/aws-s3"
+import { CrossRegionCertificate } from "@lshay/constructs"
 
 import { DistributionMetric } from "../constructs/distribution-metric.js"
 import { BasicGraphWidget } from "../constructs/basic-graph-widget.js"
 import { Environments } from "../constants/environments.js"
 import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
-import { CrossRegionCertificate } from "../constructs/cross-region-certificate.js"
 
 type StaticWebsiteStackProps = {
 	aliases?: readonly [string, ...string[]]
 	mode: string
 	hostedZoneName?: string
 	package: string
-	runtime: string
 }
 
 type WebsiteStackProps = AstroAWSStackProps &
@@ -53,14 +52,8 @@ class WebsiteStack extends Stack {
 	public constructor(scope: Construct, id: string, props: WebsiteStackProps) {
 		super(scope, id, props)
 
-		const {
-			aliases,
-			cloudwatchDashboard,
-			mode,
-			environment,
-			hostedZoneName,
-			runtime,
-		} = props
+		const { aliases, cloudwatchDashboard, mode, environment, hostedZoneName } =
+			props
 
 		const hostedZone = hostedZoneName
 			? HostedZone.fromLookup(this, "HostedZone", {
@@ -153,7 +146,6 @@ class WebsiteStack extends Stack {
 					environment: {
 						DOMAIN: String(domainNames?.[0]),
 					},
-					runtime: new Runtime(`${runtime}.x`),
 					tracing: Tracing.ACTIVE,
 				},
 				s3Bucket: {

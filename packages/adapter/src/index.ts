@@ -75,12 +75,18 @@ const astroAWSFunctions = (args: Partial<Args> = {}): AstroIntegration => {
 				}
 			},
 			"astro:build:done": async (options) => {
+				const [nodeVersion] = process.versions.node.split(".").map(Number) as [
+					number,
+					number,
+					number,
+				]
 				await writeFile(
 					fileURLToPath(new URL("metadata.json", astroConfig.outDir)),
 					JSON.stringify({
 						args: argsWithDefault,
-						options,
 						config: astroConfig,
+						nodeVersion,
+						options,
 					}),
 				)
 
@@ -89,7 +95,13 @@ const astroAWSFunctions = (args: Partial<Args> = {}): AstroIntegration => {
 						new URL(astroConfig.build.serverEntry, astroConfig.build.server),
 					),
 					fileURLToPath(new URL("lambda", astroConfig.outDir)),
-					argsWithDefault,
+					{
+						...argsWithDefault,
+						esBuildOptions: {
+							target: `node${nodeVersion}`,
+							...argsWithDefault.esBuildOptions,
+						},
+					},
 				)
 			},
 		},
