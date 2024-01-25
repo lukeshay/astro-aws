@@ -85,10 +85,9 @@ const createExports = (
 
 	const handleRequest = async (
 		request: Request,
-		matchNotFound: boolean,
 		def: CloudFrontRequestResult | CloudFrontResponseResult,
 	): Promise<CloudFrontRequestResult | CloudFrontResponseResult> => {
-		const routeData = app.match(request, { matchNotFound })
+		const routeData = app.match(request)
 
 		if (!routeData) {
 			return def
@@ -136,7 +135,7 @@ const createExports = (
 
 				const request = new Request(url, requestInit)
 
-				return handleRequest(request, true, record.response)
+				return handleRequest(request, record.response)
 			}
 
 			return record.response
@@ -159,7 +158,7 @@ const createExports = (
 
 		const request = new Request(url, requestInit)
 
-		return handleRequest(request, false, cloudFrontRequest)
+		return handleRequest(request, cloudFrontRequest)
 	}
 
 	return {
