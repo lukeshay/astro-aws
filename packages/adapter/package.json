@@ -74,6 +74,7 @@
 		"@astrojs/webapi": "^2.2.0",
 		"@middy/core": "^5.0.1",
 		"esbuild": "^0.19.5",
+		"flatted": "^3.2.9",
 		"http-status-codes": "^2.3.0",
 		"merge-anything": "^5.1.7",
 		"pino": "^8.16.2"

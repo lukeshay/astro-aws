@@ -1,6 +1,8 @@
 import { fileURLToPath } from "node:url"
 import { writeFile } from "node:fs/promises"
 
+import { stringify } from "flatted"
+
 import type { AstroAdapter, AstroConfig, AstroIntegration } from "astro"
 
 import type { Args } from "./args.js"
@@ -77,7 +79,7 @@ const astroAWSFunctions = (args: Partial<Args> = {}): AstroIntegration => {
 			"astro:build:done": async (options) => {
 				await writeFile(
 					fileURLToPath(new URL("metadata.json", astroConfig.outDir)),
-					JSON.stringify({
+					stringify({
 						args: argsWithDefault,
 						options,
 						config: astroConfig,
