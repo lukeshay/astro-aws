@@ -128,7 +128,7 @@ const createExports = (
 			method: event.requestContext.http.method,
 		})
 
-		let routeData = app.match(request, { matchNotFound: true })
+		let routeData = app.match(request)
 
 		if (!routeData) {
 			const request404 = new Request(
@@ -144,7 +144,7 @@ const createExports = (
 				},
 			)
 
-			routeData = app.match(request404, { matchNotFound: true })
+			routeData = app.match(request404)
 
 			if (!routeData) {
 				return {
