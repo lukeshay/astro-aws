@@ -52,5 +52,8 @@
 	},
 	"publishConfig": {
 		"access": "public"
+	},
+	"dependencies": {
+		"flatted": "^3.2.9"
 	}
 }

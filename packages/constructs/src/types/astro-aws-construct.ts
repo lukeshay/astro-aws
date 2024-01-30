@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { URL, fileURLToPath } from "node:url"
 
+import { parse } from "flatted"
 import { Construct } from "constructs"
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url))
@@ -47,7 +48,7 @@ abstract class AstroAWSBaseConstruct<
 		this.distDir = outDir ? resolve(outDir) : resolve(websiteDir, "dist")
 
 		this.metadata = existsSync(resolve(this.distDir, "metadata.json"))
-			? (JSON.parse(
+			? (parse(
 					readFileSync(resolve(this.distDir, "metadata.json")).toString("utf8"),
 			  ) as Metadata)
 			: undefined
