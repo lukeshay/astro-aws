@@ -157,7 +157,10 @@ const createExports = (
 			}
 		}
 
-		const response = await app.render(request, { routeData, locals: args.locals })
+		const response = await app.render(request, {
+			locals: args.locals,
+			routeData,
+		})
 
 		return createLambdaFunctionResponse(
 			app,

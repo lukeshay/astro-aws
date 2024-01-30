@@ -93,7 +93,10 @@ const createExports = (
 			return def
 		}
 
-		const response = await app.render(request, { routeData, locals: args.locals })
+		const response = await app.render(request, {
+			locals: args.locals,
+			routeData,
+		})
 		const fnResponse = await createLambdaEdgeFunctionResponse(
 			app,
 			response,

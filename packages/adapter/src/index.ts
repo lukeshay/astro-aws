@@ -2,7 +2,6 @@ import { fileURLToPath } from "node:url"
 import { writeFile } from "node:fs/promises"
 
 import { stringify } from "flatted"
-
 import type { AstroAdapter, AstroConfig, AstroIntegration } from "astro"
 
 import type { Args } from "./args.js"
