@@ -156,7 +156,7 @@ const createExports = (
 					cloudFrontRequest.method,
 					cloudFrontRequest.body.data,
 					cloudFrontRequest.body.encoding,
-			  )
+				)
 			: undefined
 
 		const request = new Request(url, requestInit)

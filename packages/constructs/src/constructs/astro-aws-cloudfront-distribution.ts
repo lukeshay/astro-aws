@@ -120,7 +120,7 @@ class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 							...this.props.cdk?.cloudfrontDistribution?.apiBehavior,
 						},
 						...this.props.cdk?.cloudfrontDistribution?.additionalBehaviors,
-				  }
+					}
 				: this.props.cdk?.cloudfrontDistribution?.additionalBehaviors,
 			defaultBehavior: {
 				origin: this.props.origin,

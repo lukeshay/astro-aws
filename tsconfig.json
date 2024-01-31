@@ -4,8 +4,8 @@
 		"baseUrl": "./",
 		"paths": {
 			"@astro-aws/adapter": ["./packages/adapter/src/index.ts"],
-			"@astro-aws/constructs": ["./packages/constructs/src/index.ts"]
-		}
+			"@astro-aws/constructs": ["./packages/constructs/src/index.ts"],
+		},
 	},
-	"extends": "./tsconfig.base.json"
+	"extends": "./tsconfig.base.json",
 }

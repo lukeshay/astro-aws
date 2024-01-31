@@ -50,7 +50,7 @@ abstract class AstroAWSBaseConstruct<
 		this.metadata = existsSync(resolve(this.distDir, "metadata.json"))
 			? (parse(
 					readFileSync(resolve(this.distDir, "metadata.json")).toString("utf8"),
-			  ) as Metadata)
+				) as Metadata)
 			: undefined
 	}
 

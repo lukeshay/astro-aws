@@ -25,7 +25,7 @@
 		"dev:one": "turbo run dev --filter",
 		"lint": "turbo run build && eslint .",
 		"lint:fix": "pnpm run lint --fix",
-		"prettier": "prettier --ignore-unknown --no-error-on-unmatched-pattern --check .",
+		"prettier": "prettier --ignore-unknown --no-error-on-unmatched-pattern --check . '!**/*.astro'",
 		"prettier:fix": "pnpm run prettier --write",
 		"release:cut": "git add . && git commit -m 'new release' && pnpm run deploy:one infra -- PROD && pnpm run changeset publish && git push && git push --follow-tags",
 		"release:prepare": "pnpm run build && pnpm run synth && pnpm run changeset version && pnpm run prettier:fix",
@@ -34,12 +34,6 @@
 		"test": "turbo run test",
 		"test:one": "turbo run test --filter",
 		"changeset": "changeset"
-	},
-	"prettier": "@lshay/prettier-config",
-	"eslintConfig": {
-		"extends": [
-			"../../.eslintrc.cjs"
-		]
 	},
 	"dependencies": {
 		"@changesets/changelog-git": "^0.2.0",

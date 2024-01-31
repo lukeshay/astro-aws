@@ -65,7 +65,7 @@ class WebsiteStack extends Stack {
 		const hostedZone = hostedZoneName
 			? HostedZone.fromLookup(this, "HostedZone", {
 					domainName: hostedZoneName,
-			  })
+				})
 			: undefined
 
 		const distDir = mode === "static" ? "dist" : `dist/${mode}`
