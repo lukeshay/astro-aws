@@ -36,10 +36,9 @@ jobs:
         with:
           node-version: ${{ matrix.node_version }}
           cache: "pnpm"
-      - uses: aws-actions/configure-aws-credentials@v1
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-region: us-east-2
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::738697399292:role/GitHubOIDCReadOnlyRole
+          aws-region: us-west-2
       - run: pnpm install
       - run: pnpm run ${{ matrix.cmd }}

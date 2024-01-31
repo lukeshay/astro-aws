@@ -30,23 +30,3 @@ jobs:
       environment_url: https://static.dev.astro-aws.org/
       stack_environment: DEV
     secrets: inherit
-  deploy-dev-ssr:
-    name: Deploy Dev SSR
-    concurrency:
-      group: ${{ format('{0}-{1}', github.workflow, github.job) }}
-    uses: ./.github/workflows/deploy.yml
-    with:
-      environment_name: development-ssr
-      environment_url: https://ssr.dev.astro-aws.org/
-      stack_environment: SSR
-    secrets: inherit
-  deploy-dev-edge:
-    name: Deploy Dev Edge
-    concurrency:
-      group: ${{ format('{0}-{1}', github.workflow, github.job) }}
-    uses: ./.github/workflows/deploy.yml
-    with:
-      environment_name: development-edge
-      environment_url: https://edge.dev.astro-aws.org/
-      stack_environment: EDGE
-    secrets: inherit
