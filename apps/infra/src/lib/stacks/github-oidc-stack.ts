@@ -35,7 +35,7 @@ export class GitHubOIDCStack extends cdk.Stack {
 					},
 					StringLike: {
 						"token.actions.githubusercontent.com:sub":
-							"repo:lukeshay/astro-aws:main",
+							"repo:lukeshay/astro-aws:ref:refs/heads/main",
 					},
 				},
 				"sts:AssumeRoleWithWebIdentity",
@@ -56,7 +56,7 @@ export class GitHubOIDCStack extends cdk.Stack {
 						},
 						StringLike: {
 							"token.actions.githubusercontent.com:sub":
-								"repo:lukeshay/astro-aws:*",
+								"repo:lukeshay/astro-aws:ref:refs/heads/*",
 						},
 					},
 					"sts:AssumeRoleWithWebIdentity",

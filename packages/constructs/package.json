@@ -36,12 +36,12 @@
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
-		"@types/node": "^18.18.0",
-		"aws-cdk-lib": "^2.109.0",
+		"@types/node": "^18.18.4",
+		"aws-cdk-lib": "^2.124.0",
 		"constructs": "^10.3.0",
-		"eslint": "^8.53.0",
-		"prettier": "^3.1.0",
-		"typescript": "^5.2.2"
+		"eslint": "^8.56.0",
+		"prettier": "^3.2.4",
+		"typescript": "^5.3.3"
 	},
 	"peerDependencies": {
 		"aws-cdk-lib": "^2.94.0",
