@@ -11,6 +11,10 @@ env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   check:
     name: Check
