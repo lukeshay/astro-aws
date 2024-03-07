@@ -5,7 +5,7 @@ import type {
 	APIGatewayProxyEventV2,
 	APIGatewayProxyHandlerV2,
 } from "aws-lambda"
-import middy from "@middy/core"
+import middy, { MiddyfiedHandler } from "@middy/core"
 import { type SSRManifest } from "astro"
 import { polyfill } from "@astrojs/webapi"
 
@@ -172,7 +172,7 @@ const createExports = (
 
 	return {
 		handler: middy({ streamifyResponse: shouldStream }).handler(
-			withLogger(args.logger, handler),
+			withLogger(args.logger, handler) as MiddyfiedHandler,
 		),
 	}
 }

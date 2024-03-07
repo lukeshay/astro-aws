@@ -2,6 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import PersonRow from "../components/home/PersonRow.astro"
 
+const rows = Array.from({ length: 100 }).map((_, i) => i + 1)
+
+export const prerender = false
 ---
 
 <Layout title="Welcome to Astro AWS.">
@@ -18,7 +21,7 @@ import PersonRow from "../components/home/PersonRow.astro"
 					</tr>
 				</thead>
 				<tbody>
-					{Astro.locals.rows.map((n) => (
+					{rows.map((n) => (
 						<PersonRow row={n} />
 					))}
 				</tbody>

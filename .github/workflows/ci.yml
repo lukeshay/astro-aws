@@ -33,16 +33,13 @@ jobs:
           - synth
     steps:
       - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
-        with:
-          version: "8.7.6"
+      - uses: oven-sh/setup-bun@v1
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node_version }}
-          cache: "pnpm"
       - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::738697399292:role/GitHubOIDCReadOnlyRole
           aws-region: us-west-2
-      - run: pnpm install
-      - run: pnpm run ${{ matrix.cmd }}
+      - run: bun install
+      - run: bun run ${{ matrix.cmd }}

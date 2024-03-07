@@ -34,22 +34,22 @@
 	},
 	"dependencies": {
 		"@astrojs/tailwind": "^5.1.0",
-		"@faker-js/faker": "^8.4.0",
-		"@middy/core": "^5.2.3",
-		"astro": "^4.2.6",
-		"daisyui": "^4.6.1",
+		"@faker-js/faker": "^8.4.1",
+		"@middy/core": "^5.2.6",
+		"astro": "^4.4.13",
+		"daisyui": "^4.7.2",
 		"http-status-codes": "^2.3.0",
 		"tailwindcss": "^3.4.1"
 	},
 	"devDependencies": {
 		"@astro-aws/adapter": "workspace:^",
-		"@astrojs/check": "^0.4.1",
+		"@astrojs/check": "^0.5.6",
 		"@types/node": "^18.18.0",
-		"eslint": "^8.56.0",
+		"eslint": "^8.57.0",
 		"npm-run-all": "^4.1.5",
-		"prettier": "^3.2.4",
+		"prettier": "^3.2.5",
 		"rimraf": "^5.0.5",
-		"typescript": "^5.3.3"
+		"typescript": "^5.4.2"
 	},
 	"engines": {
 		"node": "18.x || 20.x"

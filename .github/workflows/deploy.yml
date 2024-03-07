@@ -8,11 +8,6 @@ on:
         required: false
         type: string
         default: "20"
-      pnpm_version:
-        description: The version of PNPM to use
-        required: false
-        type: string
-        default: "8.7.6"
       stack_environment:
         description: The stack environment to deploy
         required: true
@@ -81,15 +76,12 @@ jobs:
         with:
           aws-region: ${{ inputs.aws_region }}
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-      - uses: pnpm/action-setup@v2
-        with:
-          version: ${{ inputs.pnpm_version }}
+      - uses: oven-sh/setup-bun@v1
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.node_version }}
-          cache: "pnpm"
-      - run: pnpm install
-      - run: pnpm run deploy:one infra -- ${{ inputs.stack_environment }}
+      - run: bun install
+      - run: bun run deploy:one infra -- ${{ inputs.stack_environment }}
         env:
           AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
       # - run: |

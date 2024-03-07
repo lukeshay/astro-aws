@@ -1,6 +1,5 @@
 import { cwd, env } from "node:process"
 
-import { getPnpmWorkspaces } from "workspace-tools"
 import { CfnOutput, Duration, Stack } from "aws-cdk-lib/core"
 import type { ICertificate } from "aws-cdk-lib/aws-certificatemanager"
 import {
@@ -33,12 +32,13 @@ import { BasicGraphWidget } from "../constructs/basic-graph-widget.js"
 import { Environments } from "../constants/environments.js"
 import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
 import { CrossRegionCertificate } from "../constructs/cross-region-certificate.js"
+import { resolve } from "node:path"
 
 type StaticWebsiteStackProps = {
 	aliases?: readonly [string, ...string[]]
 	mode: string
 	hostedZoneName?: string
-	package: string
+	app: string
 	runtime: string
 }
 
@@ -48,8 +48,6 @@ type WebsiteStackProps = AstroAWSStackProps &
 	}
 
 class WebsiteStack extends Stack {
-	private static readonly WORKSPACE_INFO = getPnpmWorkspaces(cwd())
-
 	public constructor(scope: Construct, id: string, props: WebsiteStackProps) {
 		super(scope, id, props)
 
@@ -112,7 +110,7 @@ class WebsiteStack extends Stack {
 						viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 					},
 					certificate,
-					comment: environment,
+					comment: `${environment} - ${mode}`,
 					defaultBehavior: {
 						cachePolicy,
 						responseHeadersPolicy: new ResponseHeadersPolicy(
@@ -161,7 +159,7 @@ class WebsiteStack extends Stack {
 					serverAccessLogsPrefix: "s3/",
 				},
 			},
-			outDir: [this.#getWorkspacePath(props.package), distDir].join("/"),
+			outDir: resolve(cwd(), "..", "..", props.app, distDir),
 		})
 
 		if (hostedZone && domainNames?.length) {
@@ -264,18 +262,6 @@ class WebsiteStack extends Stack {
 			value:
 				astroAwsConstruct.cdk.cloudfrontDistribution.distributionDomainName,
 		})
-	}
-
-	#getWorkspacePath(pkg: string): string {
-		const workspace = WebsiteStack.WORKSPACE_INFO.find(
-			(workspaceInfo) => workspaceInfo.name === pkg,
-		)
-
-		if (!workspace) {
-			throw new Error(`Unable to find workspace for ${pkg}`)
-		}
-
-		return workspace.path
 	}
 }
 

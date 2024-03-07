@@ -75,7 +75,8 @@ pnpm i @astro-aws/constructs
 
 ### Modify `lib/hello-cdk-stack.ts` to contain the following
 
-```ts
+```ts ins={4, 10-14}
+// lib/hello-cdk-stack.ts
 import { Stack } from "aws-cdk-lib/core"
 import type { StackProps } from "aws-cdk-lib/core"
 import { AstroAWS } from "@astro-aws/constructs"

@@ -1,5 +1,0 @@
-packages:
-  - "apps/*"
-  - "examples/*"
-  - "packages/*"
-  - "scripts"
