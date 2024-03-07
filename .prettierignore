@@ -7,3 +7,4 @@ apps/docs/src/content/docs/reference/packages/
 cdk.out/
 dist/
 node_modules/
+.astro

@@ -1,5 +1,18 @@
 # @astro-aws/constructs
 
+## 0.6.0
+
+### Minor Changes
+
+- 839b188: Added support for response streaming
+- 3f1e6cb: Updated dependencies
+- 3f1e6cb: Support Astro v4
+- 839b188: Added support for 404 pages
+
+### Patch Changes
+
+- 3f1e6cb: Use flatted to handle circular json
+
 ## 0.5.0
 
 ### Minor Changes
