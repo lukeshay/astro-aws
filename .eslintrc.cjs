@@ -1,8 +1,9 @@
 require("@rushstack/eslint-patch/modern-module-resolution")
 
+const { createSmartConfig } = require("@lshay/eslint-config")
+
 /** @type {import("eslint").Linter.Config} */
-module.exports = {
-	extends: ["@lshay/eslint-config"],
+module.exports = createSmartConfig({
 	overrides: [
 		{
 			files: ["*.test.*"],
@@ -32,4 +33,4 @@ module.exports = {
 			},
 		},
 	},
-}
+})
