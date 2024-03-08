@@ -5,7 +5,7 @@ description: Describes how to access cookies on the server.
 
 ## Setup
 
-Follow the [getting started guide](./getting-started) to create a new Astro project with the Astro AWS adapter.
+Follow the [getting started guide](/guides/01-getting-started) to create a new Astro project with the Astro AWS adapter.
 
 ## Allowing Cookies
 
