@@ -44,7 +44,7 @@ class AstroAWSS3Bucket extends AstroAWSBaseConstruct<
 			blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
 			encryption: BucketEncryption.S3_MANAGED,
 			enforceSSL: true,
-			...this.cdk.s3Bucket,
+			...props.cdk?.s3Bucket,
 		})
 
 		this.#originAccessIdentity = new OriginAccessIdentity(this, "S3BucketOAI", {
