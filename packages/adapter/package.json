@@ -71,7 +71,7 @@
 		"root": false
 	},
 	"dependencies": {
-		"@astrojs/webapi": "^2.2.0",
+		"@astrojs/webapi": "^3.0.0",
 		"@middy/core": "^5.2.6",
 		"esbuild": "^0.20.1",
 		"flatted": "^3.3.1",
