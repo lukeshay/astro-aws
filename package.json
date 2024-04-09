@@ -23,10 +23,7 @@
 		"deploy:one": "turbo run deploy --filter",
 		"dev": "turbo run dev",
 		"dev:one": "turbo run dev --filter",
-		"lint": "turbo run build && eslint .",
-		"lint:fix": "bun run lint --fix",
-		"prettier": "prettier --ignore-unknown --no-error-on-unmatched-pattern --check . '!**/*.astro'",
-		"prettier:fix": "bun run prettier --write",
+		"format": "prettier --ignore-unknown --no-error-on-unmatched-pattern --write --check . '!**/*.astro'",
 		"release:cut": "git add . && git commit -m 'new release' && bun run deploy:one infra -- PROD && bun run changeset publish && git push && git push --follow-tags",
 		"release:prepare": "bun run build && bun run synth && bun run changeset version && bun run prettier:fix",
 		"synth": "turbo run synth",
@@ -39,15 +36,10 @@
 		"@changesets/changelog-git": "^0.2.0",
 		"@changesets/changelog-github": "^0.5.0",
 		"@changesets/cli": "^2.27.1",
-		"@lshay/eslint-config": "^0.3.5",
 		"@lshay/prettier-config": "^0.7.0",
-		"@rushstack/eslint-patch": "^1.7.2",
-		"eslint": "^8.57.0",
-		"eslint-import-resolver-typescript": "^3.6.1",
-		"eslint-plugin-import": "^2.29.1",
 		"prettier": "^3.2.5",
-		"turbo": "^1.12.5",
-		"typescript": "^5.4.2"
+		"turbo": "^1.13.2",
+		"typescript": "^5.4.4"
 	},
 	"engines": {
 		"node": "18.x || 20.x"

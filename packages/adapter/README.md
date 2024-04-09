@@ -114,6 +114,8 @@ export default defineConfig({
 
 ### Edge Usage
 
+> **NOTE:** Environment variables are not supported in edge mode. Due to the limitations of AWS Lambda@Edge.
+
 1. Install the package.
 
 ```

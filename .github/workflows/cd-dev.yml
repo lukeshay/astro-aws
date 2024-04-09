@@ -27,6 +27,5 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment_name: development
-      environment_url: https://static.dev.astro-aws.org/
       stack_environment: DEV
     secrets: inherit

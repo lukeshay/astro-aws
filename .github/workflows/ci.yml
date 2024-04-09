@@ -28,8 +28,7 @@ jobs:
         cmd:
           - build
           - test
-          - lint
-          - prettier
+          - format
           - synth
     steps:
       - uses: actions/checkout@v3

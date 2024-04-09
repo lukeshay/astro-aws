@@ -1,9 +1,0 @@
-.cdk.staging
-.DS_Store
-.env*
-.turbo
-*.log*
-apps/docs/src/content/docs/references/packages/*
-cdk.out/
-dist/
-node_modules/
