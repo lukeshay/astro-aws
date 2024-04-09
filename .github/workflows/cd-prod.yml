@@ -21,6 +21,6 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment_name: production
-      environment_url: https://astro-aws.org/
+      environment_url: https://www.docs.astro-aws.org/
       stack_environment: PROD
     secrets: inherit
