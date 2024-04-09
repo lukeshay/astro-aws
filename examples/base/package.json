@@ -13,12 +13,6 @@
 	"files": [
 		"dist"
 	],
-	"eslintConfig": {
-		"extends": [
-			"../../.eslintrc.cjs"
-		],
-		"root": false
-	},
 	"scripts": {
 		"build:edge": "MODE=edge astro build",
 		"build:ssr": "MODE=ssr astro build",
@@ -35,21 +29,21 @@
 	"dependencies": {
 		"@astrojs/tailwind": "^5.1.0",
 		"@faker-js/faker": "^8.4.1",
-		"@middy/core": "^5.2.6",
-		"astro": "^4.4.13",
-		"daisyui": "^4.7.2",
+		"@middy/core": "^5.3.2",
+		"astro": "^4.5.17",
+		"daisyui": "^4.10.1",
 		"http-status-codes": "^2.3.0",
-		"tailwindcss": "^3.4.1"
+		"tailwindcss": "^3.4.3"
 	},
 	"devDependencies": {
 		"@astro-aws/adapter": "workspace:^",
-		"@astrojs/check": "^0.5.6",
+		"@astrojs/check": "^0.5.10",
 		"@types/node": "^18.18.0",
 		"eslint": "^8.57.0",
 		"npm-run-all": "^4.1.5",
 		"prettier": "^3.2.5",
 		"rimraf": "^5.0.5",
-		"typescript": "^5.4.2"
+		"typescript": "^5.4.4"
 	},
 	"engines": {
 		"node": "18.x || 20.x"

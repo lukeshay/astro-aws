@@ -28,20 +28,13 @@
 	"scripts": {
 		"build": "scripts build"
 	},
-	"eslintConfig": {
-		"extends": [
-			"../../.eslintrc.cjs"
-		],
-		"root": false
-	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
 		"@types/node": "^18.18.4",
-		"aws-cdk-lib": "^2.131.0",
+		"aws-cdk-lib": "^2.136.0",
 		"constructs": "^10.3.0",
-		"eslint": "^8.57.0",
 		"prettier": "^3.2.5",
-		"typescript": "^5.4.2"
+		"typescript": "^5.4.4"
 	},
 	"peerDependencies": {
 		"aws-cdk-lib": "^2.94.0",

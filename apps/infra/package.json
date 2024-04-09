@@ -21,29 +21,21 @@
 		"deploy": "./scripts/deploy.sh",
 		"synth": "cdk synth"
 	},
-	"eslintConfig": {
-		"extends": [
-			"../../.eslintrc.cjs"
-		],
-		"root": false
-	},
 	"dependencies": {
 		"@astro-aws/constructs": "workspace:^",
 		"@astro-aws/docs": "workspace:^",
-		"@aws-sdk/client-acm": "^3.525.0",
-		"aws-cdk": "^2.131.0",
-		"aws-cdk-lib": "^2.131.0",
+		"@aws-sdk/client-acm": "^3.549.0",
+		"aws-cdk": "^2.136.0",
+		"aws-cdk-lib": "^2.136.0",
 		"constructs": "^10.3.0",
-		"eslint": "^8.57.0",
 		"prettier": "^3.2.5",
-		"typescript": "^5.4.2",
+		"typescript": "^5.4.4",
 		"workspace-tools": "^0.36.4"
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
-		"@types/aws-lambda": "^8.10.136",
-		"@types/node": "^18.18.4",
-		"eslint-config-get-off-my-lawn": "^7.2.0"
+		"@types/aws-lambda": "^8.10.137",
+		"@types/node": "^18.18.4"
 	},
 	"engines": {
 		"node": "18.x || 20.x"
