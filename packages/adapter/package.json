@@ -71,7 +71,7 @@
 		"flatted": "^3.3.1",
 		"http-status-codes": "^2.3.0",
 		"merge-anything": "^5.1.7",
-		"pino": "^8.20.0"
+		"pino": "^9.0.0"
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
