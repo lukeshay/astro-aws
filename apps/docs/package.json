@@ -33,7 +33,7 @@
 		"@types/node": "^18.18.0",
 		"prettier": "^3.2.5",
 		"rimraf": "^5.0.5",
-		"starlight-links-validator": "^0.7.1"
+		"starlight-links-validator": "^0.9.0"
 	},
 	"engines": {
 		"node": "18.x || 20.x"
