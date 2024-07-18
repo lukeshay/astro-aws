@@ -120,7 +120,7 @@ class WebsiteStack extends Stack {
 								securityHeadersBehavior: {
 									contentSecurityPolicy: {
 										contentSecurityPolicy:
-											"default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; upgrade-insecure-requests",
+											"default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' cognito-identity.us-east-1.amazonaws.com dataplane.rum.us-east-1.amazonaws.com; upgrade-insecure-requests",
 										override: true,
 									},
 								},

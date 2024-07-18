@@ -25,11 +25,19 @@ export default defineConfig({
 			social: {
 				github: "https://github.com/lukeshay/astro-aws",
 			},
+			head: [
+				{
+					tag: "script",
+					attrs: {
+						src: "/load-cwr.js",
+					},
+				},
+			],
 			tagline: "AWS CDK constructs for Astro",
 			title: "Astro AWS",
 			plugins: [starlightLinksValidator()],
 		}),
 	],
 	output: "static",
-	site: `https://astro-aws.org/`,
+	site: "https://www.astro-aws.org/",
 })

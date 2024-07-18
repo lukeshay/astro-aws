@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto"
 
 import {
 	ACMClient,
+	DeleteCertificateCommand,
 	DescribeCertificateCommand,
 	RequestCertificateCommand,
 } from "@aws-sdk/client-acm"
@@ -37,15 +38,15 @@ const onEvent = async (event) => {
 		}
 	}
 
-	/*await client.send(
+	await client.send(
 		new DeleteCertificateCommand({
 			CertificateArn: event.PhysicalResourceId,
 		}),
-	)*/
+	)
 
 	return {
 		Data: {},
-		PhysicalResourceId: randomUUID(),
+		PhysicalResourceId: event.PhysicalResourceId,
 	}
 }
 
