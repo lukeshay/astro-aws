@@ -97,7 +97,7 @@ const ENVIRONMENT_PROPS: Record<Environment, EnvironmentProps> = {
 		environment: Environments.PROD,
 		websites: [
 			{
-				aliases: ["www", "www.docs", ""],
+				aliases: ["www.docs", ""],
 				hostedZoneName: "astro-aws.org",
 				mode: "static",
 				app: "apps/docs",
