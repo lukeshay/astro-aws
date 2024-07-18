@@ -1,5 +1,16 @@
 # @astro-aws/adapter
 
+## 0.7.0
+
+### Minor Changes
+
+- b4bcad7: Upgrade dependencies
+
+### Patch Changes
+
+- 48e4410: Updated dependencies
+- 0a93be7: Support x-forwarded-host in ssr setup
+
 ## 0.6.0
 
 ### Minor Changes

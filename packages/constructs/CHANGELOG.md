@@ -1,5 +1,16 @@
 # @astro-aws/constructs
 
+## 0.7.0
+
+### Minor Changes
+
+- b4bcad7: Upgrade dependencies
+
+### Patch Changes
+
+- 48af5d1: Fixed circular reference in S3 bucket construct which prevented configuration of the S3 part of the infrastructure.
+- 48e4410: Updated dependencies
+
 ## 0.6.0
 
 ### Minor Changes
