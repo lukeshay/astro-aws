@@ -1,11 +1,15 @@
 import * as path from "node:path"
 
-import { Stack } from "aws-cdk-lib/core"
+import { RemovalPolicy, Stack } from "aws-cdk-lib/core"
 import {
+	CloudFrontWebDistribution,
 	Distribution,
 	Function,
 	FunctionCode,
 	FunctionEventType,
+	OriginProtocolPolicy,
+	PriceClass,
+	ViewerCertificate,
 	ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront"
 import type { Construct } from "constructs"
@@ -17,7 +21,12 @@ import {
 } from "aws-cdk-lib/aws-route53"
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets"
 import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins"
-import { BlockPublicAccess, Bucket, BucketEncryption } from "aws-cdk-lib/aws-s3"
+import {
+	BlockPublicAccess,
+	Bucket,
+	BucketEncryption,
+	RedirectProtocol,
+} from "aws-cdk-lib/aws-s3"
 
 import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
 import { CrossRegionCertificate } from "../constructs/cross-region-certificate.js"
@@ -25,6 +34,7 @@ import { CrossRegionCertificate } from "../constructs/cross-region-certificate.j
 export type RedirectStackProps = AstroAWSStackProps & {
 	hostedZoneName: string
 	aliases: [string, ...string[]]
+	targetAlias: string
 }
 
 export class RedirectStack extends Stack {
@@ -44,6 +54,9 @@ export class RedirectStack extends Stack {
 		})
 
 		const [domainName, ...alternateNames] = domainNames
+		const targetDomainName = [props.targetAlias, "astro-aws.org"]
+			.filter(Boolean)
+			.join(".")
 
 		const { certificate } = new CrossRegionCertificate(this, "Certificate", {
 			alternateNames,
@@ -55,23 +68,38 @@ export class RedirectStack extends Stack {
 			blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
 			encryption: BucketEncryption.S3_MANAGED,
 			enforceSSL: true,
+			removalPolicy: RemovalPolicy.DESTROY,
 			versioned: true,
+			websiteRedirect: {
+				hostName: targetDomainName,
+				protocol: RedirectProtocol.HTTPS,
+			},
 		})
 
-		const distribution = new Distribution(this, "WWWRedirectDistribution", {
-			certificate,
-			defaultBehavior: {
-				functionAssociations: [
+		const distribution = new CloudFrontWebDistribution(
+			this,
+			"WWWRedirectDistribution",
+			{
+				defaultRootObject: "",
+				originConfigs: [
 					{
-						eventType: FunctionEventType.VIEWER_REQUEST,
-						function: wwwRedirectFunction,
+						behaviors: [{ isDefaultBehavior: true }],
+						customOriginSource: {
+							domainName: bucket.bucketWebsiteDomainName,
+							originProtocolPolicy: OriginProtocolPolicy.HTTP_ONLY,
+						},
 					},
 				],
-				origin: new S3Origin(bucket),
+				viewerCertificate: ViewerCertificate.fromAcmCertificate(certificate, {
+					aliases: domainNames,
+				}),
+				comment: `Redirect to ${targetDomainName} from ${domainNames.join(
+					", ",
+				)}`,
+				priceClass: PriceClass.PRICE_CLASS_ALL,
 				viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 			},
-			domainNames,
-		})
+		)
 
 		const hostedZone = HostedZone.fromLookup(this, "HostedZone", {
 			domainName: hostedZoneName,

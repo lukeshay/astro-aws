@@ -101,7 +101,7 @@ const ENVIRONMENT_PROPS: Record<Environment, EnvironmentProps> = {
 				hostedZoneName: "astro-aws.org",
 				mode: "static",
 				app: "apps/docs",
-				redirectAliases: ["", "www", "docs", "www.docs"],
+				redirectAliases: ["", "docs", "www.docs"],
 				runtime: "nodejs20",
 			},
 		],

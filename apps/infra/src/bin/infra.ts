@@ -43,7 +43,7 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 			},
 		)
 
-		if (websiteProps.redirectAliases && websiteProps.hostedZoneName) {
+		if (websiteProps.redirectAliases) {
 			new RedirectStack(
 				app,
 				createStackName(
@@ -55,7 +55,8 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 				{
 					...environmentProps,
 					aliases: websiteProps.redirectAliases,
-					hostedZoneName: websiteProps.hostedZoneName,
+					hostedZoneName: websiteProps.hostedZoneName!,
+					targetAlias: websiteProps.aliases![0],
 				},
 			)
 		}

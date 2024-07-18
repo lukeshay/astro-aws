@@ -9,7 +9,7 @@ function handler(event) {
 		statusDescription: "Temporary Redirect",
 		headers: {
 			location: {
-				value: "https://www.docs.astro-aws.org" + event.request.uri + qs,
+				value: "https://www.astro-aws.org" + event.request.uri + qs,
 			},
 		},
 	}

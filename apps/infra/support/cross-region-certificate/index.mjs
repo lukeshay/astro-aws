@@ -2,7 +2,6 @@ import { randomUUID } from "node:crypto"
 
 import {
 	ACMClient,
-	DeleteCertificateCommand,
 	DescribeCertificateCommand,
 	RequestCertificateCommand,
 } from "@aws-sdk/client-acm"
