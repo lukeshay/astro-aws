@@ -38,11 +38,11 @@ const onEvent = async (event) => {
 		}
 	}
 
-	await client.send(
+	/*await client.send(
 		new DeleteCertificateCommand({
 			CertificateArn: event.PhysicalResourceId,
 		}),
-	)
+	)*/
 
 	return {
 		Data: {},

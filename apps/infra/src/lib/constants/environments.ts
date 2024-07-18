@@ -97,11 +97,11 @@ const ENVIRONMENT_PROPS: Record<Environment, EnvironmentProps> = {
 		environment: Environments.PROD,
 		websites: [
 			{
-				aliases: ["www.docs", ""],
+				aliases: ["www"],
 				hostedZoneName: "astro-aws.org",
 				mode: "static",
 				app: "apps/docs",
-				redirectAliases: ["", "www", "docs"],
+				redirectAliases: ["", "www", "docs", "www.docs"],
 				runtime: "nodejs20",
 			},
 		],
