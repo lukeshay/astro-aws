@@ -14,7 +14,8 @@
 		"astro-aws-cdk": "dist/bin/infra.js"
 	},
 	"files": [
-		"dist"
+		"dist",
+		"cdk.out"
 	],
 	"scripts": {
 		"build": "scripts build",
@@ -24,17 +25,17 @@
 	"dependencies": {
 		"@astro-aws/constructs": "workspace:^",
 		"@astro-aws/docs": "workspace:^",
-		"@aws-sdk/client-acm": "^3.549.0",
-		"aws-cdk": "^2.136.0",
-		"aws-cdk-lib": "^2.136.0",
+		"@aws-sdk/client-acm": "^3.614.0",
+		"aws-cdk": "^2.149.0",
+		"aws-cdk-lib": "^2.149.0",
 		"constructs": "^10.3.0",
-		"prettier": "^3.2.5",
-		"typescript": "^5.4.4",
+		"prettier": "^3.3.3",
+		"typescript": "^5.5.3",
 		"workspace-tools": "^0.36.4"
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
-		"@types/aws-lambda": "^8.10.137",
+		"@types/aws-lambda": "^8.10.141",
 		"@types/node": "^18.18.4"
 	},
 	"engines": {

@@ -1,6 +1,7 @@
 {
 	"$schema": "https://turbo.build/schema.json",
-	"pipeline": {
+	"globalEnv": ["AWS_ACCOUNT", "AWS_REGION", "AWS_PROFILE", "USER"],
+	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
 			"outputs": ["dist/**", "cdk.out/**"]

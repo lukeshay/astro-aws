@@ -35,11 +35,11 @@
 	"dependencies": {
 		"@changesets/changelog-git": "^0.2.0",
 		"@changesets/changelog-github": "^0.5.0",
-		"@changesets/cli": "^2.27.1",
+		"@changesets/cli": "^2.27.7",
 		"@lshay/prettier-config": "^0.7.0",
-		"prettier": "^3.2.5",
-		"turbo": "^1.13.2",
-		"typescript": "^5.4.4"
+		"prettier": "^3.3.3",
+		"turbo": "^2.0.7",
+		"typescript": "^5.5.3"
 	},
 	"engines": {
 		"node": "18.x || 20.x"
@@ -49,5 +49,6 @@
 		"astro",
 		"vite",
 		"sharp"
-	]
+	],
+	"packageManager": "bun@1.1.13"
 }
