@@ -36,7 +36,7 @@
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
 		"@types/aws-lambda": "^8.10.141",
-		"@types/node": "^18.18.4"
+		"@types/node": "^20.0.0"
 	},
 	"engines": {
 		"node": "18.x || 20.x"
