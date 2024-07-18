@@ -112,10 +112,11 @@ const createExports = (
 			headers.set("cookie", event.cookies.join("; "))
 		}
 
+		const domainName = headers.get("x-forwarded-host") ?? event.requestContext.domainName;
 		const qs = event.rawQueryString.length ? `?${event.rawQueryString}` : ""
 		const url = new URL(
 			`${event.rawPath.replace(/\/?index\.html$/u, "")}${qs}`,
-			`https://${event.requestContext.domainName}`,
+			`https://${domainName}`,
 		)
 
 		const request = new Request(url, {
@@ -132,7 +133,7 @@ const createExports = (
 
 		if (!routeData) {
 			const request404 = new Request(
-				new URL(`404${qs}`, `https://${event.requestContext.domainName}`),
+				new URL(`404${qs}`, `https://${domainName}`),
 				{
 					body: createRequestBody(
 						event.requestContext.http.method,
