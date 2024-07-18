@@ -12,7 +12,7 @@
 		"aws-lambda",
 		"aws-cdk"
 	],
-	"homepage": "https://astro-aws.org/",
+	"homepage": "https://www.astro-aws.org/",
 	"repository": {
 		"type": "git",
 		"url": "ssh://git@github.com/lukeshay/astro-aws.git",

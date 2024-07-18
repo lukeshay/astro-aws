@@ -2,7 +2,7 @@
 	"name": "@astro-aws/examples-base",
 	"version": "0.0.0",
 	"private": true,
-	"homepage": "https://astro-aws.org/",
+	"homepage": "https://www.astro-aws.org/",
 	"repository": {
 		"type": "git",
 		"url": "ssh://git@github.com/lukeshay/astro-aws.git",

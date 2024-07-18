@@ -112,7 +112,8 @@ const createExports = (
 			headers.set("cookie", event.cookies.join("; "))
 		}
 
-		const domainName = headers.get("x-forwarded-host") ?? event.requestContext.domainName;
+		const domainName =
+			headers.get("x-forwarded-host") ?? event.requestContext.domainName
 		const qs = event.rawQueryString.length ? `?${event.rawQueryString}` : ""
 		const url = new URL(
 			`${event.rawPath.replace(/\/?index\.html$/u, "")}${qs}`,
