@@ -39,7 +39,9 @@ export class HelloCdkStack extends Stack {
 				},
 				// This configures everything excluding subpaths of /api.
 				cloudfrontDistribution: {
-					cachePolicy,
+					defaultBehavior: {
+						cachePolicy,
+					},
 				},
 			},
 			websiteDir: "../my-astro-project",
