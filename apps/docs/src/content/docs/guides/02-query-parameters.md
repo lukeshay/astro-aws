@@ -33,14 +33,12 @@ export class HelloCdkStack extends Stack {
 
 		new AstroAWS(this, "AstroAWS", {
 			cdk: {
-				// This configures all subpaths of /api.
-				apiBehavior: {
-					cachePolicy,
-				},
-				// This configures everything excluding subpaths of /api.
 				cloudfrontDistribution: {
+					apiBehavior: {
+						cachePolicy: cachePolicy
+					},
 					defaultBehavior: {
-						cachePolicy,
+						cachePolicy
 					},
 				},
 			},
