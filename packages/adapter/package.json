@@ -75,7 +75,7 @@
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
-		"@faker-js/faker": "^8.4.1",
+		"@faker-js/faker": "^9.0.0",
 		"@types/aws-lambda": "^8.10.141",
 		"@types/node": "^18.18.4",
 		"astro": "^4.11.6",
