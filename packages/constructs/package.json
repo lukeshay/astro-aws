@@ -30,7 +30,7 @@
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
-		"@types/node": "^18.18.4",
+		"@types/node": "^20.0.0",
 		"aws-cdk-lib": "^2.149.0",
 		"constructs": "^10.3.0",
 		"prettier": "^3.3.3",
