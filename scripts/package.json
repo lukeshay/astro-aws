@@ -34,7 +34,7 @@
 		"globby": "^14.0.2"
 	},
 	"devDependencies": {
-		"@types/node": "^18.18.4",
+		"@types/node": "^22.0.0",
 		"eslint": "^9.7.0",
 		"prettier": "^3.3.3",
 		"tsx": "^4.16.2",
@@ -44,6 +44,6 @@
 		"typescript": "^5.2.2"
 	},
 	"engines": {
-		"node": "18.x || 20.x"
+		"node": "18.x || 20.x || 22.x"
 	}
 }
