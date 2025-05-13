@@ -39,7 +39,7 @@
 		"@types/node": "^18.18.4"
 	},
 	"engines": {
-		"node": "18.x || 20.x"
+		"node": "20.x || 22.x"
 	},
 	"cli": {
 		"clean": [

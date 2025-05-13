@@ -36,6 +36,6 @@
 		"starlight-links-validator": "^0.9.1"
 	},
 	"engines": {
-		"node": "18.x || 20.x"
+		"node": "20.x || 22.x"
 	}
 }
