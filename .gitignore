@@ -7,3 +7,4 @@ apps/docs/src/content/docs/references/packages/*
 cdk.out/
 dist/
 node_modules/
+apps/docs/public/cwr.js
