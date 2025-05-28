@@ -1,5 +1,12 @@
 # @astro-aws/scripts
 
+## 0.2.0
+
+### Minor Changes
+
+- 3fc8a7f: Add support for node 22
+- 3fc8a7f: Remove support for node 18
+
 ## 0.1.1
 
 ### Patch Changes
