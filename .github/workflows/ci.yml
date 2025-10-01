@@ -38,7 +38,9 @@ jobs:
           node-version: ${{ matrix.node_version }}
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::738697399292:role/GitHubOIDCReadOnlyRole
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: us-west-2
       - run: bun install
       - run: bun run ${{ matrix.cmd }}
+        env:
+          AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}

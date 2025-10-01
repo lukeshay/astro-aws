@@ -36,9 +36,9 @@
 	"devDependencies": {
 		"@types/node": "^18.18.4",
 		"eslint": "^9.7.0",
-		"prettier": "^3.3.3",
+		"prettier": "^3.6.2",
 		"tsx": "^4.16.2",
-		"typescript": "^5.5.3"
+		"typescript": "^5.9.3"
 	},
 	"peerDependencies": {
 		"typescript": "^5.2.2"
