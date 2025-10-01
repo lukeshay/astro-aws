@@ -31,7 +31,7 @@
 	"devDependencies": {
 		"@astro-aws/adapter": "workspace:^",
 		"@types/node": "^18.18.0",
-		"prettier": "^3.3.3",
+		"prettier": "^3.6.2",
 		"rimraf": "^6.0.1",
 		"starlight-links-validator": "^0.9.1"
 	},

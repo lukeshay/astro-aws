@@ -29,8 +29,8 @@
 		"aws-cdk": "^2.149.0",
 		"aws-cdk-lib": "^2.149.0",
 		"constructs": "^10.3.0",
-		"prettier": "^3.3.3",
-		"typescript": "^5.5.3",
+		"prettier": "^3.6.2",
+		"typescript": "^5.9.3",
 		"workspace-tools": "^0.36.4"
 	},
 	"devDependencies": {
