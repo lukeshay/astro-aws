@@ -23,6 +23,8 @@ polyfill(globalThis, {
 	exclude: "window document",
 })
 
+const isAsciiStringPattern = /^[\x00-\xFF]*$/
+
 const createLambdaFunctionHeaders = (
 	app: NodeApp,
 	response: Response,
@@ -105,11 +107,16 @@ const createExports = (
 		const headers = new Headers()
 
 		for (const [k, v] of Object.entries(event.headers)) {
-			if (v) headers.set(k, v)
+			if (!v) continue
+  			try {
+    			headers.set(k, v)
+  			} catch (err) {
+    			console.warn(`Could not set header "${k}" with value "${v}". Skipping.`, err);
+  			}
 		}
 
 		if (event.cookies) {
-			headers.set("cookie", event.cookies.join("; "))
+			headers.set("cookie", event.cookies.filter(cookie => cookie && isAsciiStringPattern.test(cookie)).join("; "))
 		}
 
 		const domainName =
