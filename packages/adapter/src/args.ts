@@ -14,6 +14,8 @@ type Args = {
 	esBuildOptions: EsBuildOptions
 	/** Astro.locals that you want passed into the application. */
 	locals: object
+	/** Make request id available in Astro.locals  */
+	includeRequestIdInLocals?: boolean
 	/** Specifies where you want your app deployed to. */
 	mode: "edge" | "ssr-stream" | "ssr"
 	/** Settings for logging. */

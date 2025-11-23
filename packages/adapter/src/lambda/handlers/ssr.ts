@@ -108,17 +108,26 @@ const createExports = (
 
 		for (const [k, v] of Object.entries(event.headers)) {
 			if (!v) continue
-  			try {
-    			headers.set(k, v)
-  			} catch (err) {
-    			console.warn(`Could not set header "${k}" with value "${v}". Skipping.`, err);
-  			}
+			try {
+				headers.set(k, v)
+			} catch (err) {
+				console.warn(
+					`Could not set header "${k}" with value "${v}". Skipping.`,
+					err,
+				)
+			}
 		}
 
 		if (event.cookies) {
-			headers.set("cookie", event.cookies.filter(cookie => cookie && isAsciiStringPattern.test(cookie)).join("; "))
+			headers.set(
+				"cookie",
+				event.cookies
+					.filter((cookie) => cookie && isAsciiStringPattern.test(cookie))
+					.join("; "),
+			)
 		}
 
+		const requestId = event.requestContext.requestId
 		const domainName =
 			headers.get("x-forwarded-host") ?? event.requestContext.domainName
 		const qs = event.rawQueryString.length ? `?${event.rawQueryString}` : ""
@@ -166,8 +175,15 @@ const createExports = (
 			}
 		}
 
+		let locals = args.locals || {}
+		if (args.includeRequestIdInLocals && requestId) {
+			locals = {
+				...locals,
+				requestId,
+			}
+		}
 		const response = await app.render(request, {
-			locals: args.locals,
+			locals,
 			routeData,
 		})
 
