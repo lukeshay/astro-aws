@@ -86,6 +86,7 @@ const createExports = (
 	const handleRequest = async (
 		request: Request,
 		def: CloudFrontRequestResult | CloudFrontResponseResult,
+		requestId: string,
 	): Promise<CloudFrontRequestResult | CloudFrontResponseResult> => {
 		const routeData = app.match(request)
 
@@ -93,8 +94,15 @@ const createExports = (
 			return def
 		}
 
+		let locals = args.locals || {}
+		if (args.includeRequestIdInLocals) {
+			locals = {
+				...locals,
+				requestId,
+			}
+		}
 		const response = await app.render(request, {
-			locals: args.locals,
+			locals,
 			routeData,
 		})
 		const fnResponse = await createLambdaEdgeFunctionResponse(
@@ -111,6 +119,7 @@ const createExports = (
 	): Promise<CloudFrontRequestResult | CloudFrontResponseResult> => {
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		const record = event.Records[0]!.cf
+		const requestId = record.config.requestId
 
 		const headers = new Headers(
 			Object.fromEntries(
@@ -138,7 +147,7 @@ const createExports = (
 
 				const request = new Request(url, requestInit)
 
-				return handleRequest(request, record.response)
+				return handleRequest(request, record.response, requestId)
 			}
 
 			return record.response
@@ -161,7 +170,7 @@ const createExports = (
 
 		const request = new Request(url, requestInit)
 
-		return handleRequest(request, cloudFrontRequest)
+		return handleRequest(request, cloudFrontRequest, requestId)
 	}
 
 	return {
