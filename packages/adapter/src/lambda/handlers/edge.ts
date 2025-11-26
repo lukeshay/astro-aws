@@ -88,6 +88,17 @@ const createExports = (
 		def: CloudFrontRequestResult | CloudFrontResponseResult,
 		requestId: string,
 	): Promise<CloudFrontRequestResult | CloudFrontResponseResult> => {
+		try {
+			// validate request path
+			decodeURI(request.url)
+		} catch {
+			const response400 = new Response("Bad Request", { status: 400 })
+			return createLambdaEdgeFunctionResponse(
+				app,
+				response400,
+				knownBinaryMediaTypes,
+			)
+		}
 		const routeData = app.match(request)
 
 		if (!routeData) {

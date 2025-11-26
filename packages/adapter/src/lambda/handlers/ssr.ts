@@ -146,6 +146,19 @@ const createExports = (
 			method: event.requestContext.http.method,
 		})
 
+		try {
+			// validate request path
+			decodeURI(request.url)
+		} catch {
+			const response400 = new Response("Bad Request", { status: 400 })
+			return createLambdaFunctionResponse(
+				app,
+				response400,
+				knownBinaryMediaTypes,
+				shouldStream,
+			)
+		}
+
 		let routeData = app.match(request)
 
 		if (!routeData) {
