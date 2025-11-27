@@ -166,10 +166,22 @@ const createExports = (
 
 		const cloudFrontRequest = record.request as unknown as CloudFrontRequest
 
-		const url = new URL(
-			`${cloudFrontRequest.uri.replace(/\/?index\.html$/u, "")}${qs}`,
-			`${scheme}://${host}`,
-		)
+		let url: URL
+		try {
+			url = new URL(
+				`${cloudFrontRequest.uri.replace(/\/?index\.html$/u, "")}${qs}`,
+				`${scheme}://${host}`,
+			)
+			// validate request path
+			decodeURI(url.toString())
+		} catch {
+			const response400 = new Response("Bad Request", { status: 400 })
+			return createLambdaEdgeFunctionResponse(
+				app,
+				response400,
+				knownBinaryMediaTypes,
+			)
+		}
 
 		requestInit.body = cloudFrontRequest.body?.data
 			? createRequestBody(

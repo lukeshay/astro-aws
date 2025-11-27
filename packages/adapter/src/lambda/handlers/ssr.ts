@@ -131,10 +131,23 @@ const createExports = (
 		const domainName =
 			headers.get("x-forwarded-host") ?? event.requestContext.domainName
 		const qs = event.rawQueryString.length ? `?${event.rawQueryString}` : ""
-		const url = new URL(
-			`${event.rawPath.replace(/\/?index\.html$/u, "")}${qs}`,
-			`https://${domainName}`,
-		)
+		let url: URL
+		try {
+			url = new URL(
+				`${event.rawPath.replace(/\/?index\.html$/u, "")}${qs}`,
+				`https://${domainName}`,
+			)
+			// validate request path
+			decodeURI(url.toString())
+		} catch {
+			const response400 = new Response("Bad Request", { status: 400 })
+			return createLambdaFunctionResponse(
+				app,
+				response400,
+				knownBinaryMediaTypes,
+				shouldStream,
+			)
+		}
 
 		const request = new Request(url, {
 			body: createRequestBody(
@@ -145,19 +158,6 @@ const createExports = (
 			headers,
 			method: event.requestContext.http.method,
 		})
-
-		try {
-			// validate request path
-			decodeURI(request.url)
-		} catch {
-			const response400 = new Response("Bad Request", { status: 400 })
-			return createLambdaFunctionResponse(
-				app,
-				response400,
-				knownBinaryMediaTypes,
-				shouldStream,
-			)
-		}
 
 		let routeData = app.match(request)
 
