@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.9.0
+
+### Minor Changes
+
+- 2bf4773: feat: option to include requestId in Astro.locals
+
 ## 0.8.0
 
 ### Minor Changes
