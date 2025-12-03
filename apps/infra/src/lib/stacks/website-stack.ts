@@ -3,7 +3,9 @@ import { cwd, env } from "node:process"
 import { CfnOutput, Duration, Stack } from "aws-cdk-lib/core"
 import type { ICertificate } from "aws-cdk-lib/aws-certificatemanager"
 import {
+	CacheCookieBehavior,
 	CachePolicy,
+	CacheQueryStringBehavior,
 	PriceClass,
 	ResponseHeadersPolicy,
 	ViewerProtocolPolicy,
@@ -93,7 +95,9 @@ class WebsiteStack extends Stack {
 		}
 
 		const cachePolicy = new CachePolicy(this, "CachePolicy", {
+			cookieBehavior: CacheCookieBehavior.all(),
 			minTtl: Duration.days(365),
+			queryStringBehavior: CacheQueryStringBehavior.all(),
 		})
 
 		const accessLogBucket = new Bucket(this, "AccessLogBucket", {
@@ -110,7 +114,7 @@ class WebsiteStack extends Stack {
 						viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 					},
 					certificate,
-					comment: `${environment} - ${mode}`,
+					comment: `${environment} - ${mode} - ${runtime}`,
 					defaultBehavior: {
 						cachePolicy,
 						responseHeadersPolicy: new ResponseHeadersPolicy(

@@ -1,5 +1,10 @@
-const DISALLOWED_EDGE_HEADERS = [
+function mapToRegExp(str: string) {
+	return new RegExp(`^${str.toLowerCase()}$`, "u")
+}
+
+const READ_ONLY_HEADERS = [
 	"Connection",
+	"Content-Length",
 	"Expect",
 	"Keep-Alive",
 	"Proxy-Authenticate",
@@ -11,6 +16,7 @@ const DISALLOWED_EDGE_HEADERS = [
 	"X-Accel-Charset",
 	"X-Accel-Limit-Rate",
 	"X-Accel-Redirect",
+	"X-Amz-Cf-.*",
 	"X-Amzn-Auth",
 	"X-Amzn-Cf-Billing",
 	"X-Amzn-Cf-Id",
@@ -22,19 +28,27 @@ const DISALLOWED_EDGE_HEADERS = [
 	"X-Amzn-Lambda-Integration-Tag",
 	"X-Amzn-RequestId",
 	"X-Cache",
+	"X-Edge-.*",
 	"X-Forwarded-Proto",
 	"X-Real-IP",
+]
+
+const READ_ONLY_ORIGIN_REQUEST_HEADERS = [
+	...READ_ONLY_HEADERS,
 	"Accept-Encoding",
-	"Content-Length",
 	"If-Modified-Since",
 	"If-None-Match",
 	"If-Range",
 	"If-Unmodified-Since",
 	"Transfer-Encoding",
 	"Via",
-	"X-Amz-Cf-.*",
-	"X-Edge-.*",
-].map((str) => new RegExp(`^${str.toLowerCase()}$`, "u"))
+].map(mapToRegExp)
+
+const READ_ONLY_ORIGIN_RESPONSE_HEADERS = [
+	...READ_ONLY_HEADERS,
+	"Transfer-Encoding",
+	"Via",
+].map(mapToRegExp)
 
 const KNOWN_BINARY_MEDIA_TYPES = [
 	"application/epub+zip",
@@ -88,4 +102,8 @@ const KNOWN_BINARY_MEDIA_TYPES = [
 	"video/x-msvideo",
 ]
 
-export { DISALLOWED_EDGE_HEADERS, KNOWN_BINARY_MEDIA_TYPES }
+export {
+	READ_ONLY_ORIGIN_REQUEST_HEADERS,
+	READ_ONLY_ORIGIN_RESPONSE_HEADERS,
+	KNOWN_BINARY_MEDIA_TYPES,
+}
