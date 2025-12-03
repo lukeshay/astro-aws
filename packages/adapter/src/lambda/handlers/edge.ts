@@ -191,14 +191,6 @@ const createExports = (
 			`Scheme: ${scheme}, Host: ${host}, Query String: ${qs}, URL: ${url.toString()}`,
 		)
 
-		requestInit.body = cloudFrontRequest.body?.data
-			? createRequestBody(
-					cloudFrontRequest.method,
-					cloudFrontRequest.body.data,
-					cloudFrontRequest.body.encoding,
-				)
-			: undefined
-
 		logger.info(`Handling origin request`)
 
 		const request = new Request(url, requestInit)
