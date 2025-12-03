@@ -14,8 +14,8 @@ import { polyfill } from "@astrojs/webapi"
 import type { Args } from "../../args.js"
 import { createRequestBody, parseContentType } from "../helpers.js"
 import {
-	READ_ONLY_ORIGIN_REQUEST_HEADERS,
 	KNOWN_BINARY_MEDIA_TYPES,
+	READ_ONLY_ORIGIN_REQUEST_HEADERS,
 } from "../constants.js"
 import { withLogger } from "../middleware.js"
 
@@ -152,15 +152,6 @@ const createExports = (
 				: undefined,
 		}
 
-		const url = new URL(
-			`${cloudFrontRequest.uri.replace(/\/?index\.html$/u, "")}${qs}`,
-			`${scheme}://${host}`,
-		)
-
-		logger.info(
-			`Scheme: ${scheme}, Host: ${host}, Query String: ${qs}, URL: ${url.toString()}`,
-		)
-
 		if ("response" in record) {
 			logger.info(
 				`Handling origin response with status: ${record.response.status}`,
@@ -179,8 +170,6 @@ const createExports = (
 			return record.response
 		}
 
-		const cloudFrontRequest = record.request as unknown as CloudFrontRequest
-
 		let url: URL
 		try {
 			url = new URL(
@@ -192,11 +181,15 @@ const createExports = (
 		} catch {
 			const response400 = new Response("Bad Request", { status: 400 })
 			return createLambdaEdgeFunctionResponse(
-				app,
 				response400,
 				knownBinaryMediaTypes,
+				READ_ONLY_ORIGIN_REQUEST_HEADERS,
 			)
 		}
+
+		logger.info(
+			`Scheme: ${scheme}, Host: ${host}, Query String: ${qs}, URL: ${url.toString()}`,
+		)
 
 		requestInit.body = cloudFrontRequest.body?.data
 			? createRequestBody(
@@ -205,7 +198,7 @@ const createExports = (
 					cloudFrontRequest.body.encoding,
 				)
 			: undefined
-    
+
 		logger.info(`Handling origin request`)
 
 		const request = new Request(url, requestInit)
