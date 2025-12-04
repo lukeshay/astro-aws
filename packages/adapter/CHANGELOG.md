@@ -1,5 +1,16 @@
 # @astro-aws/adapter
 
+## 0.10.0
+
+### Minor Changes
+
+- 0ec9062: Redirect to 404 for edge adapter
+- b87de35: feat: handle invalid/malformed url gracefully
+
+  This change adds a safe `decodeURI` check during route matching to prevent unhandled exceptions caused by malformed or invalid percent-encoded URLs.
+  Previously, invalid paths would cause `decodeURI` to throw, resulting in a 500 Internal Server Error.
+  With this update, such errors are caught early, allowing the server to return a proper client-error response instead of failing unexpectedly.
+
 ## 0.9.0
 
 ### Minor Changes
