@@ -12,10 +12,10 @@ import { type SSRManifest } from "astro"
 import { polyfill } from "@astrojs/webapi"
 
 import type { Args } from "../../args.js"
-import { createRequestBody, parseContentType } from "../helpers.js"
+import { createRequestBody, parseContentType, validateURL } from "../helpers.js"
 import {
-	READ_ONLY_ORIGIN_REQUEST_HEADERS,
 	KNOWN_BINARY_MEDIA_TYPES,
+	READ_ONLY_ORIGIN_REQUEST_HEADERS,
 } from "../constants.js"
 import { withLogger } from "../middleware.js"
 
@@ -152,15 +152,6 @@ const createExports = (
 				: undefined,
 		}
 
-		const url = new URL(
-			`${cloudFrontRequest.uri.replace(/\/?index\.html$/u, "")}${qs}`,
-			`${scheme}://${host}`,
-		)
-
-		logger.info(
-			`Scheme: ${scheme}, Host: ${host}, Query String: ${qs}, URL: ${url.toString()}`,
-		)
-
 		if ("response" in record) {
 			logger.info(
 				`Handling origin response with status: ${record.response.status}`,
@@ -178,6 +169,25 @@ const createExports = (
 
 			return record.response
 		}
+
+		const url = new URL(
+			`${cloudFrontRequest.uri.replace(/\/?index\.html$/u, "")}${qs}`,
+			`${scheme}://${host}`,
+		)
+		try {
+			validateURL(url)
+		} catch {
+			const response400 = new Response("Bad Request", { status: 400 })
+			return createLambdaEdgeFunctionResponse(
+				response400,
+				knownBinaryMediaTypes,
+				READ_ONLY_ORIGIN_REQUEST_HEADERS,
+			)
+		}
+
+		logger.info(
+			`Scheme: ${scheme}, Host: ${host}, Query String: ${qs}, URL: ${url.toString()}`,
+		)
 
 		logger.info(`Handling origin request`)
 

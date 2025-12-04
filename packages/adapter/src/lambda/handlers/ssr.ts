@@ -14,6 +14,7 @@ import {
 	createReadableStream,
 	createRequestBody,
 	parseContentType,
+	validateURL,
 } from "../helpers.js"
 import { withLogger } from "../middleware.js"
 import { KNOWN_BINARY_MEDIA_TYPES } from "../constants.js"
@@ -135,6 +136,18 @@ const createExports = (
 			`${event.rawPath.replace(/\/?index\.html$/u, "")}${qs}`,
 			`https://${domainName}`,
 		)
+
+		try {
+			validateURL(url)
+		} catch {
+			const response400 = new Response("Bad Request", { status: 400 })
+			return createLambdaFunctionResponse(
+				app,
+				response400,
+				knownBinaryMediaTypes,
+				shouldStream,
+			)
+		}
 
 		const request = new Request(url, {
 			body: createRequestBody(
