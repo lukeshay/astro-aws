@@ -14,6 +14,7 @@ import {
 	createReadableStream,
 	createRequestBody,
 	parseContentType,
+	validateURL,
 } from "../helpers.js"
 import { withLogger } from "../middleware.js"
 import { KNOWN_BINARY_MEDIA_TYPES } from "../constants.js"
@@ -131,14 +132,13 @@ const createExports = (
 		const domainName =
 			headers.get("x-forwarded-host") ?? event.requestContext.domainName
 		const qs = event.rawQueryString.length ? `?${event.rawQueryString}` : ""
-		let url: URL
+		const url = new URL(
+			`${event.rawPath.replace(/\/?index\.html$/u, "")}${qs}`,
+			`https://${domainName}`,
+		)
+
 		try {
-			url = new URL(
-				`${event.rawPath.replace(/\/?index\.html$/u, "")}${qs}`,
-				`https://${domainName}`,
-			)
-			// validate request path
-			decodeURI(url.toString())
+			validateURL(url)
 		} catch {
 			const response400 = new Response("Bad Request", { status: 400 })
 			return createLambdaFunctionResponse(

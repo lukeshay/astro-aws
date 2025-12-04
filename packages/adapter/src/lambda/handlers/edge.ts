@@ -12,7 +12,7 @@ import { type SSRManifest } from "astro"
 import { polyfill } from "@astrojs/webapi"
 
 import type { Args } from "../../args.js"
-import { createRequestBody, parseContentType } from "../helpers.js"
+import { createRequestBody, parseContentType, validateURL } from "../helpers.js"
 import {
 	KNOWN_BINARY_MEDIA_TYPES,
 	READ_ONLY_ORIGIN_REQUEST_HEADERS,
@@ -170,14 +170,12 @@ const createExports = (
 			return record.response
 		}
 
-		let url: URL
+		const url = new URL(
+			`${cloudFrontRequest.uri.replace(/\/?index\.html$/u, "")}${qs}`,
+			`${scheme}://${host}`,
+		)
 		try {
-			url = new URL(
-				`${cloudFrontRequest.uri.replace(/\/?index\.html$/u, "")}${qs}`,
-				`${scheme}://${host}`,
-			)
-			// validate request path
-			decodeURI(url.toString())
+			validateURL(url)
 		} catch {
 			const response400 = new Response("Bad Request", { status: 400 })
 			return createLambdaEdgeFunctionResponse(

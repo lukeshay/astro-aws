@@ -26,4 +26,13 @@ const createRequestBody = (
 	return undefined
 }
 
-export { parseContentType, createRequestBody, createReadableStream }
+const validateURL = (url: URL) => {
+	decodeURI(url.toString())
+}
+
+export {
+	parseContentType,
+	createRequestBody,
+	createReadableStream,
+	validateURL,
+}
