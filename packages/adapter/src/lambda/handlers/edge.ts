@@ -158,13 +158,16 @@ const createExports = (
 			)
 
 			if (Number(record.response.status) > 399) {
-				record.response.status = "302"
-				record.response.statusDescription = "Found"
-				// @ts-expect-error - TS doesn't like this but it is valid
-				record.response.body = ""
-				record.response.headers["location"] = [
-					{ key: "Location", value: `/404${qs}` },
-				]
+				const url = new URL(`404${qs}`, `https://${host}`)
+
+				const request = new Request(url, requestInit)
+
+				return handleRequest(
+					request,
+					record.response,
+					requestId,
+					READ_ONLY_ORIGIN_REQUEST_HEADERS,
+				)
 			}
 
 			return record.response

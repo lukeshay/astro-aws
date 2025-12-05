@@ -1,0 +1,22 @@
+{
+	"mcpServers": {
+		"AWS API": {
+			"args": [],
+			"command": "uvx awslabs.aws-api-mcp-server@latest",
+			"env": {
+				"AWS_PROFILE": "astro-aws",
+				"AWS_REGION": "us-east-1",
+				"FASTMCP_LOG_LEVEL": "ERROR"
+			}
+		},
+		"AWS Documentation": {
+			"args": [],
+			"command": "uvx awslabs.aws-documentation-mcp-server@latest",
+			"env": {
+				"AWS_DOCUMENTATION_PARTITION": "aws",
+				"AWS_PROFILE": "astro-aws",
+				"FASTMCP_LOG_LEVEL": "ERROR"
+			}
+		}
+	}
+}
