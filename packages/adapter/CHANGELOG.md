@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.10.1
+
+### Patch Changes
+
+- daae1d6: Render 404 page without redirect on edge adapter
+
 ## 0.10.0
 
 ### Minor Changes
