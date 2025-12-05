@@ -20,6 +20,12 @@ type Args = {
 	mode: "edge" | "ssr-stream" | "ssr"
 	/** Settings for logging. */
 	logger?: WithLoggerOptions
+
+	customErrors: {
+		// "redirect" will redirect to /404 page where as
+		// "render" will render 404 page while remaining on the same page
+		error4xx?: "redirect" | "render"
+	}
 }
 
 export { type EsBuildOptions, type Args }
