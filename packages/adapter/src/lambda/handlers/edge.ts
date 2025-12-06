@@ -173,11 +173,12 @@ const createExports = (
 			return record.response
 		}
 
-		const url = new URL(
-			`${cloudFrontRequest.uri.replace(/\/?index\.html$/u, "")}${qs}`,
-			`${scheme}://${host}`,
-		)
+		let url: URL
 		try {
+			url = new URL(
+				`${cloudFrontRequest.uri.replace(/\/?index\.html$/u, "")}${qs}`,
+				`${scheme}://${host}`,
+			)
 			validateURL(url)
 		} catch {
 			const response400 = new Response("Bad Request", { status: 400 })
