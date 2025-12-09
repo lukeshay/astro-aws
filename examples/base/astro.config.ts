@@ -2,7 +2,7 @@ import { env } from "node:process"
 
 import { defineConfig } from "astro/config"
 import aws from "@astro-aws/adapter"
-import tailwind from "@astrojs/tailwind"
+import tailwindcss from "@tailwindcss/vite"
 
 const mode = env.MODE as "edge" | "ssr-stream" | "ssr"
 
@@ -11,7 +11,9 @@ export default defineConfig({
 	adapter: aws({
 		mode,
 	}),
-	integrations: [tailwind()],
+	vite: {
+		plugins: [tailwindcss()],
+	},
 	outDir: `./dist/${mode}`,
 	output: "server",
 })

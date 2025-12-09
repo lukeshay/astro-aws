@@ -56,7 +56,8 @@ class AstroAWSS3Bucket extends AstroAWSBaseConstruct<
 				actions: ["s3:GetObject"],
 				principals: [
 					new CanonicalUserPrincipal(
-						this.#originAccessIdentity.cloudFrontOriginAccessIdentityS3CanonicalUserId,
+						this.#originAccessIdentity
+							.cloudFrontOriginAccessIdentityS3CanonicalUserId,
 					).grantPrincipal,
 				],
 				resources: [this.#s3Bucket.arnForObjects("*")],

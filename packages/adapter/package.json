@@ -65,24 +65,23 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
-		"@astrojs/webapi": "^2.2.0",
-		"@middy/core": "^5.4.5",
-		"esbuild": "^0.23.0",
-		"flatted": "^3.3.1",
+		"@astrojs/webapi": "^3.0.0",
+		"@middy/core": "^6.4.5",
+		"esbuild": "^0.27.1",
+		"flatted": "^3.3.3",
 		"http-status-codes": "^2.3.0",
-		"merge-anything": "^6.0.2",
-		"pino": "^9.3.1"
+		"merge-anything": "^6.0.6"
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:^",
-		"@faker-js/faker": "^8.4.1",
-		"@types/aws-lambda": "^8.10.141",
-		"@types/node": "^18.18.4",
-		"astro": "^4.11.6",
+		"@faker-js/faker": "^10.1.0",
+		"@types/aws-lambda": "^8.10.159",
+		"@types/node": "^20",
+		"astro": "^5.16.4",
 		"aws-lambda": "^1.0.7",
-		"prettier": "^3.6.2",
+		"prettier": "^3.7.4",
 		"typescript": "^5.9.3",
-		"vitest": "^2.0.3"
+		"vitest": "^4.0.15"
 	},
 	"peerDependencies": {
 		"astro": ">=4"

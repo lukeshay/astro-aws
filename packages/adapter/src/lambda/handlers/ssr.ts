@@ -89,10 +89,7 @@ const createLambdaFunctionResponse = async (
 	}
 }
 
-const createExports = (
-	manifest: SSRManifest,
-	args: Args,
-): { handler: APIGatewayProxyHandlerV2<CloudfrontResult> } => {
+const createExports = (manifest: SSRManifest, args: Args) => {
 	const shouldStream = args.mode === "ssr-stream"
 
 	const app = new NodeApp(manifest, shouldStream)
