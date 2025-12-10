@@ -22,9 +22,13 @@ export default defineConfig({
 					label: "Reference",
 				},
 			],
-			social: {
-				github: "https://github.com/lukeshay/astro-aws",
-			},
+			social: [
+				{
+					icon: "github",
+					label: "GitHub",
+					href: "https://github.com/lukeshay/astro-aws",
+				},
+			],
 			head: [
 				{
 					tag: "script",
@@ -33,6 +37,10 @@ export default defineConfig({
 					},
 				},
 			],
+			editLink: {
+				baseUrl:
+					"https://github.com/lukeshay/astro-aws/edit/main/apps/docs/src/content/",
+			},
 			tagline: "AWS CDK constructs for Astro",
 			title: "Astro AWS",
 			plugins: [starlightLinksValidator()],

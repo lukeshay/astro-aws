@@ -19,7 +19,6 @@ const DEFAULT_ARGS: Args = {
 const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 	adapterFeatures: {
 		edgeMiddleware: false,
-		functionPerRoute: false,
 	},
 	args: {
 		...DEFAULT_ARGS,
@@ -31,11 +30,7 @@ const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 		args.mode ?? DEFAULT_ARGS.mode
 	}.js`,
 	supportedAstroFeatures: {
-		assets: {
-			isSharpCompatible: false,
-			isSquooshCompatible: false,
-			supportKind: "stable",
-		},
+		sharpImageService: "unsupported",
 		hybridOutput: "stable",
 		serverOutput: "stable",
 		staticOutput: "unsupported",
