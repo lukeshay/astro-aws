@@ -7,6 +7,11 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			customCss: ["./src/styles/base.css"],
+			components: {
+				PageSidebar: "./src/components/starlight/PageSidebar.astro",
+				Sidebar: "./src/components/starlight/Sidebar.astro",
+				Footer: "./src/components/starlight/Footer.astro",
+			},
 			pagination: true,
 			sidebar: [
 				{
