@@ -129,12 +129,13 @@ const createExports = (manifest: SSRManifest, args: Args) => {
 		const domainName =
 			headers.get("x-forwarded-host") ?? event.requestContext.domainName
 		const qs = event.rawQueryString.length ? `?${event.rawQueryString}` : ""
-		const url = new URL(
-			`${event.rawPath.replace(/\/?index\.html$/u, "")}${qs}`,
-			`https://${domainName}`,
-		)
 
+		let url: URL
 		try {
+			url = new URL(
+				`${event.rawPath.replace(/\/?index\.html$/u, "")}${qs}`,
+				`https://${domainName}`,
+			)
 			validateURL(url)
 		} catch {
 			const response400 = new Response("Bad Request", { status: 400 })
