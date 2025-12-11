@@ -19,7 +19,7 @@ const bundleEntry = async (entryFile: string, outDir: string, args: Args) => {
 			js: [
 				"import { createRequire as topLevelCreateRequire } from 'module';",
 				"const require = topLevelCreateRequire(import.meta.url);",
-				args.esBuildOptions.banner?.js ?? "",
+				args.esBuildOptions?.banner?.js ?? "",
 			].join(""),
 		},
 		entryPoints: [entryFile],

@@ -1,4 +1,5 @@
 import { type Handler } from "aws-lambda"
+import { AstroIntegrationLogger } from "astro"
 
 type WithLoggerOptions = {
 	logErrors?: boolean
@@ -8,12 +9,13 @@ type WithLoggerOptions = {
 
 const withLogger =
 	<TEvent, TResult>(
+		logger: AstroIntegrationLogger,
 		options: WithLoggerOptions | undefined,
 		handler: Handler<TEvent, TResult>,
 	): Handler<TEvent, TResult> =>
 	async (event, context, callback) => {
 		if (options?.logEvent) {
-			console.log("Lambda invocation event", { event })
+			logger.info(`Lambda invocation event ${JSON.stringify(event)}`)
 		}
 
 		let result: TResult
@@ -23,14 +25,14 @@ const withLogger =
 			result = await handler(event, context, callback)
 		} catch (error) {
 			if (options?.logErrors ?? true) {
-				console.log("Lambda invocation error", { error })
+				logger.error(`Lambda invocation error ${JSON.stringify(error)}`)
 			}
 
 			throw error as Error
 		}
 
 		if (options?.logResult) {
-			console.log("Lambda invocation result", { result })
+			logger.info(`Lambda invocation result ${JSON.stringify(result)}`)
 		}
 
 		return result

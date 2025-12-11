@@ -34,7 +34,6 @@ describe("index.ts", () => {
 				expect(result).toStrictEqual({
 					adapterFeatures: {
 						edgeMiddleware: false,
-						functionPerRoute: false,
 					},
 					args: {
 						...args,
@@ -46,14 +45,10 @@ describe("index.ts", () => {
 					name: ADAPTER_NAME,
 					serverEntrypoint: `${ADAPTER_NAME}/lambda/handlers/ssr.js`,
 					supportedAstroFeatures: {
-						assets: {
-							isSharpCompatible: false,
-							isSquooshCompatible: false,
-							supportKind: "stable",
-						},
 						hybridOutput: "stable",
 						serverOutput: "stable",
 						staticOutput: "unsupported",
+						sharpImageService: "unsupported",
 					},
 				})
 			})
@@ -66,7 +61,6 @@ describe("index.ts", () => {
 				expect(result).toStrictEqual({
 					adapterFeatures: {
 						edgeMiddleware: false,
-						functionPerRoute: false,
 					},
 					args: {
 						binaryMediaTypes: [],
@@ -78,13 +72,9 @@ describe("index.ts", () => {
 					name: ADAPTER_NAME,
 					serverEntrypoint: `${ADAPTER_NAME}/lambda/handlers/ssr.js`,
 					supportedAstroFeatures: {
-						assets: {
-							isSharpCompatible: false,
-							isSquooshCompatible: false,
-							supportKind: "stable",
-						},
 						hybridOutput: "stable",
 						serverOutput: "stable",
+						sharpImageService: "unsupported",
 						staticOutput: "unsupported",
 					},
 				})

@@ -32,7 +32,7 @@ const createExports = (
 
 	const knownBinaryMediaTypes = new Set([
 		...KNOWN_BINARY_MEDIA_TYPES,
-		...args.binaryMediaTypes,
+		...(args.binaryMediaTypes ?? []),
 	])
 
 	const createLambdaEdgeFunctionResponse = async (
@@ -132,7 +132,10 @@ const createExports = (
 			) as HeadersInit,
 		)
 
-		const scheme = headers.get("x-forwarded-protocol") ?? "https"
+		const scheme =
+			headers.get("cloudfront-forwarded-protocol") ??
+			headers.get("x-forwarded-protocol") ??
+			"https"
 		const host = headers.get("x-forwarded-host") ?? headers.get("host") ?? ""
 		const qs = record.request.querystring.length
 			? `?${record.request.querystring}`
@@ -206,7 +209,7 @@ const createExports = (
 	}
 
 	return {
-		handler: withLogger(args.logger, handler),
+		handler: withLogger(logger, args.logger, handler),
 	}
 }
 

@@ -9,15 +9,15 @@ type EsBuildOptions = Omit<
 
 type Args = {
 	/** Specifies what media types need to be base64 encoded. */
-	binaryMediaTypes: string[]
+	binaryMediaTypes?: string[]
 	/** Configures ESBuild options that are not configured automatically. */
-	esBuildOptions: EsBuildOptions
+	esBuildOptions?: EsBuildOptions
 	/** Astro.locals that you want passed into the application. */
-	locals: object
+	locals?: object
 	/** Make request id available in Astro.locals  */
 	includeRequestIdInLocals?: boolean
 	/** Specifies where you want your app deployed to. */
-	mode: "edge" | "ssr-stream" | "ssr"
+	mode?: "edge" | "ssr-stream" | "ssr"
 	/** Settings for logging. */
 	logger?: WithLoggerOptions
 }

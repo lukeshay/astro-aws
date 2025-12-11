@@ -94,9 +94,11 @@ const createExports = (manifest: SSRManifest, args: Args) => {
 
 	const app = new NodeApp(manifest, shouldStream)
 
+	const logger = app.getAdapterLogger()
+
 	const knownBinaryMediaTypes = new Set([
 		...KNOWN_BINARY_MEDIA_TYPES,
-		...args.binaryMediaTypes,
+		...(args.binaryMediaTypes ?? []),
 	])
 
 	const handler: APIGatewayProxyHandlerV2<CloudfrontResult> = async (
@@ -109,9 +111,8 @@ const createExports = (manifest: SSRManifest, args: Args) => {
 			try {
 				headers.set(k, v)
 			} catch (err) {
-				console.warn(
-					`Could not set header "${k}" with value "${v}". Skipping.`,
-					err,
+				logger.warn(
+					`Could not set header "${k}" with value "${v}". Skipping. ${JSON.stringify(err)}`,
 				)
 			}
 		}
@@ -208,7 +209,7 @@ const createExports = (manifest: SSRManifest, args: Args) => {
 
 	return {
 		handler: middy({ streamifyResponse: shouldStream }).handler(
-			withLogger(args.logger, handler) as MiddyfiedHandler,
+			withLogger(logger, args.logger, handler) as MiddyfiedHandler,
 		),
 	}
 }
