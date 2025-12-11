@@ -28,16 +28,16 @@
 		"root": false
 	},
 	"dependencies": {
-		"commander": "^12.1.0",
+		"commander": "^14.0.2",
 		"cosmiconfig": "^9.0.0",
-		"esbuild": "^0.23.0",
-		"globby": "^14.0.2"
+		"esbuild": "^0.27.1",
+		"globby": "^16.0.0"
 	},
 	"devDependencies": {
 		"@types/node": "^18.18.4",
-		"eslint": "^9.7.0",
-		"prettier": "^3.6.2",
-		"tsx": "^4.16.2",
+		"eslint": "^9.39.1",
+		"prettier": "^3.7.4",
+		"tsx": "^4.21.0",
 		"typescript": "^5.9.3"
 	},
 	"peerDependencies": {

@@ -73,11 +73,10 @@
 		"merge-anything": "^6.0.6"
 	},
 	"devDependencies": {
-		"@astro-aws/scripts": "workspace:^",
 		"@faker-js/faker": "^10.1.0",
 		"@types/aws-lambda": "^8.10.159",
 		"@types/node": "^20",
-		"astro": "^5.16.4",
+		"astro": "^5.16.5",
 		"aws-lambda": "^1.0.7",
 		"prettier": "^3.7.4",
 		"typescript": "^5.9.3",

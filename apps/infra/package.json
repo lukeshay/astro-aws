@@ -25,16 +25,15 @@
 	"dependencies": {
 		"@astro-aws/constructs": "workspace:^",
 		"@astro-aws/docs": "workspace:^",
-		"@aws-sdk/client-acm": "^3.946.0",
-		"aws-cdk": "^2.1033.0",
+		"@aws-sdk/client-acm": "^3.948.0",
+		"aws-cdk": "^2.1034.0",
 		"aws-cdk-lib": "^2.232.1",
-		"constructs": "^10.4.3",
+		"constructs": "^10.4.4",
 		"prettier": "^3.7.4",
 		"typescript": "^5.9.3",
 		"workspace-tools": "^0.40.0"
 	},
 	"devDependencies": {
-		"@astro-aws/scripts": "workspace:^",
 		"@types/aws-lambda": "^8.10.159",
 		"@types/node": "^20"
 	},

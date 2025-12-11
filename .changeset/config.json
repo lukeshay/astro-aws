@@ -5,7 +5,12 @@
 	"changelog": ["@changesets/changelog-git", { "repo": "lukeshay/astro-aws" }],
 	"commit": false,
 	"fixed": [],
-	"ignore": ["@astro-aws/infra", "@astro-aws/docs", "@astro-aws/examples-base"],
+	"ignore": [
+		"@astro-aws/infra",
+		"@astro-aws/docs",
+		"@astro-aws/examples-base",
+		"@astro-aws/scripts"
+	],
 	"linked": [["@astro-aws/adapter", "@astro-aws/constructs"]],
 	"updateInternalDependencies": "patch"
 }

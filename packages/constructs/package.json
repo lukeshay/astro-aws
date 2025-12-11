@@ -29,10 +29,9 @@
 		"build": "scripts build"
 	},
 	"devDependencies": {
-		"@astro-aws/scripts": "workspace:^",
 		"@types/node": "^20",
 		"aws-cdk-lib": "^2.232.1",
-		"constructs": "^10.4.3",
+		"constructs": "^10.4.4",
 		"prettier": "^3.7.4",
 		"typescript": "^5.9.3"
 	},
