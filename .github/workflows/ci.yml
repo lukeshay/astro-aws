@@ -25,6 +25,7 @@ jobs:
         node_version:
           - 20
           - 22
+          - 24
         cmd:
           - build
           - test
