@@ -134,7 +134,6 @@
         "@types/node": "^18.18.4",
         "eslint": "^9.39.1",
         "prettier": "^3.7.4",
-        "tsx": "^4.21.0",
         "typescript": "^5.9.3",
       },
       "peerDependencies": {

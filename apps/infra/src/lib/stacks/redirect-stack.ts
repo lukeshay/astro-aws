@@ -1,12 +1,7 @@
-import * as path from "node:path"
 
 import { RemovalPolicy, Stack } from "aws-cdk-lib/core"
 import {
 	CloudFrontWebDistribution,
-	Distribution,
-	Function,
-	FunctionCode,
-	FunctionEventType,
 	OriginProtocolPolicy,
 	PriceClass,
 	ViewerCertificate,
@@ -20,7 +15,6 @@ import {
 	RecordTarget,
 } from "aws-cdk-lib/aws-route53"
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets"
-import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins"
 import {
 	BlockPublicAccess,
 	Bucket,
@@ -46,12 +40,6 @@ export class RedirectStack extends Stack {
 		const domainNames = aliases.map((alias) =>
 			[alias, hostedZoneName].filter(Boolean).join("."),
 		) as [string, ...string[]]
-
-		const wwwRedirectFunction = new Function(this, "WwwRedirectFunction", {
-			code: FunctionCode.fromFile({
-				filePath: path.resolve(".", "support", "redirect", "index.js"),
-			}),
-		})
 
 		const [domainName, ...alternateNames] = domainNames
 		const targetDomainName = [props.targetAlias, "astro-aws.org"]
