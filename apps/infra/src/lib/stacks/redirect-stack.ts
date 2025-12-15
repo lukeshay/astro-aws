@@ -1,11 +1,11 @@
 import { RemovalPolicy, Stack } from "aws-cdk-lib/core"
 import {
-	CloudFrontWebDistribution,
+	Distribution,
 	OriginProtocolPolicy,
 	PriceClass,
-	ViewerCertificate,
 	ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront"
+import { HttpOrigin } from "aws-cdk-lib/aws-cloudfront-origins"
 import type { Construct } from "constructs"
 import {
 	AaaaRecord,
@@ -63,30 +63,18 @@ export class RedirectStack extends Stack {
 			},
 		})
 
-		const distribution = new CloudFrontWebDistribution(
-			this,
-			"WWWRedirectDistribution",
-			{
-				defaultRootObject: "",
-				originConfigs: [
-					{
-						behaviors: [{ isDefaultBehavior: true }],
-						customOriginSource: {
-							domainName: bucket.bucketWebsiteDomainName,
-							originProtocolPolicy: OriginProtocolPolicy.HTTP_ONLY,
-						},
-					},
-				],
-				viewerCertificate: ViewerCertificate.fromAcmCertificate(certificate, {
-					aliases: domainNames,
+		const distribution = new Distribution(this, "WWWRedirectDistribution", {
+			defaultBehavior: {
+				origin: new HttpOrigin(bucket.bucketWebsiteDomainName, {
+					protocolPolicy: OriginProtocolPolicy.HTTP_ONLY,
 				}),
-				comment: `Redirect to ${targetDomainName} from ${domainNames.join(
-					", ",
-				)}`,
-				priceClass: PriceClass.PRICE_CLASS_ALL,
 				viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 			},
-		)
+			certificate,
+			domainNames,
+			comment: `Redirect to ${targetDomainName} from ${domainNames.join(", ")}`,
+			priceClass: PriceClass.PRICE_CLASS_ALL,
+		})
 
 		const hostedZone = HostedZone.fromLookup(this, "HostedZone", {
 			domainName: hostedZoneName,
