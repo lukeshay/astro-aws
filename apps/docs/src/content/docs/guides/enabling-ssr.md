@@ -166,5 +166,5 @@ export default defineConfig({
 ## Next Steps
 
 - Learn about [advanced configuration options](/guides/configuring-deployment) for customizing your deployment
-- Check out examples for [cookies](/examples/cookies) and [query parameters](/examples/query-parameters)
+- Check out guides for [cookies](/guides/cookies) and [query parameters](/guides/query-parameters)
 - Review the [@astro-aws/adapter reference](/reference/packages/adapter) for all adapter options

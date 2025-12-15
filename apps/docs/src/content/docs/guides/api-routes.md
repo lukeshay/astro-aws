@@ -263,6 +263,5 @@ For example, if you only specify a `cachePolicy`, the API behavior will still us
 
 ## Next Steps
 
-- See a complete [API routes example](/examples/api-routes) with working code
 - Learn about [configuring deployment](/guides/configuring-deployment) for other customization options
 - Review the [@astro-aws/constructs reference](/reference/packages/constructs) for all available configuration options

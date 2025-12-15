@@ -467,5 +467,4 @@ Monitor these key metrics to track optimization effectiveness:
 
 - Review [configuring deployment](/guides/configuring-deployment) for more customization options
 - Learn about [enabling SSR](/guides/enabling-ssr) if you need dynamic functionality
-- Check out [monitoring and logging](/guides/logging-monitoring) for observability best practices
 - Explore the [@astro-aws/constructs reference](/reference/packages/constructs) for all available options
