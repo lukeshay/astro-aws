@@ -88,6 +88,7 @@ class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> {
 		this.#astroAWSOrigin = new AstroAWSOrigin(this, "AstroAWSOrigin", {
 			...this.props,
 			lambdaFunction: this.#lambdaFunction,
+			originAccessIdentity: this.#astroAWSS3Bucket.cdk.originAccessIdentity,
 			s3Bucket: this.#astroAWSS3Bucket.cdk.s3Bucket,
 		})
 

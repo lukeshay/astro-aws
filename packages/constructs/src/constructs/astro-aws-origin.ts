@@ -6,7 +6,7 @@ import {
 	type FunctionUrlOptions,
 	type Function,
 } from "aws-cdk-lib/aws-lambda"
-import { type IOrigin } from "aws-cdk-lib/aws-cloudfront"
+import { type IOrigin, OriginAccessIdentity } from "aws-cdk-lib/aws-cloudfront"
 import { type Bucket } from "aws-cdk-lib/aws-s3"
 import {
 	HttpOrigin,
@@ -33,6 +33,7 @@ type AstroAWSOriginCdkProps = {
 type AstroAWSOriginProps = AstroAWSBaseConstructProps & {
 	lambdaFunction?: Function
 	s3Bucket: Bucket
+	originAccessIdentity?: OriginAccessIdentity
 	cdk?: AstroAWSOriginCdkProps
 }
 
@@ -59,7 +60,10 @@ class AstroAWSOrigin extends AstroAWSBaseConstruct<
 
 		this.#s3Origin = S3BucketOrigin.withOriginAccessIdentity(
 			this.props.s3Bucket,
-			this.props.cdk?.s3Origin,
+			{
+				...this.props.cdk?.s3Origin,
+				originAccessIdentity: this.props.originAccessIdentity,
+			},
 		)
 
 		if (this.props.lambdaFunction && this.isSSR) {

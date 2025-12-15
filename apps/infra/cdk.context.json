@@ -1,4 +1,5 @@
 {
+	"acknowledged-issue-numbers": [34892],
 	"hosted-zone:account=738697399292:domainName=astro-aws.org:region=us-east-1": {
 		"Id": "/hostedzone/Z0584480MGUI8KRBPWM",
 		"Name": "astro-aws.org."
