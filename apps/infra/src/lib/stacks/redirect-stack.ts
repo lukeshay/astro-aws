@@ -1,4 +1,3 @@
-
 import { RemovalPolicy, Stack } from "aws-cdk-lib/core"
 import {
 	CloudFrontWebDistribution,

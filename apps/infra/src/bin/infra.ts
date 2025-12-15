@@ -29,6 +29,15 @@ const createStackName = (
 
 Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 	environmentProps.websites.forEach((websiteProps) => {
+		if (environment === Environments.DEV) {
+			// eslint-disable-next-line no-param-reassign
+			delete websiteProps.hostedZoneName
+			// eslint-disable-next-line no-param-reassign
+			delete websiteProps.aliases
+			// eslint-disable-next-line no-param-reassign
+			delete websiteProps.redirectAliases
+		}
+
 		new WebsiteStack(
 			app,
 			createStackName(

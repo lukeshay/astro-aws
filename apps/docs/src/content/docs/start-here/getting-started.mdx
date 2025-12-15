@@ -1,0 +1,209 @@
+---
+title: Getting Started
+description: Getting started guide
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components"
+
+## What is Astro AWS
+
+Astro AWS is an [Astro](https://astro.build/) SSR adapter and AWS CDK constructs for deploying your Astro application to AWS. It provides everything you need to deploy your Astro application to AWS Lambda with CloudFront, handling both server-side rendered (SSR) and static content.
+
+> **IMPORTANT NOTE:** These packages only provide the bare minimum AWS CDK configuration to get your application running. Everything that does not need to be configured uses the default values AWS provides.
+
+## Prerequisites
+
+Before you begin, make sure you have the following:
+
+- **Node.js** 20.x or higher
+- **AWS Account** with appropriate permissions
+- **AWS CLI** installed and configured with your credentials
+- **AWS CDK CLI** (we'll install this in the guide)
+
+## Step 1: Create your Astro project
+
+Create a new Astro project using the `create-astro` CLI, then add the Astro AWS adapter.
+
+<Tabs syncKey="package-manager">
+<TabItem label="npm">
+
+```sh
+npm create astro@latest
+npx astro add @astro-aws/adapter
+```
+
+</TabItem>
+<TabItem label="bun">
+
+```sh
+bun create astro@latest
+bun x astro add @astro-aws/adapter
+```
+
+</TabItem>
+<TabItem label="pnpm">
+
+```sh
+pnpm create astro@latest
+pnpm astro add @astro-aws/adapter
+```
+
+</TabItem>
+<TabItem label="yarn">
+
+```sh
+yarn create astro@latest
+yarn astro add @astro-aws/adapter
+```
+
+</TabItem>
+</Tabs>
+
+The adapter will automatically configure your `astro.config.mjs` file with the necessary settings.
+
+## Step 2: Build your Astro project
+
+Build your Astro project to generate the deployment artifacts:
+
+<Tabs syncKey="package-manager">
+<TabItem label="npm">
+
+```sh
+npm run build
+```
+
+</TabItem>
+<TabItem label="bun">
+
+```sh
+bun run build
+```
+
+</TabItem>
+<TabItem label="pnpm">
+
+```sh
+pnpm run build
+```
+
+</TabItem>
+<TabItem label="yarn">
+
+```sh
+yarn build
+```
+
+</TabItem>
+</Tabs>
+
+This creates a `dist` directory containing your built application that will be deployed to AWS.
+
+## Step 3: Set up your AWS CDK project
+
+### Install AWS CDK CLI
+
+```sh
+npm install -g aws-cdk
+```
+
+### Create a new CDK project
+
+```sh
+mkdir my-cdk-project
+cd my-cdk-project
+cdk init app --language typescript
+```
+
+### Install dependencies
+
+Install the `@astro-aws/constructs` package and its peer dependencies:
+
+<Tabs syncKey="package-manager">
+<TabItem label="npm">
+
+```sh
+npm install @astro-aws/constructs constructs aws-cdk-lib
+```
+
+</TabItem>
+<TabItem label="bun">
+
+```sh
+bun add @astro-aws/constructs constructs aws-cdk-lib
+```
+
+</TabItem>
+<TabItem label="pnpm">
+
+```sh
+pnpm add @astro-aws/constructs constructs aws-cdk-lib
+```
+
+</TabItem>
+<TabItem label="yarn">
+
+```sh
+yarn add @astro-aws/constructs constructs aws-cdk-lib
+```
+
+</TabItem>
+</Tabs>
+
+### Configure your CDK stack
+
+Update the stack file (typically `lib/my-cdk-project-stack.ts` or similar) with the following:
+
+```ts
+import { Stack } from "aws-cdk-lib"
+import type { StackProps } from "aws-cdk-lib"
+import { Construct } from "constructs"
+import { AstroAWS } from "@astro-aws/constructs"
+
+export interface AstroSiteStackProps extends StackProps {}
+
+export class AstroSiteStack extends Stack {
+	public constructor(scope: Construct, id: string, props: AstroSiteStackProps) {
+		super(scope, id, props)
+
+		new AstroAWS(this, "AstroAWS", {
+			websiteDir: "../my-astro-project", // Path to your Astro project directory
+		})
+	}
+}
+```
+
+> **Note:** Update `websiteDir` to point to the relative path of your Astro project from the CDK project directory. The construct will look for the `dist` directory inside this path.
+
+## Step 4: Bootstrap AWS CDK (first time only)
+
+If this is your first time using AWS CDK in this account and region, you need to bootstrap it:
+
+```sh
+cdk bootstrap
+```
+
+This creates the necessary resources for CDK to deploy your application.
+
+## Step 5: Deploy your application
+
+Deploy your CDK stack to AWS:
+
+```sh
+cdk deploy
+```
+
+The deployment process will:
+
+1. Create a Lambda function with your Astro application
+2. Set up a CloudFront distribution
+3. Configure the necessary IAM roles and permissions
+4. Output the CloudFront distribution URL
+
+After deployment completes, you'll see the CloudFront distribution URL in the output. Your Astro application is now live on AWS!
+
+## Next Steps
+
+- Learn how to [enable SSR](/guides/enabling-ssr) in your Astro application
+- Explore [advanced configuration options](/guides/configuring-deployment) for customizing your deployment
+- Check out the [@astro-aws/adapter reference](/reference/packages/adapter) for adapter-specific options
+- Review the [@astro-aws/constructs reference](/reference/packages/constructs) for CDK customization options

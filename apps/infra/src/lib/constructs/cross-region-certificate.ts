@@ -31,7 +31,7 @@ class CrossRegionCertificateProvider extends Construct {
 						resources: ["*"],
 					}),
 				],
-				runtime: Runtime.NODEJS_20_X,
+				runtime: Runtime.NODEJS_24_X,
 			},
 		)
 
@@ -49,7 +49,7 @@ class CrossRegionCertificateProvider extends Construct {
 						resources: ["*"],
 					}),
 				],
-				runtime: Runtime.NODEJS_20_X,
+				runtime: Runtime.NODEJS_24_X,
 			},
 		)
 

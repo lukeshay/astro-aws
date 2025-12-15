@@ -18,8 +18,7 @@
 		"dist",
 		"bin.js"
 	],
-	"scripts": {
-	},
+	"scripts": {},
 	"eslintConfig": {
 		"extends": [
 			"../.eslintrc.cjs"

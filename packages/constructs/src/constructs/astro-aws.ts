@@ -128,7 +128,7 @@ class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> {
 		const {
 			environment = {},
 			architecture,
-			runtime = Runtime.NODEJS_18_X,
+			runtime = Runtime.NODEJS_24_X,
 			memorySize = 512,
 			description = "SSR Lambda Function",
 			...givenProps
