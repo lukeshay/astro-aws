@@ -1,5 +1,16 @@
 # @astro-aws/constructs
 
+## 0.11.0
+
+### Minor Changes
+
+- f5a23a3: Upgrade dependencies
+
+### Patch Changes
+
+- 3d0dbd7: Add support for Node.js 24
+- 888385b: Upgrade dependencies
+
 ## 0.8.0
 
 ### Minor Changes
