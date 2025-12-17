@@ -28,12 +28,12 @@
 	"dependencies": {
 		"commander": "^14.0.2",
 		"cosmiconfig": "^9.0.0",
-		"esbuild": "^0.27.1",
+		"esbuild": "^0.27.2",
 		"globby": "^16.0.0"
 	},
 	"devDependencies": {
 		"@types/node": "^18.18.4",
-		"eslint": "^9.39.1",
+		"eslint": "^9.39.2",
 		"prettier": "^3.7.4",
 		"typescript": "^5.9.3"
 	},

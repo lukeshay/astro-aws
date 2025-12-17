@@ -48,6 +48,7 @@ describe("index.ts", () => {
 						hybridOutput: "stable",
 						serverOutput: "stable",
 						staticOutput: "unsupported",
+						envGetSecret: "unsupported",
 						sharpImageService: "unsupported",
 					},
 				})
@@ -76,6 +77,7 @@ describe("index.ts", () => {
 						serverOutput: "stable",
 						sharpImageService: "unsupported",
 						staticOutput: "unsupported",
+						envGetSecret: "unsupported",
 					},
 				})
 			})
