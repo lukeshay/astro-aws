@@ -13,6 +13,9 @@ jobs:
       name: production
     name: Release
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@v3
       - uses: oven-sh/setup-bun@v1
