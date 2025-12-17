@@ -8,6 +8,7 @@ import { WebsiteStack } from "../lib/stacks/website-stack.js"
 import { GitHubOIDCStack } from "../lib/stacks/github-oidc-stack.js"
 import { GitHubUsersStack } from "../lib/stacks/github-users-stack.js"
 import { RedirectStack } from "../lib/stacks/redirect-stack.js"
+import { DistributionLoggingStack } from "../lib/stacks/distribution-logging-stack.js"
 
 const app = new App()
 
@@ -38,7 +39,7 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 			delete websiteProps.redirectAliases
 		}
 
-		new WebsiteStack(
+		const websiteStack = new WebsiteStack(
 			app,
 			createStackName(
 				environment,
@@ -49,6 +50,25 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 			{
 				...environmentProps,
 				...websiteProps,
+			},
+		)
+
+		new DistributionLoggingStack(
+			app,
+			createStackName(
+				environment,
+				"DistributionLogging",
+				websiteProps.runtime,
+				websiteProps.mode,
+			),
+			{
+				...environmentProps,
+				...websiteProps,
+				env: {
+					...environmentProps.env,
+					region: "us-east-1",
+				},
+				astroAWS: websiteStack.astroAWS,
 			},
 		)
 

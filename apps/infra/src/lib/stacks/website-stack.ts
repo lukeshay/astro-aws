@@ -50,6 +50,7 @@ type WebsiteStackProps = AstroAWSStackProps &
 	}
 
 class WebsiteStack extends Stack {
+	public readonly astroAWS: AstroAWS
 	public constructor(scope: Construct, id: string, props: WebsiteStackProps) {
 		super(scope, id, props)
 
@@ -266,6 +267,8 @@ class WebsiteStack extends Stack {
 			value:
 				astroAwsConstruct.cdk.cloudfrontDistribution.distributionDomainName,
 		})
+
+		this.astroAWS = astroAwsConstruct
 	}
 }
 
