@@ -13,7 +13,7 @@ const withLogger =
 		options: WithLoggerOptions | undefined,
 		handler: Handler<TEvent, TResult>,
 	): Handler<TEvent, TResult> =>
-	async (event, context, callback) => {
+	async (event, context) => {
 		if (options?.logEvent) {
 			logger.info(`Lambda invocation event ${JSON.stringify(event)}`)
 		}
@@ -22,7 +22,7 @@ const withLogger =
 
 		try {
 			// @ts-expect-error - need void
-			result = await handler(event, context, callback)
+			result = await handler(event, context)
 		} catch (error) {
 			if (options?.logErrors ?? true) {
 				logger.error(`Lambda invocation error ${JSON.stringify(error)}`)

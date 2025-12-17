@@ -6,6 +6,7 @@ import {
 	CfnDeliveryDestination,
 	CfnDeliverySource,
 	LogGroup,
+	RetentionDays,
 } from "aws-cdk-lib/aws-logs"
 import type { AstroAWS } from "@astro-aws/constructs"
 
@@ -40,7 +41,9 @@ class DistributionLoggingStack extends Stack {
 			},
 		)
 
-		const distributionLogGroup = new LogGroup(this, "DistributionLogGroup")
+		const distributionLogGroup = new LogGroup(this, "DistributionLogGroup", {
+			retention: RetentionDays.FIVE_DAYS,
+		})
 
 		const distributionDeliveryDestination = new CfnDeliveryDestination(
 			this,

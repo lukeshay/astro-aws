@@ -3,6 +3,8 @@
 set -e
 
 ENVIRONMENT="${1:-DEV}"
-AWS_ARGS="${@:2}"
+RUNTIME="${2:-*}"
+MODE="${3:-*}"
+AWS_ARGS="${@:4}"
 
-bun run cdk deploy --asset-parallelism --concurrency 4 --require-approval never "AstroAWS-${ENVIRONMENT}-*" ${AWS_ARGS}
+bunx cdk deploy --asset-parallelism --concurrency 4 --require-approval never "AstroAWS-${ENVIRONMENT}-*-${RUNTIME}-${MODE}" ${AWS_ARGS}

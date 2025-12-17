@@ -1,5 +1,5 @@
 ---
-title: Passing Through Query Parameters
+title: Query Parameters
 description: Describes how to access query parameters on the server.
 ---
 
