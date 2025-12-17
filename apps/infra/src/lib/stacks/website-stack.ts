@@ -22,12 +22,6 @@ import {
 	RecordTarget,
 } from "aws-cdk-lib/aws-route53"
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets"
-import {
-	BlockPublicAccess,
-	Bucket,
-	BucketAccessControl,
-	BucketEncryption,
-} from "aws-cdk-lib/aws-s3"
 
 import { DistributionMetric } from "../constructs/distribution-metric.js"
 import { BasicGraphWidget } from "../constructs/basic-graph-widget.js"
@@ -101,12 +95,6 @@ class WebsiteStack extends Stack {
 			queryStringBehavior: CacheQueryStringBehavior.all(),
 		})
 
-		const accessLogBucket = new Bucket(this, "AccessLogBucket", {
-			accessControl: BucketAccessControl.LOG_DELIVERY_WRITE,
-			blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-			encryption: BucketEncryption.S3_MANAGED,
-		})
-
 		const astroAwsConstruct = new AstroAWS(this, "AstroAWSConstruct", {
 			cdk: {
 				cloudfrontDistribution: {
@@ -140,8 +128,6 @@ class WebsiteStack extends Stack {
 							responsePagePath: "/403",
 						},
 					],
-					logBucket: accessLogBucket,
-					logFilePrefix: "cloudfront/",
 					priceClass:
 						environment === Environments.PROD
 							? PriceClass.PRICE_CLASS_ALL
@@ -158,10 +144,6 @@ class WebsiteStack extends Stack {
 					},
 					runtime: new Runtime(`${runtime}.x`),
 					tracing: Tracing.ACTIVE,
-				},
-				s3Bucket: {
-					serverAccessLogsBucket: accessLogBucket,
-					serverAccessLogsPrefix: "s3/",
 				},
 			},
 			outDir: resolve(cwd(), "..", "..", props.app, distDir),
