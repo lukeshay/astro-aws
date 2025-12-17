@@ -1,5 +1,23 @@
 # @astro-aws/adapter
 
+## 0.11.0
+
+### Minor Changes
+
+- f5a23a3: Upgrade dependencies
+
+### Patch Changes
+
+- 3d0dbd7: Add support for Node.js 24
+- 888385b: Upgrade dependencies
+- abec174: Validate and sanitize forwarded URL inputs before processing
+  - Add validation for `x-forwarded-protocol` and `x-forwarded-host` headers to prevent invalid or malicious URLs.
+  - Prevent exceptions caused by invalid URLs constructed from manipulated headers.
+  - Fixes security issue where user-controlled headers could lead to invalid URL usage.
+
+- 6ac1fa0: Use cloudfront-forwarded-protocol as default for scheme on edge functions
+- 6ac1fa0: Use Astro logger instead of console logger
+
 ## 0.10.1
 
 ### Patch Changes
