@@ -79,8 +79,8 @@ export class RedirectStack extends Stack {
 		})
 
 		function getDNS() {
-			const domainNames = redirectAliases.map(
-				(redirectAlias) => `${redirectAlias}.${hostedZoneName}`,
+			const domainNames = redirectAliases.map((redirectAlias) =>
+				[redirectAlias, hostedZoneName].filter(Boolean).join("."),
 			)
 
 			const targetDomainName = `${alias}.${hostedZoneName}`
