@@ -15,6 +15,10 @@ export default defineConfig({
 			pagination: true,
 			sidebar: [
 				{
+					items: ["start-here/getting-started"],
+					label: "Start Here",
+				},
+				{
 					autogenerate: {
 						directory: "guides",
 					},

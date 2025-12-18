@@ -8,6 +8,7 @@ import { WebsiteStack } from "../lib/stacks/website-stack.js"
 import { GitHubOIDCStack } from "../lib/stacks/github-oidc-stack.js"
 import { GitHubUsersStack } from "../lib/stacks/github-users-stack.js"
 import { RedirectStack } from "../lib/stacks/redirect-stack.js"
+import { DistributionLoggingStack } from "../lib/stacks/distribution-logging-stack.js"
 
 const app = new App()
 
@@ -29,16 +30,7 @@ const createStackName = (
 
 Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 	environmentProps.websites.forEach((websiteProps) => {
-		if (environment === Environments.DEV) {
-			// eslint-disable-next-line no-param-reassign
-			delete websiteProps.hostedZoneName
-			// eslint-disable-next-line no-param-reassign
-			delete websiteProps.aliases
-			// eslint-disable-next-line no-param-reassign
-			delete websiteProps.redirectAliases
-		}
-
-		new WebsiteStack(
+		const websiteStack = new WebsiteStack(
 			app,
 			createStackName(
 				environment,
@@ -52,7 +44,27 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 			},
 		)
 
-		if (websiteProps.redirectAliases) {
+		new DistributionLoggingStack(
+			app,
+			createStackName(
+				environment,
+				"DistributionLogging",
+				websiteProps.runtime,
+				websiteProps.mode,
+			),
+			{
+				...environmentProps,
+				mode: websiteProps.mode,
+				runtime: websiteProps.runtime,
+				astroAWS: websiteStack.astroAWS,
+			},
+		)
+
+		if (
+			websiteProps.alias &&
+			websiteProps.redirectAliases &&
+			websiteProps.hostedZoneName
+		) {
 			new RedirectStack(
 				app,
 				createStackName(
@@ -63,9 +75,9 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 				),
 				{
 					...environmentProps,
-					aliases: websiteProps.redirectAliases,
-					hostedZoneName: websiteProps.hostedZoneName!,
-					targetAlias: websiteProps.aliases![0],
+					alias: websiteProps.alias,
+					redirectAliases: websiteProps.redirectAliases,
+					hostedZoneName: websiteProps.hostedZoneName,
 				},
 			)
 		}

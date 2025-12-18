@@ -88,6 +88,7 @@ class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> {
 		this.#astroAWSOrigin = new AstroAWSOrigin(this, "AstroAWSOrigin", {
 			...this.props,
 			lambdaFunction: this.#lambdaFunction,
+			originAccessIdentity: this.#astroAWSS3Bucket.cdk.originAccessIdentity,
 			s3Bucket: this.#astroAWSS3Bucket.cdk.s3Bucket,
 		})
 
@@ -128,7 +129,7 @@ class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> {
 		const {
 			environment = {},
 			architecture,
-			runtime = Runtime.NODEJS_18_X,
+			runtime = Runtime.NODEJS_24_X,
 			memorySize = 512,
 			description = "SSR Lambda Function",
 			...givenProps

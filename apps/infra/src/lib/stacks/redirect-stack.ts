@@ -1,17 +1,11 @@
-import * as path from "node:path"
-
 import { RemovalPolicy, Stack } from "aws-cdk-lib/core"
 import {
-	CloudFrontWebDistribution,
 	Distribution,
-	Function,
-	FunctionCode,
-	FunctionEventType,
 	OriginProtocolPolicy,
 	PriceClass,
-	ViewerCertificate,
 	ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront"
+import { HttpOrigin } from "aws-cdk-lib/aws-cloudfront-origins"
 import type { Construct } from "constructs"
 import {
 	AaaaRecord,
@@ -20,7 +14,6 @@ import {
 	RecordTarget,
 } from "aws-cdk-lib/aws-route53"
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets"
-import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins"
 import {
 	BlockPublicAccess,
 	Bucket,
@@ -29,40 +22,22 @@ import {
 } from "aws-cdk-lib/aws-s3"
 
 import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
-import { CrossRegionCertificate } from "../constructs/cross-region-certificate.js"
+import { DnsValidatedCertificate } from "@trautonen/cdk-dns-validated-certificate"
 
 export type RedirectStackProps = AstroAWSStackProps & {
 	hostedZoneName: string
-	aliases: [string, ...string[]]
-	targetAlias: string
+	alias: string
+	redirectAliases: readonly [string, ...string[]]
 }
 
 export class RedirectStack extends Stack {
 	public constructor(scope: Construct, id: string, props: RedirectStackProps) {
 		super(scope, id, props)
 
-		const { hostedZoneName, aliases } = props
+		const self = this
 
-		const domainNames = aliases.map((alias) =>
-			[alias, hostedZoneName].filter(Boolean).join("."),
-		) as [string, ...string[]]
-
-		const wwwRedirectFunction = new Function(this, "WwwRedirectFunction", {
-			code: FunctionCode.fromFile({
-				filePath: path.resolve(".", "support", "redirect", "index.js"),
-			}),
-		})
-
-		const [domainName, ...alternateNames] = domainNames
-		const targetDomainName = [props.targetAlias, "astro-aws.org"]
-			.filter(Boolean)
-			.join(".")
-
-		const { certificate } = new CrossRegionCertificate(this, "Certificate", {
-			alternateNames,
-			domainName,
-			region: "us-east-1",
-		})
+		const { hostedZoneName, alias, redirectAliases } = props
+		const { hostedZone, domainNames, certificate, targetDomainName } = getDNS()
 
 		const bucket = new Bucket(this, "RedirectBucket", {
 			blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
@@ -76,33 +51,17 @@ export class RedirectStack extends Stack {
 			},
 		})
 
-		const distribution = new CloudFrontWebDistribution(
-			this,
-			"WWWRedirectDistribution",
-			{
-				defaultRootObject: "",
-				originConfigs: [
-					{
-						behaviors: [{ isDefaultBehavior: true }],
-						customOriginSource: {
-							domainName: bucket.bucketWebsiteDomainName,
-							originProtocolPolicy: OriginProtocolPolicy.HTTP_ONLY,
-						},
-					},
-				],
-				viewerCertificate: ViewerCertificate.fromAcmCertificate(certificate, {
-					aliases: domainNames,
+		const distribution = new Distribution(this, "WWWRedirectDistribution", {
+			defaultBehavior: {
+				origin: new HttpOrigin(bucket.bucketWebsiteDomainName, {
+					protocolPolicy: OriginProtocolPolicy.HTTP_ONLY,
 				}),
-				comment: `Redirect to ${targetDomainName} from ${domainNames.join(
-					", ",
-				)}`,
-				priceClass: PriceClass.PRICE_CLASS_ALL,
 				viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 			},
-		)
-
-		const hostedZone = HostedZone.fromLookup(this, "HostedZone", {
-			domainName: hostedZoneName,
+			certificate,
+			domainNames,
+			comment: `Redirect to ${targetDomainName} from ${domainNames.join(", ")}`,
+			priceClass: PriceClass.PRICE_CLASS_ALL,
 		})
 
 		domainNames.forEach((domain) => {
@@ -118,5 +77,26 @@ export class RedirectStack extends Stack {
 				zone: hostedZone,
 			})
 		})
+
+		function getDNS() {
+			const domainNames = redirectAliases.map((redirectAlias) =>
+				[redirectAlias, hostedZoneName].filter(Boolean).join("."),
+			)
+
+			const targetDomainName = `${alias}.${hostedZoneName}`
+
+			const hostedZone = HostedZone.fromLookup(self, "HostedZone", {
+				domainName: hostedZoneName,
+			})
+
+			const certificate = new DnsValidatedCertificate(self, "Certificate", {
+				domainName: targetDomainName,
+				alternativeDomainNames: domainNames,
+				validationHostedZones: [{ hostedZone }],
+				certificateRegion: "us-east-1",
+			})
+
+			return { hostedZone, domainNames, certificate, targetDomainName }
+		}
 	}
 }

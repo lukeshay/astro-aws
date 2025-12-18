@@ -67,7 +67,7 @@
 	"dependencies": {
 		"@astrojs/webapi": "^3.0.0",
 		"@middy/core": "^6.4.5",
-		"esbuild": "^0.27.1",
+		"esbuild": "^0.27.2",
 		"flatted": "^3.3.3",
 		"http-status-codes": "^2.3.0",
 		"merge-anything": "^6.0.6"
@@ -76,11 +76,11 @@
 		"@faker-js/faker": "^10.1.0",
 		"@types/aws-lambda": "^8.10.159",
 		"@types/node": "^20",
-		"astro": "^5.16.5",
+		"astro": "^5.16.6",
 		"aws-lambda": "^1.0.7",
 		"prettier": "^3.7.4",
 		"typescript": "^5.9.3",
-		"vitest": "^4.0.15"
+		"vitest": "^4.0.16"
 	},
 	"peerDependencies": {
 		"astro": ">=4"

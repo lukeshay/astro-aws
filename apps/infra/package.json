@@ -25,9 +25,10 @@
 	"dependencies": {
 		"@astro-aws/constructs": "workspace:^",
 		"@astro-aws/docs": "workspace:^",
-		"@aws-sdk/client-acm": "^3.948.0",
-		"aws-cdk": "^2.1034.0",
-		"aws-cdk-lib": "^2.232.1",
+		"@aws-sdk/client-acm": "^3.954.0",
+		"@trautonen/cdk-dns-validated-certificate": "^0.1.35",
+		"aws-cdk": "^2.1100.1",
+		"aws-cdk-lib": "^2.232.2",
 		"constructs": "^10.4.4",
 		"prettier": "^3.7.4",
 		"typescript": "^5.9.3",

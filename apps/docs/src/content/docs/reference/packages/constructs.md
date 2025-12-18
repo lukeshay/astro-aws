@@ -31,10 +31,10 @@ import { Stack } from "aws-cdk-lib/core"
 import type { StackProps } from "aws-cdk-lib/core"
 import { AstroAWS } from "@astro-aws/constructs"
 
-export interface MyAstroStackProps extends StackProps {}
+export interface AstroSiteStackProps extends StackProps {}
 
-export class MyAstroStack extends Stack {
-	public constructor(scope: Construct, id: string, props: MyAstroStackProps) {
+export class AstroSiteStack extends Stack {
+	public constructor(scope: Construct, id: string, props: AstroSiteStackProps) {
 		super(scope, id, props)
 
 		new AstroAWS(this, "AstroAWS", {
@@ -53,10 +53,10 @@ import { Stack, CfnOutput } from "aws-cdk-lib/core"
 import type { StackProps } from "aws-cdk-lib/core"
 import { AstroAWS } from "@astro-aws/constructs"
 
-export interface MyAstroStackProps extends StackProps {}
+export interface AstroSiteStackProps extends StackProps {}
 
-export class MyAstroStack extends Stack {
-	public constructor(scope: Construct, id: string, props: MyAstroStackProps) {
+export class AstroSiteStack extends Stack {
+	public constructor(scope: Construct, id: string, props: AstroSiteStackProps) {
 		super(scope, id, props)
 
 		const astroAWS = new AstroAWS(this, "AstroAWS", {

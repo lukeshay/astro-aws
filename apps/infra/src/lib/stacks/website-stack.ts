@@ -1,5 +1,6 @@
 import { cwd, env } from "node:process"
 
+import { DnsValidatedCertificate } from "@trautonen/cdk-dns-validated-certificate"
 import { CfnOutput, Duration, Stack } from "aws-cdk-lib/core"
 import type { ICertificate } from "aws-cdk-lib/aws-certificatemanager"
 import {
@@ -10,7 +11,7 @@ import {
 	ResponseHeadersPolicy,
 	ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront"
-import { Architecture, Runtime, Tracing } from "aws-cdk-lib/aws-lambda"
+import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda"
 import type { Construct } from "constructs"
 import { AstroAWS } from "@astro-aws/constructs"
 import { LogQueryWidget } from "aws-cdk-lib/aws-cloudwatch"
@@ -22,22 +23,15 @@ import {
 	RecordTarget,
 } from "aws-cdk-lib/aws-route53"
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets"
-import {
-	BlockPublicAccess,
-	Bucket,
-	BucketAccessControl,
-	BucketEncryption,
-} from "aws-cdk-lib/aws-s3"
 
 import { DistributionMetric } from "../constructs/distribution-metric.js"
 import { BasicGraphWidget } from "../constructs/basic-graph-widget.js"
 import { Environments } from "../constants/environments.js"
 import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
-import { CrossRegionCertificate } from "../constructs/cross-region-certificate.js"
 import { resolve } from "node:path"
 
 type StaticWebsiteStackProps = {
-	aliases?: readonly [string, ...string[]]
+	alias?: string
 	mode: string
 	hostedZoneName?: string
 	app: string
@@ -50,11 +44,14 @@ type WebsiteStackProps = AstroAWSStackProps &
 	}
 
 class WebsiteStack extends Stack {
+	public readonly astroAWS: AstroAWS
 	public constructor(scope: Construct, id: string, props: WebsiteStackProps) {
 		super(scope, id, props)
 
+		const self = this
+
 		const {
-			aliases,
+			alias,
 			cloudwatchDashboard,
 			mode,
 			environment,
@@ -62,48 +59,14 @@ class WebsiteStack extends Stack {
 			runtime,
 		} = props
 
-		const hostedZone = hostedZoneName
-			? HostedZone.fromLookup(this, "HostedZone", {
-					domainName: hostedZoneName,
-				})
-			: undefined
+		const { domainNames, certificate, hostedZone } = getDNS()
 
 		const distDir = mode === "static" ? "dist" : `dist/${mode}`
-		const domainNames = aliases?.map((alias) =>
-			[alias, hostedZoneName].filter(Boolean).join("."),
-		)
-
-		let certificate: ICertificate | undefined
-
-		if (hostedZone && domainNames?.length) {
-			const [domainName, ...alternateNames] = domainNames as [
-				string,
-				...string[],
-			]
-
-			const crossRegionCertificate = new CrossRegionCertificate(
-				this,
-				"Certificate",
-				{
-					alternateNames,
-					domainName,
-					region: "us-east-1",
-				},
-			)
-
-			certificate = crossRegionCertificate.certificate
-		}
 
 		const cachePolicy = new CachePolicy(this, "CachePolicy", {
 			cookieBehavior: CacheCookieBehavior.all(),
 			minTtl: Duration.days(365),
 			queryStringBehavior: CacheQueryStringBehavior.all(),
-		})
-
-		const accessLogBucket = new Bucket(this, "AccessLogBucket", {
-			accessControl: BucketAccessControl.LOG_DELIVERY_WRITE,
-			blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-			encryption: BucketEncryption.S3_MANAGED,
 		})
 
 		const astroAwsConstruct = new AstroAWS(this, "AstroAWSConstruct", {
@@ -139,8 +102,6 @@ class WebsiteStack extends Stack {
 							responsePagePath: "/403",
 						},
 					],
-					logBucket: accessLogBucket,
-					logFilePrefix: "cloudfront/",
 					priceClass:
 						environment === Environments.PROD
 							? PriceClass.PRICE_CLASS_ALL
@@ -156,11 +117,6 @@ class WebsiteStack extends Stack {
 						DOMAIN: String(domainNames?.[0]),
 					},
 					runtime: new Runtime(`${runtime}.x`),
-					tracing: Tracing.ACTIVE,
-				},
-				s3Bucket: {
-					serverAccessLogsBucket: accessLogBucket,
-					serverAccessLogsPrefix: "s3/",
 				},
 			},
 			outDir: resolve(cwd(), "..", "..", props.app, distDir),
@@ -266,6 +222,39 @@ class WebsiteStack extends Stack {
 			value:
 				astroAwsConstruct.cdk.cloudfrontDistribution.distributionDomainName,
 		})
+
+		if (domainNames?.[0]) {
+			new CfnOutput(this, "DomainName", {
+				value: domainNames[0],
+			})
+		}
+
+		this.astroAWS = astroAwsConstruct
+
+		function getDNS() {
+			if (!alias || !hostedZoneName) {
+				return {
+					hostedZone: undefined,
+					domainNames: undefined,
+					certificate: undefined,
+				}
+			}
+
+			const hostedZone = HostedZone.fromLookup(self, "HostedZone", {
+				domainName: hostedZoneName,
+			})
+
+			const domainName = `${alias}.${hostedZoneName}`
+			const domainNames = [domainName]
+
+			const certificate = new DnsValidatedCertificate(self, "Certificate", {
+				domainName,
+				validationHostedZones: [{ hostedZone }],
+				certificateRegion: "us-east-1",
+			})
+
+			return { hostedZone, domainNames, certificate }
+		}
 	}
 }
 

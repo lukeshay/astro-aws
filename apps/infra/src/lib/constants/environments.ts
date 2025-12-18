@@ -34,28 +34,32 @@ const ENVIRONMENT_PROPS: Record<Environment, EnvironmentProps> = {
 		environment: Environments.DEV,
 		websites: [
 			{
-				aliases: ["www.static.dev", "static.dev"],
+				alias: "www.static.dev",
+				redirectAliases: ["static.dev"],
 				hostedZoneName: "astro-aws.org",
 				mode: "static",
 				app: "apps/docs",
 				runtime: "nodejs24",
 			},
 			{
-				aliases: ["www.ssr.nodejs20.dev", "ssr.nodejs20.dev"],
+				alias: "www.ssr.nodejs20.dev",
+				redirectAliases: ["ssr.nodejs20.dev"],
 				hostedZoneName: "astro-aws.org",
 				mode: "ssr",
 				app: "examples/base",
 				runtime: "nodejs20",
 			},
 			{
-				aliases: ["www.stream.nodejs20.dev", "stream.nodejs20.dev"],
+				alias: "www.stream.nodejs20.dev",
+				redirectAliases: ["stream.nodejs20.dev"],
 				hostedZoneName: "astro-aws.org",
 				mode: "ssr-stream",
 				app: "examples/base",
 				runtime: "nodejs20",
 			},
 			{
-				aliases: ["www.edge.nodejs20.dev", "edge.nodejs20.dev"],
+				alias: "www.edge.nodejs20.dev",
+				redirectAliases: ["edge.nodejs20.dev"],
 				env: {
 					...base.env,
 					region: "us-east-1",
@@ -66,21 +70,24 @@ const ENVIRONMENT_PROPS: Record<Environment, EnvironmentProps> = {
 				runtime: "nodejs20",
 			},
 			{
-				aliases: ["www.ssr.nodejs22.dev", "ssr.nodejs22.dev"],
+				alias: "www.ssr.nodejs22.dev",
+				redirectAliases: ["ssr.nodejs22.dev"],
 				hostedZoneName: "astro-aws.org",
 				mode: "ssr",
 				app: "examples/base",
 				runtime: "nodejs22",
 			},
 			{
-				aliases: ["www.stream.nodejs22.dev", "stream.nodejs22.dev"],
+				alias: "www.stream.nodejs22.dev",
+				redirectAliases: ["stream.nodejs22.dev"],
 				hostedZoneName: "astro-aws.org",
 				mode: "ssr-stream",
 				app: "examples/base",
 				runtime: "nodejs22",
 			},
 			{
-				aliases: ["www.edge.nodejs22.dev", "edge.nodejs22.dev"],
+				alias: "www.edge.nodejs22.dev",
+				redirectAliases: ["edge.nodejs22.dev"],
 				env: {
 					...base.env,
 					region: "us-east-1",
@@ -91,21 +98,24 @@ const ENVIRONMENT_PROPS: Record<Environment, EnvironmentProps> = {
 				runtime: "nodejs22",
 			},
 			{
-				aliases: ["www.ssr.nodejs25.dev", "ssr.nodejs25.dev"],
+				alias: "www.ssr.nodejs24.dev",
+				redirectAliases: ["ssr.nodejs24.dev"],
 				hostedZoneName: "astro-aws.org",
 				mode: "ssr",
 				app: "examples/base",
 				runtime: "nodejs24",
 			},
 			{
-				aliases: ["www.stream.nodejs24.dev", "stream.nodejs24.dev"],
+				alias: "www.stream.nodejs24.dev",
+				redirectAliases: ["stream.nodejs24.dev"],
 				hostedZoneName: "astro-aws.org",
 				mode: "ssr-stream",
 				app: "examples/base",
 				runtime: "nodejs24",
 			},
 			{
-				aliases: ["www.edge.nodejs24.dev", "edge.nodejs24.dev"],
+				alias: "www.edge.nodejs24.dev",
+				redirectAliases: ["edge.nodejs24.dev"],
 				env: {
 					...base.env,
 					region: "us-east-1",
@@ -122,7 +132,7 @@ const ENVIRONMENT_PROPS: Record<Environment, EnvironmentProps> = {
 		environment: Environments.PROD,
 		websites: [
 			{
-				aliases: ["www"],
+				alias: "www",
 				hostedZoneName: "astro-aws.org",
 				mode: "static",
 				app: "apps/docs",

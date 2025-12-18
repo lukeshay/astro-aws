@@ -114,8 +114,6 @@ export default defineConfig({
 
 ### Edge Usage
 
-> **NOTE:** Environment variables are not supported in edge mode. Due to the limitations of AWS Lambda@Edge.
-
 1. Install the package.
 
 ```
@@ -145,6 +143,14 @@ export default defineConfig({
 	}),
 })
 ```
+
+#### Limitations
+
+- Environment variables are not supported
+- Limited execution time (5 seconds for viewer request/response, 30 seconds for origin request/response)
+- Smaller deployment package size limits
+- Limited access to AWS services (no VPC access)
+- No access to the file system (except `/tmp`)
 
 ## Example
 
