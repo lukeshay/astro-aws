@@ -22,7 +22,13 @@ class DistributionLoggingStack extends Stack {
 		id: string,
 		props: DistributionLoggingStackProps,
 	) {
-		super(scope, id, props)
+		super(scope, id, {
+			...props,
+			env: {
+				...props.env,
+				region: "us-east-1",
+			},
+		})
 
 		const { astroAWS, mode, environment, runtime } = props
 

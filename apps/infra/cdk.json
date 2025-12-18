@@ -60,7 +60,7 @@
 		"@aws-cdk/aws-rds:preventRenderingDeprecatedCredentials": true,
 		"@aws-cdk/aws-rds:setCorrectValueForDatabaseInstanceReadReplicaInstanceResourceId": true,
 		"@aws-cdk/aws-redshift:columnId": true,
-		"@aws-cdk/aws-route53-patters:useCertificate": true,
+		"@aws-cdk/aws-route53-patterns:useCertificate": true,
 		"@aws-cdk/aws-route53-targets:userPoolDomainNameMethodWithoutCustomResource": true,
 		"@aws-cdk/aws-s3:createDefaultLoggingPolicy": true,
 		"@aws-cdk/aws-s3:keepNotificationInImportedBucket": false,

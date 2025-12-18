@@ -30,15 +30,6 @@ const createStackName = (
 
 Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 	environmentProps.websites.forEach((websiteProps) => {
-		if (environment === Environments.DEV) {
-			// eslint-disable-next-line no-param-reassign
-			delete websiteProps.hostedZoneName
-			// eslint-disable-next-line no-param-reassign
-			delete websiteProps.aliases
-			// eslint-disable-next-line no-param-reassign
-			delete websiteProps.redirectAliases
-		}
-
 		const websiteStack = new WebsiteStack(
 			app,
 			createStackName(
@@ -63,16 +54,17 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 			),
 			{
 				...environmentProps,
-				...websiteProps,
-				env: {
-					...environmentProps.env,
-					region: "us-east-1",
-				},
+				mode: websiteProps.mode,
+				runtime: websiteProps.runtime,
 				astroAWS: websiteStack.astroAWS,
 			},
 		)
 
-		if (websiteProps.redirectAliases) {
+		if (
+			websiteProps.alias &&
+			websiteProps.redirectAliases &&
+			websiteProps.hostedZoneName
+		) {
 			new RedirectStack(
 				app,
 				createStackName(
@@ -83,9 +75,9 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 				),
 				{
 					...environmentProps,
-					aliases: websiteProps.redirectAliases,
-					hostedZoneName: websiteProps.hostedZoneName!,
-					targetAlias: websiteProps.aliases![0],
+					alias: websiteProps.alias,
+					redirectAliases: websiteProps.redirectAliases,
+					hostedZoneName: websiteProps.hostedZoneName,
 				},
 			)
 		}

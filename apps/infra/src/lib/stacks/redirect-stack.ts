@@ -22,34 +22,22 @@ import {
 } from "aws-cdk-lib/aws-s3"
 
 import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
-import { CrossRegionCertificate } from "../constructs/cross-region-certificate.js"
+import { DnsValidatedCertificate } from "@trautonen/cdk-dns-validated-certificate"
 
 export type RedirectStackProps = AstroAWSStackProps & {
 	hostedZoneName: string
-	aliases: [string, ...string[]]
-	targetAlias: string
+	alias: string
+	redirectAliases: readonly [string, ...string[]]
 }
 
 export class RedirectStack extends Stack {
 	public constructor(scope: Construct, id: string, props: RedirectStackProps) {
 		super(scope, id, props)
 
-		const { hostedZoneName, aliases } = props
+		const self = this
 
-		const domainNames = aliases.map((alias) =>
-			[alias, hostedZoneName].filter(Boolean).join("."),
-		) as [string, ...string[]]
-
-		const [domainName, ...alternateNames] = domainNames
-		const targetDomainName = [props.targetAlias, "astro-aws.org"]
-			.filter(Boolean)
-			.join(".")
-
-		const { certificate } = new CrossRegionCertificate(this, "Certificate", {
-			alternateNames,
-			domainName,
-			region: "us-east-1",
-		})
+		const { hostedZoneName, alias, redirectAliases } = props
+		const { hostedZone, domainNames, certificate, targetDomainName } = getDNS()
 
 		const bucket = new Bucket(this, "RedirectBucket", {
 			blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
@@ -76,10 +64,6 @@ export class RedirectStack extends Stack {
 			priceClass: PriceClass.PRICE_CLASS_ALL,
 		})
 
-		const hostedZone = HostedZone.fromLookup(this, "HostedZone", {
-			domainName: hostedZoneName,
-		})
-
 		domainNames.forEach((domain) => {
 			new ARecord(this, `${domain}-ARecord`, {
 				recordName: domain,
@@ -93,5 +77,26 @@ export class RedirectStack extends Stack {
 				zone: hostedZone,
 			})
 		})
+
+		function getDNS() {
+			const domainNames = redirectAliases.map(
+				(redirectAlias) => `${redirectAlias}.${hostedZoneName}`,
+			)
+
+			const targetDomainName = `${alias}.${hostedZoneName}`
+
+			const hostedZone = HostedZone.fromLookup(self, "HostedZone", {
+				domainName: hostedZoneName,
+			})
+
+			const certificate = new DnsValidatedCertificate(self, "Certificate", {
+				domainName: targetDomainName,
+				alternativeDomainNames: domainNames,
+				validationHostedZones: [{ hostedZone }],
+				certificateRegion: "us-east-1",
+			})
+
+			return { hostedZone, domainNames, certificate, targetDomainName }
+		}
 	}
 }
