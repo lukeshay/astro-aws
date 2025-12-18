@@ -13,9 +13,6 @@ jobs:
       name: production
     name: Release
     runs-on: ubuntu-22.04
-    permissions:
-      contents: read
-      pull-requests: write
     steps:
       - uses: actions/checkout@v3
       - uses: oven-sh/setup-bun@v1
@@ -25,4 +22,4 @@ jobs:
       - run: bun install
       - uses: changesets/action@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
