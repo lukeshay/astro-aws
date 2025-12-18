@@ -25,7 +25,7 @@
 	"dependencies": {
 		"@astro-aws/constructs": "workspace:^",
 		"@astro-aws/docs": "workspace:^",
-		"@aws-sdk/client-acm": "^3.953.0",
+		"@aws-sdk/client-acm": "^3.954.0",
 		"@trautonen/cdk-dns-validated-certificate": "^0.1.35",
 		"aws-cdk": "^2.1100.1",
 		"aws-cdk-lib": "^2.232.2",
