@@ -3,6 +3,8 @@ title: Static Site Deployment
 description: Learn how to deploy Astro sites as static sites without server-side rendering on AWS.
 ---
 
+import { Tabs, TabItem } from "@astrojs/starlight/components"
+
 ## Overview
 
 Astro AWS supports deploying Astro sites as static sites without server-side rendering (SSR). Static deployment is the simplest and most cost-effective option for sites that don't require dynamic server-side functionality. When you deploy a static site, Astro AWS creates only the essential resources needed: an S3 bucket for hosting your static files and a CloudFront distribution for global content delivery.
@@ -48,9 +50,36 @@ That's it! No adapter configuration is needed for static sites.
 
 Build your Astro site as you normally would:
 
-```bash
+<Tabs syncKey="package-manager">
+<TabItem label="npm">
+
+```sh
 npm run build
 ```
+
+</TabItem>
+<TabItem label="bun">
+
+```sh
+bun run build
+```
+
+</TabItem>
+<TabItem label="pnpm">
+
+```sh
+pnpm run build
+```
+
+</TabItem>
+<TabItem label="yarn">
+
+```sh
+yarn build
+```
+
+</TabItem>
+</Tabs>
 
 This will generate static HTML, CSS, JavaScript, and other assets in the `dist` directory.
 
@@ -101,7 +130,7 @@ Deploying a static site with Astro AWS is straightforward. The construct automat
 
 ### Basic Static Deployment
 
-```ts ins={13-15}
+```ts
 // lib/astro-site-stack.ts
 import { Stack } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
@@ -130,7 +159,7 @@ The construct automatically:
 
 You can customize the S3 bucket and CloudFront distribution even for static sites:
 
-```ts ins={5-6,14-35}
+```ts
 // lib/astro-site-stack.ts
 import { Stack } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
@@ -187,7 +216,7 @@ export class AstroSiteStack extends Stack {
 
 If your static site is built to a different directory or you're deploying from a pre-built directory:
 
-```ts ins={14-16}
+```ts
 new AstroAWS(this, "AstroAWS", {
 	outDir: "../my-astro-project/dist",
 })
@@ -220,7 +249,7 @@ If you need any of these features, consider using SSR instead.
 
 For static sites, you can configure aggressive caching since content doesn't change frequently:
 
-```ts ins={13-20}
+```ts
 const staticCachePolicy = new CachePolicy(this, "StaticCachePolicy", {
 	defaultTtl: Duration.days(365),
 	minTtl: Duration.days(1),
@@ -243,7 +272,7 @@ While Astro AWS doesn't support ISR out of the box for static sites, you can ach
 
 Here's a complete example of deploying a static Astro site:
 
-```ts ins={1,5-8,12,14-42}
+```ts
 // lib/astro-site-stack.ts
 import { Stack, Duration } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"

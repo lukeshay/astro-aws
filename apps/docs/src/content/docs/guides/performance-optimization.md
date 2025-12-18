@@ -23,7 +23,7 @@ Cache policies use three TTL (Time To Live) settings:
 
 For static sites or static assets, use aggressive caching:
 
-```ts ins={5-6,13-20}
+```ts
 // lib/astro-site-stack.ts
 import { Stack, Duration } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
@@ -65,7 +65,7 @@ export class AstroSiteStack extends Stack {
 
 For SSR sites, configure caching to balance freshness with performance:
 
-```ts ins={5-6,13-22}
+```ts
 import {
 	CachePolicy,
 	CacheCookieBehavior,
@@ -100,7 +100,7 @@ CloudFront price classes determine which edge locations serve your content. Choo
 
 ### Choosing the Right Price Class
 
-```ts ins={5,13-20}
+```ts
 import { PriceClass } from "aws-cdk-lib/aws-cloudfront"
 
 export class AstroSiteStack extends Stack {
@@ -138,7 +138,7 @@ Lambda function configuration directly impacts performance and cost. Optimizing 
 
 Lambda memory allocation affects CPU power proportionally. More memory = more CPU:
 
-```ts ins={5,13-26}
+```ts
 import { Architecture, Runtime, Tracing } from "aws-cdk-lib/aws-lambda"
 
 new AstroAWS(this, "AstroAWS", {
@@ -166,7 +166,7 @@ new AstroAWS(this, "AstroAWS", {
 
 Set timeouts based on your application's needs:
 
-```ts ins={13-18}
+```ts
 cdk: {
 	lambdaFunction: {
 		timeout: Duration.seconds(10), // For fast SSR responses
@@ -187,7 +187,7 @@ cdk: {
 
 Enable X-Ray tracing to monitor Lambda performance:
 
-```ts ins={13-20}
+```ts
 cdk: {
 	lambdaFunction: {
 		tracing: Tracing.ACTIVE, // Enable X-Ray tracing
@@ -216,7 +216,7 @@ AWS Lambda supports both ARM64 (Graviton2) and x86_64 architectures. ARM64 provi
 
 ### Configuring ARM64
 
-```ts ins={5,13-20}
+```ts
 import { Architecture } from "aws-cdk-lib/aws-lambda"
 
 new AstroAWS(this, "AstroAWS", {
@@ -246,7 +246,7 @@ new AstroAWS(this, "AstroAWS", {
 
 Compare architectures by deploying both and monitoring:
 
-```ts ins={13-20}
+```ts
 // Test configuration
 cdk: {
 	lambdaFunction: {
@@ -271,7 +271,7 @@ Beyond caching, several CloudFront settings can improve performance.
 
 Enable compression to reduce transfer sizes:
 
-```ts ins={5,13-25}
+```ts
 import {
 	CachePolicy,
 	CompressionFormat,
@@ -308,7 +308,7 @@ CloudFront automatically uses HTTP/2 and HTTP/3 when supported by clients. Ensur
 
 For high-traffic sites, consider using Origin Shield to reduce origin load:
 
-```ts ins={13-20}
+```ts
 cdk: {
 	cloudfrontDistribution: {
 		enableOriginShield: true,
@@ -380,7 +380,7 @@ Regular monitoring helps identify optimization opportunities:
 
 Here's a complete example combining multiple optimization strategies:
 
-```ts ins={1,5-8,12,14-50}
+```ts
 // lib/astro-site-stack.ts
 import { Stack, Duration } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"

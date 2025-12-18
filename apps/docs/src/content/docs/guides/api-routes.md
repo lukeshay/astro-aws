@@ -37,7 +37,7 @@ You can customize the API behavior by providing an `apiBehavior` configuration o
 
 ### Basic Configuration
 
-```ts ins={13-20}
+```ts
 // lib/astro-site-stack.ts
 import { Stack } from "aws-cdk-lib/core"
 import type { StackProps } from "aws-cdk-lib/core"
@@ -71,7 +71,7 @@ API routes often return dynamic content that shouldn't be cached. You can config
 
 For APIs that return dynamic or user-specific data, configure a cache policy that disables caching:
 
-```ts ins={5-7,15-25}
+```ts
 // lib/astro-site-stack.ts
 import { Stack, Duration } from "aws-cdk-lib/core"
 import type { StackProps } from "aws-cdk-lib/core"
@@ -127,7 +127,7 @@ When creating a cache policy for API routes, consider:
 
 If your API returns static or infrequently changing data, you can enable caching:
 
-```ts ins={15-22}
+```ts
 const apiCachePolicy = new CachePolicy(this, "ApiCachePolicy", {
 	cookieBehavior: CacheCookieBehavior.none(),
 	headerBehavior: CacheHeaderBehavior.none(),
@@ -150,7 +150,7 @@ CORS (Cross-Origin Resource Sharing) headers are automatically configured for AP
 
 If you need more restrictive CORS settings, you can create a custom response headers policy:
 
-```ts ins={5-9,17-36}
+```ts
 // lib/astro-site-stack.ts
 import { Stack, Duration } from "aws-cdk-lib/core"
 import type { StackProps } from "aws-cdk-lib/core"
@@ -194,7 +194,7 @@ The `apiBehavior` configuration only affects `/api/*` paths. All other paths (yo
 
 ### Example: Different Cache Policies
 
-```ts ins={5-8,15-45}
+```ts
 // lib/astro-site-stack.ts
 import { Stack, Duration } from "aws-cdk-lib/core"
 import type { StackProps } from "aws-cdk-lib/core"

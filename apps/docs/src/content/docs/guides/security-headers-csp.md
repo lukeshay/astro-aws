@@ -25,7 +25,7 @@ CloudFront uses `ResponseHeadersPolicy` to add security headers to responses. Yo
 
 Here's a basic example of creating a `ResponseHeadersPolicy` with CSP:
 
-```ts ins={5,13-25}
+```ts
 // lib/astro-site-stack.ts
 import { Stack } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
@@ -86,7 +86,7 @@ Common CSP directives include:
 
 For maximum security, use a strict CSP policy that only allows resources from your own domain:
 
-```ts ins={13-25}
+```ts
 const strictSecurityPolicy = new ResponseHeadersPolicy(
 	this,
 	"StrictSecurityPolicy",
@@ -106,7 +106,7 @@ const strictSecurityPolicy = new ResponseHeadersPolicy(
 
 If your application needs to load resources from external domains (CDNs, APIs, etc.), you can include them in your CSP:
 
-```ts ins={13-25}
+```ts
 const cspWithExternalResources = new ResponseHeadersPolicy(
 	this,
 	"CSPWithExternalResources",
@@ -126,7 +126,7 @@ const cspWithExternalResources = new ResponseHeadersPolicy(
 
 If you're using AWS services like CloudWatch RUM or Cognito, you'll need to include their domains:
 
-```ts ins={13-25}
+```ts
 const cspWithAWSServices = new ResponseHeadersPolicy(
 	this,
 	"CSPWithAWSServices",
@@ -152,7 +152,7 @@ In addition to CSP, CloudFront's `ResponseHeadersPolicy` supports other security
 
 Here's an example that includes multiple security headers:
 
-```ts ins={5-6,14-36}
+```ts
 // lib/astro-site-stack.ts
 import { Stack, Duration } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
@@ -223,7 +223,7 @@ export class AstroSiteStack extends Stack {
 
 For development environments, you might want a more permissive CSP:
 
-```ts ins={13-20}
+```ts
 const devSecurityPolicy = new ResponseHeadersPolicy(this, "DevSecurityPolicy", {
 	securityHeadersBehavior: {
 		contentSecurityPolicy: {
@@ -239,7 +239,7 @@ const devSecurityPolicy = new ResponseHeadersPolicy(this, "DevSecurityPolicy", {
 
 For production, use a strict policy:
 
-```ts ins={13-20}
+```ts
 const prodSecurityPolicy = new ResponseHeadersPolicy(
 	this,
 	"ProdSecurityPolicy",
@@ -259,7 +259,7 @@ const prodSecurityPolicy = new ResponseHeadersPolicy(
 
 If you're using analytics services like Google Analytics or Plausible:
 
-```ts ins={13-20}
+```ts
 const analyticsSecurityPolicy = new ResponseHeadersPolicy(
 	this,
 	"AnalyticsSecurityPolicy",
@@ -279,7 +279,7 @@ const analyticsSecurityPolicy = new ResponseHeadersPolicy(
 
 You can apply different security policies to different CloudFront behaviors. For example, you might want stricter policies for your main site and different policies for API routes:
 
-```ts ins={5,13-40}
+```ts
 // lib/astro-site-stack.ts
 import { Stack } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
@@ -387,7 +387,7 @@ These tools will scan your site and provide a security score along with recommen
 
 Here's a complete example combining all the concepts:
 
-```ts ins={1,5-8,12,14-46,49-53}
+```ts
 // lib/astro-site-stack.ts
 import { Stack, Duration } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"

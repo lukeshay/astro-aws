@@ -22,7 +22,7 @@ All resources can be customized through the `cdk` prop, which allows you to conf
 
 Here's a minimal example of using the `AstroAWS` construct. This will automatically identify which type of deployment you are wanting (SSR, SSR stream, Lambda@Edge):
 
-```ts ins={13-15}
+```ts
 // lib/astro-site-stack.ts
 import { Stack } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
@@ -50,7 +50,7 @@ You can customize any AWS resource by passing configuration options through the 
 
 Configure your Lambda function for SSR:
 
-```ts ins={2,6,14-26}
+```ts
 // lib/astro-site-stack.ts
 import { Stack, Duration } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
@@ -86,7 +86,7 @@ export class AstroSiteStack extends Stack {
 
 Customize your CloudFront distribution:
 
-```ts ins={5,13-23}
+```ts
 // lib/astro-site-stack.ts
 import { Stack } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
@@ -120,7 +120,7 @@ export class AstroSiteStack extends Stack {
 
 Configure your S3 bucket:
 
-```ts ins={5,11,15-22}
+```ts
 // lib/astro-site-stack.ts
 import { Stack } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
@@ -153,7 +153,7 @@ export class AstroSiteStack extends Stack {
 
 Here's a comprehensive example combining multiple configurations:
 
-```ts ins={1,5-7,11,13-35,38-41}
+```ts
 import { Stack, CfnOutput, Duration } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
 import { Construct } from "constructs"
@@ -207,7 +207,7 @@ export class AstroSiteStack extends Stack {
 
 You can access the underlying AWS resources through the `cdk` property:
 
-```ts ins={4-11}
+```ts
 const astroAWS = new AstroAWS(this, "AstroAWS", {
 	websiteDir: "../my-astro-project",
 })

@@ -19,7 +19,7 @@ Regular SSR mode uses AWS Lambda to render your Astro pages on the server. This 
 
 Update your `astro.config.ts` file to enable SSR mode:
 
-```ts ins={8}
+```ts
 // astro.config.ts
 import { defineConfig } from "astro/config"
 import astroAws from "@astro-aws/adapter"
@@ -55,7 +55,7 @@ SSR Streaming mode enables streaming responses, allowing your pages to start ren
 
 Update your `astro.config.ts` file to enable SSR streaming mode:
 
-```ts ins={8}
+```ts
 // astro.config.ts
 import { defineConfig } from "astro/config"
 import astroAws from "@astro-aws/adapter"
@@ -116,7 +116,7 @@ Edge mode uses AWS Lambda@Edge to run your Astro application at CloudFront edge 
 
 Update your `astro.config.ts` file to enable edge mode:
 
-```ts ins={8}
+```ts
 // astro.config.ts
 import { defineConfig } from "astro/config"
 import astroAws from "@astro-aws/adapter"

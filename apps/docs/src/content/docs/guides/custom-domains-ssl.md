@@ -48,7 +48,7 @@ This guide shows you how to create certificates in the correct region and config
 
 Here's a minimal example of setting up a custom domain. Since CloudFront requires certificates in `us-east-1`, we'll create the certificate in a separate stack:
 
-```ts ins={5-6,9-10,13-14,17-18,21-30,33-35,38-48}
+```ts
 // lib/certificate-stack.ts
 import { Stack } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
@@ -112,7 +112,7 @@ export class AstroSiteStack extends Stack {
 
 After configuring the certificate and CloudFront distribution, you need to set up DNS records to point your domain to CloudFront. You can automatically create these records using CDK:
 
-```ts ins={5-7,9-10,13-14,17-18,21-30,33-35,38-48,51-66}
+```ts
 // lib/certificate-stack.ts
 import { Stack } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
@@ -227,7 +227,7 @@ The certificate validation process:
 
 You can configure multiple domains or subdomains using the `subjectAlternativeNames` parameter:
 
-```ts ins={17-18,21-30}
+```ts
 // In CertificateStack constructor
 this.certificate = new Certificate(this, "Certificate", {
 	domainName: "example.com",
@@ -254,7 +254,7 @@ All domains will be included in a single certificate (SAN certificate), and DNS 
 
 Here's a complete example that sets up a custom domain with SSL certificate and DNS records:
 
-```ts ins={1,5-10,13-14,17-18,21-30,33-35,38-48,51-66}
+```ts
 // lib/certificate-stack.ts
 import { Stack } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"

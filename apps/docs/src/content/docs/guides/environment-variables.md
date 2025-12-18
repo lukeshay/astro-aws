@@ -13,7 +13,7 @@ The simplest way to configure environment variables is through the `lambdaFuncti
 
 ### Basic Configuration
 
-```ts ins={5,13-20}
+```ts
 // lib/astro-site-stack.ts
 import { Stack } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
@@ -107,7 +107,7 @@ You can configure different environment variables for different deployment envir
 
 ### Using Stack Context
 
-```ts ins={1,5,9-10,13-30}
+```ts
 // lib/astro-site-stack.ts
 import { Stack } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
@@ -159,7 +159,7 @@ export class AstroSiteStack extends Stack {
 
 You can also use CDK context values to determine the environment:
 
-```ts ins={13-25}
+```ts
 export class AstroSiteStack extends Stack {
 	public constructor(scope: Construct, id: string, props: StackProps) {
 		super(scope, id, props)
@@ -217,14 +217,13 @@ aws secretsmanager create-secret \
 
 Your Lambda function needs permission to read the secret. Configure this in your CDK stack:
 
-```ts ins={1,5-6,13-30}
+```ts
 // lib/astro-site-stack.ts
 import { Stack } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"
 import { Construct } from "constructs"
 import { AstroAWS } from "@astro-aws/constructs"
 import { Secret } from "aws-cdk-lib/aws-secretsmanager"
-import { PolicyStatement, Effect } from "aws-cdk-lib/aws-iam"
 
 export class AstroSiteStack extends Stack {
 	public constructor(scope: Construct, id: string, props: StackProps) {
@@ -439,7 +438,7 @@ environment: {
 
 Here's a complete example showing environment variables configuration with different environments and Secrets Manager integration:
 
-```ts ins={1,5-8,11,13-60}
+```ts
 // lib/astro-site-stack.ts
 import { Stack } from "aws-cdk-lib"
 import type { StackProps } from "aws-cdk-lib"

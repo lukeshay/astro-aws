@@ -11,7 +11,7 @@ Follow the [getting started guide](/start-here/getting-started) to create a new 
 
 In order to allow cookies to be passed to your application, you must create a custom `CachePolicy` for the CloudFront distribution. The following example based on the getting started guide will allow all cookies to be passed to your application.
 
-```ts ins={13-15,18-28}
+```ts
 // lib/astro-site-stack.ts
 import { Stack } from "aws-cdk-lib/core"
 import type { StackProps } from "aws-cdk-lib/core"
