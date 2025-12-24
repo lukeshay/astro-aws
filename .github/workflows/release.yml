@@ -7,6 +7,10 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   release:
     environment:
@@ -15,6 +19,8 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: true
       - uses: oven-sh/setup-bun@v1
       - uses: actions/setup-node@v4
         with:
