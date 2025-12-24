@@ -27,7 +27,7 @@
 		"release:cut": "git add . && git commit -m 'new release' && bun run deploy:one @astro-aws/infra -- PROD && bun run changeset publish && git push && git push --follow-tags",
 		"release:prepare": "bun run build && bun run synth && bun run changeset version && bun run format",
 		"changeset:version": "bun run changeset version && bun run format",
-		"changeset:release": "bun run deploy:one @astro-aws/infra -- PROD && bun run changeset tag && bun run changeset publish && git push && git push --follow-tags",
+		"changeset:publish": "bun run deploy:one @astro-aws/infra -- PROD && bun run changeset tag && bun run changeset publish && git push --force --follow-tags origin HEAD:refs/heads/main",
 		"synth": "turbo run synth",
 		"synth:one": "turbo run synth --filter",
 		"test": "turbo run test",
