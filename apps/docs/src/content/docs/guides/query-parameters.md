@@ -49,7 +49,3 @@ export class AstroSiteStack extends Stack {
 	}
 }
 ```
-
-```
-
-```
