@@ -1,16 +1,18 @@
-<!--
-For issue references: Add a comma-separated list of a [closing word](https://help.github.com/articles/closing-issues-via-commit-messages/) followed by the ticket number fixed by the PR. (it should be underlined in the preview if done correctly)
--->
+# Context
 
-| Q                       | A <!--(Can use an emoji 👍) -->                                                                            |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------- |
-| Fixed Issues?           | `Fixes #1, Fixes #2` <!-- remove the (`) quotes and write "Fixes" before the number to link the issues --> |
-| Patch: Bug Fix?         |
-| Major: Breaking Change? |
-| Minor: New Feature?     |
-| Tests Added + Pass?     | Yes                                                                                                        |
-| Documentation PR Link   | <!-- If only readme change, add `[skip ci]` to your commits -->                                            |
-| Any Dependency Changes? |
-| License                 | MIT                                                                                                        |
+<!-- Issues this fixes. Format: Fixes #1, #2, #3, .... -->
 
-<!-- Describe your changes below in as much detail as possible -->
+Fixes
+
+<!-- Provide additional context for this PR including issues this PR fixes. -->
+
+Replace me with additional context
+
+# Additional Changes Made
+
+<!-- Add a detailed description of what this PR does -->
+
+# TODO
+
+- [ ] Added unit tests
+- [ ] Updated or added new documentation to [documentation website](apps/docs)

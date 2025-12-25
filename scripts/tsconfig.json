@@ -1,3 +1,6 @@
 {
+	"compilerOptions": {
+		"types": ["@types/bun"]
+	},
 	"extends": "../tsconfig.base.json"
 }

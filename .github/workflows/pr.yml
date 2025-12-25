@@ -1,0 +1,26 @@
+name: PR
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check-pr:
+    name: Check PR
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: oven-sh/setup-bun@v1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: bun install
+      - run: bunx scripts verify-pr ${{ github.event.pull_request.number }}

@@ -82,7 +82,7 @@ jobs:
           node-version: ${{ inputs.node_version }}
       - run: bun install
       - run: bun run build
-      - run: bun run deploy:one @astro-aws/infra -- ${{ inputs.stack_environment }}
+      - run: bun run deploy:one @astro-aws/infra -- ${{ inputs.stack_environment }} '*' '*'
         env:
           AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
       # - run: |
