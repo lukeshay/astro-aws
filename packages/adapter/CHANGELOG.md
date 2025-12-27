@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.12.0
+
+### Minor Changes
+
+- 0453b85: Upgrade dependencies
+
 ## 0.11.0
 
 ### Minor Changes
