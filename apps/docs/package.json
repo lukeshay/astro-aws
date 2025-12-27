@@ -15,12 +15,12 @@
 	],
 	"scripts": {
 		"astro": "astro",
-		"build": "pnpm run clean && ./scripts/copy-package-readmes.sh && astro build",
+		"build": "bun run clean && ./scripts/copy-package-readmes.sh && astro build",
 		"check": "astro check && tsc",
 		"clean": "rimraf dist",
 		"dev": "astro dev",
 		"preview": "astro preview",
-		"release": "pnpm run build && pnpm run package",
+		"release": "bun run build && bun run package",
 		"start": "astro dev"
 	},
 	"dependencies": {

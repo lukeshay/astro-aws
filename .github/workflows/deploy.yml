@@ -66,11 +66,6 @@ jobs:
       name: ${{ inputs.environment_name }}
       url: ${{ inputs.environment_url }}
     steps:
-      - run: echo "::add-mask::${{ secrets.AWS_ACCOUNT }}"
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ inputs.ref }}
-          repository: ${{ inputs.repository }}
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -81,13 +76,7 @@ jobs:
         with:
           node-version: ${{ inputs.node_version }}
       - run: bun install
-      - run: bun run build
       - run: bun run deploy:one @astro-aws/infra -- ${{ inputs.stack_environment }} '*' '*'
         env:
           AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
-      # - run: |
-      #       export TIME="$(TZ=GMT date +'%Y-%m-%d_%H-%M-%S')"
-      #       git tag "${{ inputs.stack_environment }}_latest" --force
-      #       git tag "${{ inputs.stack_environment }}_${TIME}"
-      #       git push origin "${{ inputs.stack_environment }}_latest" --force
-      #       git push origin "${{ inputs.stack_environment }}_${TIME}"
+          AWS_REGION: ${{ inputs.aws_region }}

@@ -18,12 +18,12 @@
 		"build:ssr": "MODE=ssr astro build",
 		"build:ssr-stream": "MODE=ssr-stream astro build",
 		"astro": "astro",
-		"build": "pnpm run clean && run-p build:*",
+		"build": "bun run clean && run-p build:*",
 		"check": "astro check && tsc",
-		"clean": "rimraf dist",
+		"clean": "rimraf dist .cache",
 		"dev": "astro dev",
 		"preview": "astro preview",
-		"release": "pnpm run build && pnpm run package",
+		"release": "bun run build && bun run package",
 		"start": "astro dev"
 	},
 	"dependencies": {

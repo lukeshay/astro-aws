@@ -15,5 +15,6 @@ export default defineConfig({
 		plugins: [tailwindcss()],
 	},
 	outDir: `./dist/${mode}`,
+	cacheDir: `./.cache/${mode}`,
 	output: "server",
 })
