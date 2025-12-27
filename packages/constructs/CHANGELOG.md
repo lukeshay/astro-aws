@@ -1,5 +1,13 @@
 # @astro-aws/constructs
 
+## 0.12.0
+
+### Minor Changes
+
+- 0453b85: Default lambda runtimes to Nodejs 24
+- 0453b85: Upgrade dependencies
+- 0453b85: Remove usage of deprecated constructs
+
 ## 0.11.0
 
 ### Minor Changes
