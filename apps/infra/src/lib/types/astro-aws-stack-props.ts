@@ -5,7 +5,7 @@ import type { Environment } from "../constants/environments.js"
 export type AstroAWSStackProps = Readonly<
 	Omit<StackProps, "env"> & {
 		env: {
-			account: string | undefined
+			account: string
 			region: string
 		}
 		environment: Environment

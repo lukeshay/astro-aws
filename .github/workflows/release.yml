@@ -37,5 +37,7 @@ jobs:
           version: bun run changeset:version
           publish: bun run changeset:publish
         env:
+          AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
+          AWS_REGION: us-west-2
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

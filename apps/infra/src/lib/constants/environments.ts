@@ -7,7 +7,7 @@ const base = {
 	analyticsReporting: false,
 	crossRegionReferences: true,
 	env: {
-		account: env.AWS_ACCOUNT ?? env.CDK_DEFAULT_ACCOUNT,
+		account: env.AWS_ACCOUNT ?? String(env.CDK_DEFAULT_ACCOUNT),
 		region: "us-west-2",
 	},
 	terminationProtection: false,
