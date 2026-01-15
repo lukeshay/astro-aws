@@ -80,7 +80,7 @@
 		"@aws-cdk/core:aspectStabilization": true,
 		"@aws-cdk/core:cfnIncludeRejectComplexResourceUpdateCreatePolicyIntrinsics": true,
 		"@aws-cdk/core:checkSecretUsage": true,
-		"@aws-cdk/core:enableAdditionalMetadataCollection": true,
+		"@aws-cdk/core:enableAdditionalMetadataCollection": false,
 		"@aws-cdk/core:enablePartitionLiterals": true,
 		"@aws-cdk/core:explicitStackTags": true,
 		"@aws-cdk/core:includePrefixInUniqueNameGeneration": true,
