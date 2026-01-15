@@ -28,7 +28,7 @@ on:
         description: The AWS region
         required: false
         type: string
-        default: us-east-2
+        default: us-west-2
       ref:
         description: The git ref to checkout
         required: false
