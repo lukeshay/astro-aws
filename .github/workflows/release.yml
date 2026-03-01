@@ -27,6 +27,8 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
       - name: Verify AWS identity
         run: aws sts get-caller-identity
+      - name: Export AWS account
+        run: echo "AWS_ACCOUNT=$(aws sts get-caller-identity --query Account --output text)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v3
       - uses: oven-sh/setup-bun@v1
       - uses: actions/setup-node@v4
@@ -39,7 +41,7 @@ jobs:
           version: bun run changeset:version
           publish: bun run changeset:publish
         env:
-          AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
+          AWS_ACCOUNT: ${{ env.AWS_ACCOUNT }}
           AWS_REGION: us-west-2
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
