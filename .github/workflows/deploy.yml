@@ -24,11 +24,6 @@ on:
         description: AWS session name
         required: false
         type: string
-      aws_region:
-        description: The AWS region
-        required: false
-        type: string
-        default: us-west-2
       ref:
         description: The git ref to checkout
         required: false
@@ -69,8 +64,9 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ inputs.aws_region }}
+          aws-region: us-west-2
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+      - uses: actions/checkout@v3
       - uses: oven-sh/setup-bun@v1
       - uses: actions/setup-node@v4
         with:
@@ -79,4 +75,4 @@ jobs:
       - run: bun run deploy:one @astro-aws/infra -- ${{ inputs.stack_environment }} '*' '*'
         env:
           AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
-          AWS_REGION: ${{ inputs.aws_region }}
+          AWS_REGION: us-west-2

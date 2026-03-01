@@ -1,6 +1,15 @@
 {
 	"$schema": "https://turbo.build/schema.json",
-	"globalEnv": ["AWS_ACCOUNT", "AWS_REGION", "AWS_PROFILE", "USER"],
+	"globalEnv": [
+		"AWS_ACCESS_KEY_ID",
+		"AWS_SECRET_ACCESS_KEY",
+		"AWS_SESSION_TOKEN",
+		"AWS_DEFAULT_REGION",
+		"AWS_ACCOUNT",
+		"AWS_REGION",
+		"AWS_PROFILE",
+		"USER"
+	],
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
