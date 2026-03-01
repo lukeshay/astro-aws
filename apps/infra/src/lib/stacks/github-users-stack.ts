@@ -38,12 +38,24 @@ export class GitHubUsersStack extends Stack {
 			userName: "GitHubReadOnlyUser",
 		})
 
+		const codexAdminUser = new User(this, "CodexAdminUser", {
+			managedPolicies: [
+				ManagedPolicy.fromAwsManagedPolicyName("AdministratorAccess"),
+			],
+			path: "/astro-aws/users/",
+			userName: "CodexAdminUser",
+		})
+
 		const adminAccessKey = new AccessKey(this, "GitHubAdminAccessKey", {
 			user: adminUser,
 		})
 
 		const readOnlyAccessKey = new AccessKey(this, "GitHubReadOnlyAccessKey", {
 			user: readOnlyUser,
+		})
+
+		const codexAdminAccessKey = new AccessKey(this, "CodexAdminAccessKey", {
+			user: codexAdminUser,
 		})
 
 		const adminAccessKeys = new Secret(this, "GitHubAdminUserAccessKeys", {
@@ -68,6 +80,16 @@ export class GitHubUsersStack extends Stack {
 			},
 		)
 
+		const codexAdminAccessKeys = new Secret(this, "CodexAdminUserAccessKeys", {
+			secretName: "/astro-aws/users/CodexAdminUser/access-keys",
+			secretObjectValue: {
+				accessKeyId: SecretValue.unsafePlainText(
+					codexAdminAccessKey.accessKeyId,
+				),
+				secretAccessKey: codexAdminAccessKey.secretAccessKey,
+			},
+		})
+
 		const denyGetGitHubKeysPolicy = new Policy(
 			this,
 			"DenyGetGitHubKeysPolicy",
@@ -79,6 +101,7 @@ export class GitHubUsersStack extends Stack {
 						resources: [
 							readOnlyAccessKeys.secretArn,
 							adminAccessKeys.secretArn,
+							codexAdminAccessKeys.secretArn,
 						],
 					}),
 				],
@@ -87,5 +110,6 @@ export class GitHubUsersStack extends Stack {
 
 		adminUser.attachInlinePolicy(denyGetGitHubKeysPolicy)
 		readOnlyUser.attachInlinePolicy(denyGetGitHubKeysPolicy)
+		codexAdminUser.attachInlinePolicy(denyGetGitHubKeysPolicy)
 	}
 }
