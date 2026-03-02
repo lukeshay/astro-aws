@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   check:
-    name: Check
+    name: npm run ${{ matrix.cmd }} - ${{ matrix.node_version }}
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
