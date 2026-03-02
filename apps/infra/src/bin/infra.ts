@@ -84,11 +84,7 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 	})
 
 	if (environment === Environments.DEV) {
-		new UsersStack(
-			app,
-			createStackName(environment, "Users"),
-			environmentProps,
-		)
+		new UsersStack(app, createStackName(environment, "Users"), environmentProps)
 
 		new GitHubOIDCStack(
 			app,

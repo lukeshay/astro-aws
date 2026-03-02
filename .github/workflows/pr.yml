@@ -24,3 +24,5 @@ jobs:
           node-version: 24
       - run: bun install
       - run: bunx scripts verify-pr ${{ github.event.pull_request.number }}
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
