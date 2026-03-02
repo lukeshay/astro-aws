@@ -15,11 +15,7 @@ import type { AstroAWSStackProps } from "../types/astro-aws-stack-props.js"
 export type UsersStackProps = AstroAWSStackProps
 
 export class UsersStack extends Stack {
-	public constructor(
-		scope: Construct,
-		id: string,
-		props: UsersStackProps,
-	) {
+	public constructor(scope: Construct, id: string, props: UsersStackProps) {
 		super(scope, id, props)
 
 		const codexAgentUser = new User(this, "CodexAgentUser", {
@@ -44,21 +40,15 @@ export class UsersStack extends Stack {
 			},
 		})
 
-		const denyGetKeysPolicy = new Policy(
-			this,
-			"DenyGetKeysPolicy",
-			{
-				statements: [
-					new PolicyStatement({
-						actions: ["secretsmanager:GetSecretValue"],
-						effect: Effect.DENY,
-						resources: [
-							codexAgentAccessKeys.secretArn,
-						],
-					}),
-				],
-			},
-		)
+		const denyGetKeysPolicy = new Policy(this, "DenyGetKeysPolicy", {
+			statements: [
+				new PolicyStatement({
+					actions: ["secretsmanager:GetSecretValue"],
+					effect: Effect.DENY,
+					resources: [codexAgentAccessKeys.secretArn],
+				}),
+			],
+		})
 
 		codexAgentUser.attachInlinePolicy(denyGetKeysPolicy)
 	}
