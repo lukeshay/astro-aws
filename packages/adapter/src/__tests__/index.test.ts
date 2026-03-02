@@ -9,6 +9,7 @@ import type { Args } from "../args.js"
 import { ADAPTER_NAME } from "../constants.js"
 import { astroAWSFunctions, getAdapter } from "../index.js"
 import * as shared from "../shared.js"
+import * as log from "../log.js"
 
 vi.mock("node:fs/promises", () => ({
 	writeFile: vi.fn(),
@@ -177,6 +178,20 @@ describe("index.ts", () => {
 
 					expect(setAdapter).toHaveBeenCalledTimes(1)
 					expect(setAdapter).toHaveBeenCalledWith(getAdapter(args))
+				})
+
+				test("should warn for static output", async () => {
+					const warn = vi.spyOn(log, "warn").mockImplementation(() => {})
+
+					await astroConfigDone({
+						config: {
+							...config,
+							output: "static",
+						},
+						setAdapter,
+					} as unknown as Parameters<typeof astroConfigDone>[0])
+
+					expect(warn).toHaveBeenCalledTimes(2)
 				})
 			})
 
