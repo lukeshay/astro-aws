@@ -6,7 +6,7 @@ import {
 } from "../lib/constants/environments.js"
 import { WebsiteStack } from "../lib/stacks/website-stack.js"
 import { GitHubOIDCStack } from "../lib/stacks/github-oidc-stack.js"
-import { GitHubUsersStack } from "../lib/stacks/github-users-stack.js"
+import { UsersStack } from "../lib/stacks/users-stack.js"
 import { RedirectStack } from "../lib/stacks/redirect-stack.js"
 import { DistributionLoggingStack } from "../lib/stacks/distribution-logging-stack.js"
 
@@ -84,9 +84,9 @@ Object.entries(ENVIRONMENT_PROPS).forEach(([environment, environmentProps]) => {
 	})
 
 	if (environment === Environments.DEV) {
-		new GitHubUsersStack(
+		new UsersStack(
 			app,
-			createStackName(environment, "GitHubUsers"),
+			createStackName(environment, "Users"),
 			environmentProps,
 		)
 

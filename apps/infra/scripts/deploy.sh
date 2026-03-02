@@ -3,14 +3,24 @@
 set -e
 
 ENVIRONMENT="${1:-DEV}"
-RUNTIME="${2:-*}"
-MODE="${3:-*}"
+RUNTIME="${2}"
+MODE="${3}"
 AWS_ARGS="${@:4}"
 
 TEMP_OUTPUT=$(mktemp)
 trap "rm -f $TEMP_OUTPUT" EXIT
 
-bunx cdk deploy --asset-parallelism --concurrency 4 --require-approval never "AstroAWS-${ENVIRONMENT}-*-${RUNTIME}-${MODE}" ${AWS_ARGS} 2>&1 | tee "$TEMP_OUTPUT"
+STACKS="AstroAWS-${ENVIRONMENT}-*"
+
+if [ -n "${RUNTIME}" ]; then
+  STACKS="${STACKS}-${RUNTIME}"
+fi
+
+if [ -n "${MODE}" ]; then
+  STACKS="${STACKS}-${MODE}"
+fi
+
+bunx cdk deploy --asset-parallelism --concurrency 4 --require-approval never "${STACKS}" ${AWS_ARGS} 2>&1 | tee "$TEMP_OUTPUT"
 DEPLOY_EXIT_CODE=${PIPESTATUS[0]}
 
 echo "$TEMP_OUTPUT" > "output.log"
