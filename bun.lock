@@ -114,6 +114,7 @@
         "constructs": "^10.4.4",
         "prettier": "^3.7.4",
         "typescript": "^5.9.3",
+        "vitest": "^4.0.16",
       },
       "peerDependencies": {
         "aws-cdk-lib": "^2.94.0",
