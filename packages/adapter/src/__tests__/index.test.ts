@@ -50,7 +50,7 @@ describe("index.ts", () => {
 						serverOutput: "stable",
 						staticOutput: "unsupported",
 						envGetSecret: "unsupported",
-						sharpImageService: "unsupported",
+						sharpImageService: "stable",
 					},
 				})
 			})
@@ -76,7 +76,7 @@ describe("index.ts", () => {
 					supportedAstroFeatures: {
 						hybridOutput: "stable",
 						serverOutput: "stable",
-						sharpImageService: "unsupported",
+						sharpImageService: "stable",
 						staticOutput: "unsupported",
 						envGetSecret: "unsupported",
 					},
@@ -114,8 +114,8 @@ describe("index.ts", () => {
 				astroBuildDone: NonNullable<
 					AstroIntegration["hooks"]["astro:build:done"]
 				>,
-				updateConfig: vi.MockedFunction,
-				setAdapter: vi.MockedFunction
+				updateConfig: ReturnType<typeof vi.fn>,
+				setAdapter: ReturnType<typeof vi.fn>
 
 			beforeEach(() => {
 				result = astroAWSFunctions(args)
@@ -226,6 +226,45 @@ describe("index.ts", () => {
 							esBuildOptions: {},
 							locals: {},
 							mode: "ssr",
+						},
+					)
+				})
+
+				test("should bundle sharp image service entrypoint", async () => {
+					const bundleEntry = vi
+						.spyOn(shared, "bundleEntry")
+						.mockResolvedValue()
+
+					await astroConfigDone({
+						config: {
+							...config,
+							image: {
+								service: {
+									entrypoint: "astro/assets/services/sharp",
+								},
+							},
+						},
+						setAdapter,
+					} as unknown as Parameters<typeof astroConfigDone>[0])
+
+					await astroBuildDone({
+						routes,
+					} as unknown as Parameters<typeof astroBuildDone>[0])
+
+					expect(bundleEntry).toHaveBeenCalledTimes(2)
+					expect(bundleEntry).toHaveBeenNthCalledWith(
+						2,
+						"astro/assets/services/sharp",
+						fileURLToPath(new URL("lambda", config.outDir)),
+						{
+							...args,
+							esBuildOptions: {},
+							locals: {},
+							mode: "ssr",
+						},
+						{
+							additionalExternals: ["sharp"],
+							outName: "image-service",
 						},
 					)
 				})

@@ -57,4 +57,31 @@ describe("shared.ts", () => {
 		expect(config.banner.js).toContain("createRequire")
 		expect(config.banner.js).toContain("const require")
 	})
+
+	test("supports named entry output and additional externals", async () => {
+		await bundleEntry(
+			"astro/assets/services/sharp",
+			"/tmp/out",
+			{
+				esBuildOptions: {},
+			},
+			{
+				additionalExternals: ["sharp"],
+				outName: "image-service",
+			},
+		)
+
+		expect(build).toHaveBeenCalledTimes(1)
+		expect(build).toHaveBeenCalledWith(
+			expect.objectContaining({
+				entryPoints: [
+					{
+						in: "astro/assets/services/sharp",
+						out: "image-service",
+					},
+				],
+				external: ["aws-sdk", "sharp"],
+			}),
+		)
+	})
 })

@@ -16,6 +16,21 @@ const DEFAULT_ARGS: Args = {
 	mode: "ssr",
 }
 
+const SHARP_IMAGE_SERVICE_ENTRYPOINT = "astro/assets/services/sharp"
+
+const usesSharpImageService = (config: AstroConfig) => {
+	const entrypoint = config.image?.service.entrypoint
+
+	if (!entrypoint) {
+		return false
+	}
+
+	return (
+		entrypoint === SHARP_IMAGE_SERVICE_ENTRYPOINT ||
+		entrypoint.toString().includes("/assets/services/sharp")
+	)
+}
+
 const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 	adapterFeatures: {
 		edgeMiddleware: false,
@@ -30,7 +45,7 @@ const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 		args.mode ?? DEFAULT_ARGS.mode
 	}.js`,
 	supportedAstroFeatures: {
-		sharpImageService: "unsupported",
+		sharpImageService: "stable",
 		hybridOutput: "stable",
 		serverOutput: "stable",
 		staticOutput: "unsupported",
@@ -72,6 +87,10 @@ const astroAWSFunctions = (args: Partial<Args> = {}): AstroIntegration => {
 				}
 			},
 			"astro:build:done": async (options) => {
+				const lambdaOutDir = fileURLToPath(
+					new URL("lambda", astroConfig.outDir),
+				)
+
 				await writeFile(
 					fileURLToPath(new URL("metadata.json", astroConfig.outDir)),
 					stringify({
@@ -85,9 +104,21 @@ const astroAWSFunctions = (args: Partial<Args> = {}): AstroIntegration => {
 					fileURLToPath(
 						new URL(astroConfig.build.serverEntry, astroConfig.build.server),
 					),
-					fileURLToPath(new URL("lambda", astroConfig.outDir)),
+					lambdaOutDir,
 					argsWithDefault,
 				)
+
+				if (usesSharpImageService(astroConfig)) {
+					await bundleEntry(
+						SHARP_IMAGE_SERVICE_ENTRYPOINT,
+						lambdaOutDir,
+						argsWithDefault,
+						{
+							additionalExternals: ["sharp"],
+							outName: "image-service",
+						},
+					)
+				}
 			},
 		},
 	}
