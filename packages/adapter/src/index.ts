@@ -66,11 +66,13 @@ const astroAWSFunctions = (args: Partial<Args> = {}): AstroIntegration => {
 						server: new URL("server/", config.outDir),
 						serverEntry: "entry.mjs",
 					},
-					image: {
-						service: {
-							entrypoint: "astro/assets/services/sharp",
-						},
-					},
+					...((args.mode ?? DEFAULT_ARGS.mode) === "edge"
+						? {}
+						: {
+								service: {
+									entrypoint: "astro/assets/services/sharp",
+								},
+							}),
 				})
 			},
 			"astro:config:done": ({ config, setAdapter }) => {
