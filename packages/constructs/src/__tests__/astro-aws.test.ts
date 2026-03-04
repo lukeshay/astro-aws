@@ -79,7 +79,7 @@ describe("AstroAWS", () => {
 				originGroup: {
 					fallbackStatusCodes: [418],
 				},
-			},
+			} as any, // TODO(@lukeshay): Fix this typing issue where the props are not being inferred correctly,
 		})
 
 		const template = Template.fromStack(stack)
