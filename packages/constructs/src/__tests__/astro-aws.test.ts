@@ -11,8 +11,6 @@ import { AstroAWS } from "../index.js"
 
 const tempDirs: string[] = []
 
-const cast = <T>(obj: unknown): T => obj as T
-
 const createDist = (metadata?: { mode: "ssr" | "ssr-stream" | "edge" }) => {
 	const root = join(
 		tmpdir(),
@@ -72,7 +70,7 @@ describe("AstroAWS", () => {
 
 		const astro = new AstroAWS(stack, "Astro", {
 			websiteDir,
-			cdk: cast({
+			cdk: {
 				lambdaFunction: {
 					environment: {
 						FOO: "bar",
@@ -81,7 +79,7 @@ describe("AstroAWS", () => {
 				originGroup: {
 					fallbackStatusCodes: [418],
 				},
-			}),
+			},
 		})
 
 		const template = Template.fromStack(stack)

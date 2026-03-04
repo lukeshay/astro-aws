@@ -3,8 +3,11 @@
 .env*
 .turbo
 *.log*
-apps/docs/src/content/docs/reference/packages/
+apps/docs/src/content/docs/references/packages/*
 cdk.out/
 dist/
 node_modules/
-.astro
+apps/docs/public/cwr.js
+*.tmp
+coverage/
+.opencode/
