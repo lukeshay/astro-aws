@@ -1,5 +1,6 @@
 import { fileURLToPath } from "node:url"
-import { writeFile } from "node:fs/promises"
+import { cp, mkdir, writeFile } from "node:fs/promises"
+import { join } from "node:path"
 
 import { stringify } from "flatted"
 import type { AstroAdapter, AstroConfig, AstroIntegration } from "astro"
@@ -16,6 +17,11 @@ const DEFAULT_ARGS: Args = {
 	mode: "ssr",
 }
 
+type Metadata = {
+	args?: Args
+	config?: AstroConfig
+}
+
 const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 	adapterFeatures: {
 		edgeMiddleware: false,
@@ -30,7 +36,7 @@ const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 		args.mode ?? DEFAULT_ARGS.mode
 	}.js`,
 	supportedAstroFeatures: {
-		sharpImageService: "unsupported",
+		sharpImageService: "stable",
 		hybridOutput: "stable",
 		serverOutput: "stable",
 		staticOutput: "unsupported",
@@ -39,11 +45,13 @@ const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 })
 
 const astroAWSFunctions = (args: Partial<Args> = {}): AstroIntegration => {
-	let astroConfig: AstroConfig
-
 	const argsWithDefault: Args = {
 		...DEFAULT_ARGS,
 		...args,
+	}
+
+	const metadata: Metadata = {
+		args: argsWithDefault,
 	}
 
 	/* eslint-disable sort-keys */
@@ -57,12 +65,17 @@ const astroAWSFunctions = (args: Partial<Args> = {}): AstroIntegration => {
 						server: new URL("server/", config.outDir),
 						serverEntry: "entry.mjs",
 					},
+					image: {
+						service: {
+							entrypoint: "astro/assets/services/sharp",
+						},
+					},
 				})
 			},
 			"astro:config:done": ({ config, setAdapter }) => {
 				setAdapter(getAdapter(argsWithDefault))
 
-				astroConfig = config
+				metadata.config = config
 
 				if (config.output === "static") {
 					warn('`output: "server"` is required to use this adapter.')
@@ -73,19 +86,38 @@ const astroAWSFunctions = (args: Partial<Args> = {}): AstroIntegration => {
 			},
 			"astro:build:done": async (options) => {
 				await writeFile(
-					fileURLToPath(new URL("metadata.json", astroConfig.outDir)),
+					fileURLToPath(new URL("metadata.json", metadata.config!.outDir)),
 					stringify({
-						args: argsWithDefault,
+						...metadata,
 						options,
-						config: astroConfig,
 					}),
 				)
 
+				const lambdaOutDir = fileURLToPath(
+					new URL("lambda", metadata.config!.outDir),
+				)
+
+				const clientAssetsOutDir = join(lambdaOutDir, "client", "_astro")
+				const clientAssetsSourceDir = fileURLToPath(
+					new URL("_astro", metadata.config!.build.client),
+				)
+
+				await mkdir(clientAssetsOutDir, {
+					recursive: true,
+				})
+
+				await cp(clientAssetsSourceDir, clientAssetsOutDir, {
+					recursive: true,
+				})
+
 				await bundleEntry(
 					fileURLToPath(
-						new URL(astroConfig.build.serverEntry, astroConfig.build.server),
+						new URL(
+							metadata.config!.build.serverEntry,
+							metadata.config!.build.server,
+						),
 					),
-					fileURLToPath(new URL("lambda", astroConfig.outDir)),
+					lambdaOutDir,
 					argsWithDefault,
 				)
 			},

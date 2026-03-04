@@ -1,5 +1,7 @@
 import { URL, fileURLToPath } from "node:url"
-import { writeFile } from "node:fs/promises"
+
+import { parse } from "flatted"
+import { cp, mkdir, writeFile } from "node:fs/promises"
 
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest"
 import { faker } from "@faker-js/faker"
@@ -12,6 +14,8 @@ import * as shared from "../shared.js"
 import * as log from "../log.js"
 
 vi.mock("node:fs/promises", () => ({
+	cp: vi.fn(),
+	mkdir: vi.fn(),
 	writeFile: vi.fn(),
 }))
 
@@ -50,7 +54,7 @@ describe("index.ts", () => {
 						serverOutput: "stable",
 						staticOutput: "unsupported",
 						envGetSecret: "unsupported",
-						sharpImageService: "unsupported",
+						sharpImageService: "stable",
 					},
 				})
 			})
@@ -76,7 +80,7 @@ describe("index.ts", () => {
 					supportedAstroFeatures: {
 						hybridOutput: "stable",
 						serverOutput: "stable",
-						sharpImageService: "unsupported",
+						sharpImageService: "stable",
 						staticOutput: "unsupported",
 						envGetSecret: "unsupported",
 					},
@@ -124,6 +128,7 @@ describe("index.ts", () => {
 
 				config = {
 					build: {
+						client: new URL("client/", outDir),
 						server: new URL("server/", outDir),
 						serverEntry: "entry.mjs",
 					},
@@ -131,7 +136,7 @@ describe("index.ts", () => {
 				} as unknown as AstroConfig
 				routes = [
 					{
-						route: faker.string.sample(),
+						route: "/_image",
 					} as unknown as RouteData,
 					{
 						route: faker.string.sample(),
@@ -164,6 +169,11 @@ describe("index.ts", () => {
 							client: new URL("client/", config.outDir),
 							server: new URL("server/", config.outDir),
 							serverEntry: "entry.mjs",
+						},
+						image: {
+							service: {
+								entrypoint: "astro/assets/services/sharp",
+							},
 						},
 					})
 				})
@@ -215,7 +225,19 @@ describe("index.ts", () => {
 						fileURLToPath(new URL("metadata.json", config.outDir)),
 						expect.any(String),
 					)
+
+					const metadata = parse(
+						(writeFile as unknown as { mock: { calls: [string, string][] } })
+							.mock.calls[0][1],
+					) as {
+						args: {
+							mode: string
+						}
+					}
+					expect(metadata.args.mode).toBe("ssr")
 					expect(bundleEntry).toHaveBeenCalledTimes(1)
+					expect(mkdir).toHaveBeenCalledTimes(1)
+					expect(cp).toHaveBeenCalledTimes(1)
 					expect(bundleEntry).toHaveBeenCalledWith(
 						fileURLToPath(
 							new URL(config.build.serverEntry, config.build.server),

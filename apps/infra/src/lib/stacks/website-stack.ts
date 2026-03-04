@@ -2,7 +2,6 @@ import { cwd, env } from "node:process"
 
 import { DnsValidatedCertificate } from "@trautonen/cdk-dns-validated-certificate"
 import { CfnOutput, Duration, Stack } from "aws-cdk-lib/core"
-import type { ICertificate } from "aws-cdk-lib/aws-certificatemanager"
 import {
 	CacheCookieBehavior,
 	CachePolicy,
@@ -11,7 +10,12 @@ import {
 	ResponseHeadersPolicy,
 	ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront"
-import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda"
+import {
+	Architecture,
+	Code,
+	LayerVersion,
+	Runtime,
+} from "aws-cdk-lib/aws-lambda"
 import type { Construct } from "constructs"
 import { AstroAWS } from "@astro-aws/constructs"
 import { LogQueryWidget } from "aws-cdk-lib/aws-cloudwatch"
@@ -43,6 +47,8 @@ type WebsiteStackProps = AstroAWSStackProps &
 		cloudwatchDashboard?: Dashboard
 	}
 
+const SHARP_LAYER_VERSION = "0.34.0"
+
 class WebsiteStack extends Stack {
 	public readonly astroAWS: AstroAWS
 	public constructor(scope: Construct, id: string, props: WebsiteStackProps) {
@@ -62,6 +68,23 @@ class WebsiteStack extends Stack {
 		const { domainNames, certificate, hostedZone } = getDNS()
 
 		const distDir = mode === "static" ? "dist" : `dist/${mode}`
+		const lambdaRuntime = new Runtime(`${runtime}.x`)
+		const sharpLayer =
+			mode === "ssr" || mode === "ssr-stream"
+				? new LayerVersion(this, "SharpLayer", {
+						code: Code.fromAsset(
+							resolve(
+								cwd(),
+								"layers",
+								"sharp",
+								`sharp-v${SHARP_LAYER_VERSION}.zip`,
+							),
+						),
+						compatibleArchitectures: [Architecture.ARM_64],
+						compatibleRuntimes: [lambdaRuntime],
+						description: `Sharp ${SHARP_LAYER_VERSION} dependency for Astro Image`,
+					})
+				: undefined
 
 		const cachePolicy = new CachePolicy(this, "CachePolicy", {
 			cookieBehavior: CacheCookieBehavior.all(),
@@ -116,7 +139,8 @@ class WebsiteStack extends Stack {
 					environment: {
 						DOMAIN: String(domainNames?.[0]),
 					},
-					runtime: new Runtime(`${runtime}.x`),
+					layers: sharpLayer ? [sharpLayer] : undefined,
+					runtime: lambdaRuntime,
 				},
 			},
 			outDir: resolve(cwd(), "..", "..", props.app, distDir),

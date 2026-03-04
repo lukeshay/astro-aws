@@ -9,3 +9,4 @@ dist/
 node_modules/
 apps/docs/public/cwr.js
 *.tmp
+coverage/

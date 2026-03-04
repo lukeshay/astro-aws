@@ -21,7 +21,7 @@ describe("shared.ts", () => {
 		const args: Args = {
 			esBuildOptions: {
 				banner: {
-					js: "console.log('banner')",
+					js: "console.log(\'banner\')",
 				},
 				target: "node20",
 			},
@@ -35,7 +35,7 @@ describe("shared.ts", () => {
 				allowOverwrite: true,
 				bundle: true,
 				entryPoints: ["/tmp/entry.mjs"],
-				external: ["aws-sdk"],
+				external: ["aws-sdk", "sharp"],
 				format: "esm",
 				metafile: true,
 				outExtension: {

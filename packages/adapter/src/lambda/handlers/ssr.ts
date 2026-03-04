@@ -1,4 +1,5 @@
 import { Buffer } from "node:buffer"
+import { readFile } from "node:fs/promises"
 
 import { NodeApp } from "astro/app/node"
 import type {
@@ -23,6 +24,51 @@ import { type CloudfrontResult } from "../types.js"
 polyfill(globalThis, {
 	exclude: "window document",
 })
+
+const originalFetch = globalThis.fetch.bind(globalThis)
+
+const contentTypeFromPath = (pathname: string) => {
+	if (pathname.endsWith(".avif")) return "image/avif"
+	if (pathname.endsWith(".gif")) return "image/gif"
+	if (pathname.endsWith(".jpg") || pathname.endsWith(".jpeg")) {
+		return "image/jpeg"
+	}
+	if (pathname.endsWith(".png")) return "image/png"
+	if (pathname.endsWith(".svg")) return "image/svg+xml"
+	if (pathname.endsWith(".webp")) return "image/webp"
+
+	return "application/octet-stream"
+}
+
+globalThis.fetch = async (input, init) => {
+	const inputUrl =
+		typeof input === "string"
+			? new URL(input, "http://localhost")
+			: input instanceof URL
+				? input
+				: new URL(input.url, "http://localhost")
+
+	if (inputUrl.pathname.startsWith("/_astro/")) {
+		try {
+			const localAssetUrl = new URL(
+				`./client${inputUrl.pathname}`,
+				import.meta.url,
+			)
+			const localAsset = await readFile(localAssetUrl)
+
+			return new Response(localAsset, {
+				headers: {
+					"content-type": contentTypeFromPath(inputUrl.pathname),
+				},
+				status: 200,
+			})
+		} catch {
+			// Fallback to default fetch behavior when the local asset does not exist.
+		}
+	}
+
+	return originalFetch(input, init)
+}
 
 const isAsciiStringPattern = /^[\x00-\xFF]*$/
 
@@ -89,10 +135,41 @@ const createLambdaFunctionResponse = async (
 	}
 }
 
+const getDomainName = (
+	headers: Headers,
+	fallbackDomainName: string,
+	rawPath: string,
+) => {
+	const forwardedHost = headers.get("x-forwarded-host")
+
+	if (forwardedHost) {
+		return forwardedHost
+	}
+
+	if (rawPath.startsWith("/_image")) {
+		const referer = headers.get("referer")
+
+		if (referer) {
+			try {
+				return new URL(referer).host
+			} catch {
+				// ignore invalid referer
+			}
+		}
+	}
+
+	return fallbackDomainName
+}
+
 const createExports = (manifest: SSRManifest, args: Args) => {
 	const shouldStream = args.mode === "ssr-stream"
 
-	const app = new NodeApp(manifest, shouldStream)
+	const manifestForLambdaRuntime: SSRManifest = {
+		...manifest,
+		buildClientDir: new URL("./client/", import.meta.url),
+	}
+
+	const app = new NodeApp(manifestForLambdaRuntime, shouldStream)
 
 	const logger = app.getAdapterLogger()
 
@@ -127,8 +204,11 @@ const createExports = (manifest: SSRManifest, args: Args) => {
 		}
 
 		const requestId = event.requestContext.requestId
-		const domainName =
-			headers.get("x-forwarded-host") ?? event.requestContext.domainName
+		const domainName = getDomainName(
+			headers,
+			event.requestContext.domainName,
+			event.rawPath,
+		)
 		const qs = event.rawQueryString.length ? `?${event.rawQueryString}` : ""
 
 		let url: URL

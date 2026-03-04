@@ -24,10 +24,10 @@ import {
 } from "../types/astro-aws-construct.js"
 
 type AstroAWSOriginCdkProps = {
-	lambdaFunctionOrigin?: HttpOriginProps
-	lambdaFunctionUrl?: FunctionUrlOptions
-	originGroup?: OriginGroupProps
-	s3Origin?: S3BucketOriginWithOAIProps
+	lambdaFunctionOrigin?: Partial<HttpOriginProps>
+	lambdaFunctionUrl?: Partial<FunctionUrlOptions>
+	originGroup?: Partial<OriginGroupProps>
+	s3Origin?: Partial<S3BucketOriginWithOAIProps>
 }
 
 type AstroAWSOriginProps = AstroAWSBaseConstructProps & {

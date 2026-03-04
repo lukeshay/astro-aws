@@ -24,7 +24,7 @@ import {
 
 type AstroAWSCloudfrontDistributionCdkProps = {
 	cloudfrontDistribution?: Omit<
-		DistributionProps,
+		Partial<DistributionProps>,
 		"apiBehavior" | "defaultBehavior"
 	> & {
 		apiBehavior?: Omit<BehaviorOptions, "origin">
@@ -70,6 +70,10 @@ class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 							function handler(event) {
 								var request = event.request;
 								var uri = request.uri;
+
+								if (uri.startsWith("/_")) {
+									return request;
+								}
 						
 								if (uri.endsWith("/")) {
 									request.uri += "index.html";
@@ -109,6 +113,23 @@ class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 			...this.props.cdk?.cloudfrontDistribution,
 			additionalBehaviors: this.props.lambdaFunctionOrigin
 				? {
+						// ...(this.metadata?.args.mode.includes("ssr")
+						// 	? {
+						// 			"/_image*": {
+						// 				allowedMethods: AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+						// 				cachePolicy:
+						// 					this.props.cdk?.cloudfrontDistribution?.apiBehavior
+						// 						?.cachePolicy ?? CachePolicy.CACHING_DISABLED,
+						// 				origin: this.props.lambdaFunctionOrigin,
+						// 				originRequestPolicy:
+						// 					OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+						// 				responseHeadersPolicy:
+						// 					ResponseHeadersPolicy.CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT_AND_SECURITY_HEADERS,
+						// 				viewerProtocolPolicy:
+						// 					ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+						// 			},
+						// 		}
+						// 	: {}),
 						"/api/*": {
 							allowedMethods: AllowedMethods.ALLOW_ALL,
 							origin: this.props.lambdaFunctionOrigin,

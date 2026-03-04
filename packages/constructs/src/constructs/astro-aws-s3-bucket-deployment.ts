@@ -14,8 +14,9 @@ import {
 } from "../types/astro-aws-construct.js"
 
 type AstroAWSS3BucketDeploymentCdkProps = {
-	s3BucketDeployment?: Partial<
-		Omit<BucketDeploymentProps, "destinationBucket" | "distribution">
+	s3BucketDeployment?: Omit<
+		Partial<BucketDeploymentProps>,
+		"destinationBucket" | "distribution"
 	>
 }
 

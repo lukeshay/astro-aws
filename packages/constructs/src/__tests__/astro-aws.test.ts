@@ -12,7 +12,10 @@ import { AstroAWS } from "../index.js"
 const tempDirs: string[] = []
 
 const createDist = (metadata?: { mode: "ssr" | "ssr-stream" | "edge" }) => {
-	const root = join(tmpdir(), `astro-aws-constructs-${Math.random().toString(16).slice(2)}`)
+	const root = join(
+		tmpdir(),
+		`astro-aws-constructs-${Math.random().toString(16).slice(2)}`,
+	)
 	const distDir = join(root, "dist")
 	mkdirSync(distDir, { recursive: true })
 
