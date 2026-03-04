@@ -49,6 +49,11 @@ globalThis.fetch = async (input, init) => {
 				: new URL(input.url, "http://localhost")
 
 	if (inputUrl.pathname.startsWith("/_astro/")) {
+		// Prevent path traversal attacks
+		if (inputUrl.pathname.includes("..")) {
+			return new Response("Forbidden", { status: 403 })
+		}
+
 		try {
 			const localAssetUrl = new URL(
 				`./client${inputUrl.pathname}`,

@@ -36,7 +36,7 @@ const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 		args.mode ?? DEFAULT_ARGS.mode
 	}.js`,
 	supportedAstroFeatures: {
-		sharpImageService: "stable",
+		sharpImageService: (args.mode ?? DEFAULT_ARGS.mode) === "edge" ? "unsupported" : "stable",
 		hybridOutput: "stable",
 		serverOutput: "stable",
 		staticOutput: "unsupported",
@@ -106,9 +106,13 @@ const astroAWSFunctions = (args: Partial<Args> = {}): AstroIntegration => {
 					recursive: true,
 				})
 
-				await cp(clientAssetsSourceDir, clientAssetsOutDir, {
-					recursive: true,
-				})
+				try {
+					await cp(clientAssetsSourceDir, clientAssetsOutDir, {
+						recursive: true,
+					})
+				} catch {
+					// _astro directory may not exist if no static assets
+				}
 
 				await bundleEntry(
 					fileURLToPath(

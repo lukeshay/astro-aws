@@ -251,6 +251,36 @@ describe("index.ts", () => {
 						},
 					)
 				})
+
+				test("should handle missing _astro directory gracefully", async () => {
+					const bundleEntry = vi
+						.spyOn(shared, "bundleEntry")
+						.mockResolvedValue()
+
+					const cpError = new Error("ENOENT: no such file or directory")
+					;(
+						cp as unknown as {
+							mockImplementation: (fn: () => Promise<void>) => void
+						}
+					).mockImplementation(async () => {
+						throw cpError
+					})
+
+					await astroConfigDone({
+						config,
+						setAdapter,
+					} as unknown as Parameters<typeof astroConfigDone>[0])
+
+					await expect(
+						astroBuildDone({
+							routes,
+						} as unknown as Parameters<typeof astroBuildDone>[0]),
+					).resolves.not.toThrow()
+
+					expect(bundleEntry).toHaveBeenCalledTimes(1)
+					expect(mkdir).toHaveBeenCalledTimes(1)
+					expect(cp).toHaveBeenCalledTimes(1)
+				})
 			})
 		})
 	})
