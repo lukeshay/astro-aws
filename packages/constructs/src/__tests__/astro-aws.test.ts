@@ -75,11 +75,11 @@ describe("AstroAWS", () => {
 					environment: {
 						FOO: "bar",
 					},
-				},
+				} as any, // TODO(@lukeshay): Fix this typing issue where the props are not being inferred correctly,,
 				originGroup: {
 					fallbackStatusCodes: [418],
-				},
-			} as any, // TODO(@lukeshay): Fix this typing issue where the props are not being inferred correctly,
+				} as any, // TODO(@lukeshay): Fix this typing issue where the props are not being inferred correctly,,
+			},
 		})
 
 		const template = Template.fromStack(stack)
