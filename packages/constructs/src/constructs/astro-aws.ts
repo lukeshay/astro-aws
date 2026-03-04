@@ -33,7 +33,7 @@ import type {
 import { AstroAWSCloudfrontDistribution } from "./astro-aws-cloudfront-distribution.js"
 
 type AstroAWSCdkProps = {
-	lambdaFunction?: Omit<FunctionProps, "code" | "handler">
+	lambdaFunction?: Omit<Partial<FunctionProps>, "code" | "handler">
 }
 
 type AstroAWSProps = {

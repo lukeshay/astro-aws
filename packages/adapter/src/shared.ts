@@ -7,7 +7,7 @@ import type { Args } from "./args.js"
 const DEFAULT_CONFIG: BuildOptions = {
 	allowOverwrite: true,
 	bundle: true,
-	external: ["aws-sdk"],
+	external: ["aws-sdk", "sharp"],
 	metafile: true,
 	platform: "node",
 	target: "node16",

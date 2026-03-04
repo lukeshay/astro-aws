@@ -1,0 +1,24 @@
+---
+import { Image } from "astro:assets"
+
+import Layout from "../layouts/Layout.astro"
+import astroAws from "../assets/astro-aws.png"
+---
+
+<Layout title="Astro Image Example">
+	<main class="mx-auto max-w-3xl space-y-6 p-8">
+		<h1 class="text-3xl font-bold">Astro Image component test page</h1>
+		<p>
+			This page renders a local image through <code>astro:assets</code> using the
+			<code>&lt;Image /&gt;</code> component.
+		</p>
+		<Image
+			src={astroAws}
+			alt="Astro AWS logo"
+			width={960}
+			height={540}
+			format="webp"
+			quality={80}
+		/>
+	</main>
+</Layout>

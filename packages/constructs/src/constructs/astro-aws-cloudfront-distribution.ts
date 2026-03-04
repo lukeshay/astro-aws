@@ -24,7 +24,7 @@ import {
 
 type AstroAWSCloudfrontDistributionCdkProps = {
 	cloudfrontDistribution?: Omit<
-		DistributionProps,
+		Partial<DistributionProps>,
 		"apiBehavior" | "defaultBehavior"
 	> & {
 		apiBehavior?: Omit<BehaviorOptions, "origin">
@@ -70,6 +70,10 @@ class AstroAWSCloudfrontDistribution extends AstroAWSBaseConstruct<
 							function handler(event) {
 								var request = event.request;
 								var uri = request.uri;
+
+								if (uri.startsWith("/_")) {
+									return request;
+								}
 						
 								if (uri.endsWith("/")) {
 									request.uri += "index.html";

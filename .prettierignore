@@ -7,4 +7,8 @@ apps/docs/src/content/docs/reference/packages/
 cdk.out/
 dist/
 node_modules/
-.astro
+apps/docs/public/cwr.js
+*.tmp
+coverage/
+.opencode/
+.astro/

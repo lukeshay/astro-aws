@@ -47,6 +47,8 @@ export default defineConfig({
 - ✅ Configurable Lambda timeout and memory
 - ✅ Standard SSR rendering
 
+If you use Astro's `Image` component in SSR mode, see [Astro Image with a Sharp Lambda Layer](/guides/astro-image-component).
+
 ## SSR Streaming
 
 SSR Streaming mode enables streaming responses, allowing your pages to start rendering content to users before the entire page is complete. This can significantly improve perceived performance, especially for pages with slow data fetching.
@@ -139,6 +141,7 @@ export default defineConfig({
 ### Limitations
 
 - ❌ Environment variables are not supported
+- ❌ Astro Image with a Sharp Lambda layer is not supported
 - ⚠️ Limited execution time (5 seconds for viewer request/response, 30 seconds for origin request/response)
 - ⚠️ Smaller deployment package size limits
 - ⚠️ Limited access to AWS services (no VPC access)

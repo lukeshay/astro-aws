@@ -19,6 +19,7 @@
 	],
 	"scripts": {
 		"build": "scripts build",
+		"build:sharp-layer": "bash ./scripts/build-sharp-layer.sh",
 		"deploy": "./scripts/deploy.sh",
 		"synth": "cdk synth"
 	},

@@ -3,6 +3,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 
 import { App, Stack } from "aws-cdk-lib"
+import { Runtime } from "aws-cdk-lib/aws-lambda"
 import { Match, Template } from "aws-cdk-lib/assertions"
 import { stringify } from "flatted"
 import { afterEach, describe, expect, it } from "vitest"
@@ -12,7 +13,10 @@ import { AstroAWS } from "../index.js"
 const tempDirs: string[] = []
 
 const createDist = (metadata?: { mode: "ssr" | "ssr-stream" | "edge" }) => {
-	const root = join(tmpdir(), `astro-aws-constructs-${Math.random().toString(16).slice(2)}`)
+	const root = join(
+		tmpdir(),
+		`astro-aws-constructs-${Math.random().toString(16).slice(2)}`,
+	)
 	const distDir = join(root, "dist")
 	mkdirSync(distDir, { recursive: true })
 
@@ -69,11 +73,16 @@ describe("AstroAWS", () => {
 			websiteDir,
 			cdk: {
 				lambdaFunction: {
+					// TODO(@lukeshay): Investigate why runtime is required here when it should be optional
+					runtime: Runtime.NODEJS_24_X,
 					environment: {
 						FOO: "bar",
 					},
 				},
 				originGroup: {
+					// TODO(@lukeshay): Investigate why primaryOrigin and fallbackOrigin are required when they should be managed internally
+					primaryOrigin: {} as any,
+					fallbackOrigin: {} as any,
 					fallbackStatusCodes: [418],
 				},
 			},
