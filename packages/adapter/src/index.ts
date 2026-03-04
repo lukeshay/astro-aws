@@ -36,7 +36,8 @@ const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 		args.mode ?? DEFAULT_ARGS.mode
 	}.js`,
 	supportedAstroFeatures: {
-		sharpImageService: (args.mode ?? DEFAULT_ARGS.mode) === "edge" ? "unsupported" : "stable",
+		sharpImageService:
+			(args.mode ?? DEFAULT_ARGS.mode) === "edge" ? "unsupported" : "stable",
 		hybridOutput: "stable",
 		serverOutput: "stable",
 		staticOutput: "unsupported",

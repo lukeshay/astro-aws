@@ -3,6 +3,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 
 import { App, Stack } from "aws-cdk-lib"
+import { Runtime } from "aws-cdk-lib/aws-lambda"
 import { Match, Template } from "aws-cdk-lib/assertions"
 import { stringify } from "flatted"
 import { afterEach, describe, expect, it } from "vitest"
@@ -72,11 +73,16 @@ describe("AstroAWS", () => {
 			websiteDir,
 			cdk: {
 				lambdaFunction: {
+					// TODO(@lukeshay): Investigate why runtime is required here when it should be optional
+					runtime: Runtime.NODEJS_24_X,
 					environment: {
 						FOO: "bar",
 					},
 				},
 				originGroup: {
+					// TODO(@lukeshay): Investigate why primaryOrigin and fallbackOrigin are required when they should be managed internally
+					primaryOrigin: {} as any,
+					fallbackOrigin: {} as any,
 					fallbackStatusCodes: [418],
 				},
 			},

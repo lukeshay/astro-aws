@@ -11,3 +11,4 @@ apps/docs/public/cwr.js
 *.tmp
 coverage/
 .opencode/
+.astro/
