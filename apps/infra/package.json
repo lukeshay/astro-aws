@@ -36,6 +36,7 @@
 		"workspace-tools": "^0.40.2"
 	},
 	"devDependencies": {
+		"@astro-aws/scripts": "workspace:*",
 		"@types/aws-lambda": "^8.10.159",
 		"@types/node": "^20"
 	},

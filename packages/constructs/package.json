@@ -30,6 +30,7 @@
 		"test": "vitest run --coverage"
 	},
 	"devDependencies": {
+		"@astro-aws/scripts": "workspace:*",
 		"@types/node": "^20",
 		"aws-cdk-lib": "^2.233.0",
 		"constructs": "^10.4.4",
