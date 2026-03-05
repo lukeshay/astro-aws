@@ -1,7 +1,7 @@
 name: CI
 
 on:
-  pull_request_target:
+  pull_request:
   push:
     branches:
       - "main"
@@ -33,8 +33,6 @@ jobs:
           - synth
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: oven-sh/setup-bun@v1
       - uses: actions/setup-node@v4
         with:
