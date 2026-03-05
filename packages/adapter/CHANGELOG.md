@@ -1,5 +1,11 @@
 # @astro-aws/adapter
 
+## 0.13.0
+
+### Minor Changes
+
+- 03d64dd: Add support for Astro Image component
+
 ## 0.12.0
 
 ### Minor Changes

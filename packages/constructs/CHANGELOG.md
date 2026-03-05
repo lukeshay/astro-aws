@@ -1,5 +1,15 @@
 # @astro-aws/constructs
 
+## 0.13.0
+
+### Minor Changes
+
+- 03d64dd: Add support for Astro Image component
+
+### Patch Changes
+
+- 03d64dd: Make CdkProps partials
+
 ## 0.12.0
 
 ### Minor Changes
