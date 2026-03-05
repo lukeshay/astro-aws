@@ -1,14 +1,14 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest"
 
-const importLogModule = () => import("../log.js")
+const importLogModule = () => import("../src/log.js")
 
 describe("log.ts", () => {
 	beforeEach(() => {
+		delete process.env.ASTRO_AWS_LOG_LEVEL
 		vi.resetModules()
 	})
 
 	afterEach(() => {
-		vi.unstubAllEnvs()
 		vi.restoreAllMocks()
 	})
 

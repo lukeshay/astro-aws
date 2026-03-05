@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from "vitest"
 
-import type { Args } from "../args.js"
+import type { Args } from "../src/args.js"
 
 const { build } = vi.hoisted(() => ({
 	build: vi.fn(),
@@ -10,7 +10,7 @@ vi.mock("esbuild", () => ({
 	build,
 }))
 
-import { bundleEntry } from "../shared.js"
+import { bundleEntry } from "../src/shared.js"
 
 describe("shared.ts", () => {
 	beforeEach(() => {

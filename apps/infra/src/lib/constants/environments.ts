@@ -160,6 +160,15 @@ const ENVIRONMENT_PROPS: Record<Environment, EnvironmentProps> = {
 				app: "examples/base",
 				runtime: "nodejs24",
 			},
+			{
+				env: {
+					...base.env,
+					region: "us-east-1",
+				},
+				mode: "edge",
+				app: "examples/base",
+				runtime: "nodejs24",
+			},
 		],
 	},
 }

@@ -69,8 +69,10 @@ const astroAWSFunctions = (args: Partial<Args> = {}): AstroIntegration => {
 					...((args.mode ?? DEFAULT_ARGS.mode) === "edge"
 						? {}
 						: {
-								service: {
-									entrypoint: "astro/assets/services/sharp",
+								image: {
+									service: {
+										entrypoint: "astro/assets/services/sharp",
+									},
 								},
 							}),
 				})

@@ -6,9 +6,9 @@ import { App, Stack } from "aws-cdk-lib"
 import { Runtime } from "aws-cdk-lib/aws-lambda"
 import { Match, Template } from "aws-cdk-lib/assertions"
 import { stringify } from "flatted"
-import { afterEach, describe, expect, it } from "vitest"
+import { afterEach, describe, expect, test } from "vitest"
 
-import { AstroAWS } from "../index.js"
+import { AstroAWS } from "../src/index.js"
 
 const tempDirs: string[] = []
 
@@ -50,7 +50,7 @@ afterEach(() => {
 })
 
 describe("AstroAWS", () => {
-	it("creates static resources without SSR lambda function", () => {
+	test("creates static resources without SSR lambda function", () => {
 		const app = new App()
 		const stack = new Stack(app, "StaticStack")
 		const websiteDir = createDist()
@@ -64,7 +64,7 @@ describe("AstroAWS", () => {
 		template.resourceCountIs("AWS::Lambda::Url", 0)
 	})
 
-	it("creates ssr lambda and configures origin group", () => {
+	test("creates ssr lambda and configures origin group", () => {
 		const app = new App()
 		const stack = new Stack(app, "SSRStack")
 		const websiteDir = createDist({ mode: "ssr" })
@@ -125,7 +125,7 @@ describe("AstroAWS", () => {
 		})
 	})
 
-	it("uses streaming invoke mode for ssr-stream", () => {
+	test("uses streaming invoke mode for ssr-stream", () => {
 		const app = new App()
 		const stack = new Stack(app, "StreamStack")
 		const websiteDir = createDist({ mode: "ssr-stream" })
@@ -138,7 +138,7 @@ describe("AstroAWS", () => {
 		})
 	})
 
-	it("uses edge lambda associations and x86_64 architecture in edge mode", () => {
+	test("uses edge lambda associations and x86_64 architecture in edge mode", () => {
 		const app = new App()
 		const stack = new Stack(app, "EdgeStack")
 		const websiteDir = createDist({ mode: "edge" })

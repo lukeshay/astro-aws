@@ -3,15 +3,15 @@ import { URL, fileURLToPath } from "node:url"
 import { parse } from "flatted"
 import { cp, mkdir, writeFile } from "node:fs/promises"
 
-import { afterEach, beforeEach, describe, expect, test, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, Mock, test, vi } from "vitest"
 import { faker } from "@faker-js/faker"
 import type { AstroConfig, AstroIntegration, RouteData } from "astro"
 
-import type { Args } from "../args.js"
-import { ADAPTER_NAME } from "../constants.js"
-import { astroAWSFunctions, getAdapter } from "../index.js"
-import * as shared from "../shared.js"
-import * as log from "../log.js"
+import type { Args } from "../src/args.js"
+import { ADAPTER_NAME } from "../src/constants.js"
+import { astroAWSFunctions, getAdapter } from "../src/index.js"
+import * as shared from "../src/shared.js"
+import * as log from "../src/log.js"
 
 vi.mock("node:fs/promises", () => ({
 	cp: vi.fn(),
@@ -118,8 +118,8 @@ describe("index.ts", () => {
 				astroBuildDone: NonNullable<
 					AstroIntegration["hooks"]["astro:build:done"]
 				>,
-				updateConfig: vi.MockedFunction,
-				setAdapter: vi.MockedFunction
+				updateConfig: Mock,
+				setAdapter: Mock
 
 			beforeEach(() => {
 				result = astroAWSFunctions(args)
@@ -177,6 +177,26 @@ describe("index.ts", () => {
 						},
 					})
 				})
+
+				test("should not configure image service for edge mode", async () => {
+					const edgeResult = astroAWSFunctions({ mode: "edge" })
+					const edgeSetup = edgeResult.hooks["astro:config:setup"]!
+					const edgeUpdateConfig = vi.fn()
+
+					await edgeSetup({
+						config,
+						updateConfig: edgeUpdateConfig,
+					} as unknown as Parameters<typeof edgeSetup>[0])
+
+					expect(edgeUpdateConfig).toHaveBeenCalledTimes(1)
+					expect(edgeUpdateConfig).toHaveBeenCalledWith({
+						build: {
+							client: new URL("client/", config.outDir),
+							server: new URL("server/", config.outDir),
+							serverEntry: "entry.mjs",
+						},
+					})
+				})
 			})
 
 			describe("astro:config:done", () => {
@@ -228,7 +248,7 @@ describe("index.ts", () => {
 
 					const metadata = parse(
 						(writeFile as unknown as { mock: { calls: [string, string][] } })
-							.mock.calls[0][1],
+							.mock.calls[0]![1],
 					) as {
 						args: {
 							mode: string
