@@ -69,4 +69,8 @@ If you have questions about this Privacy Policy, please [contact us through our 
 
 ## Third-Party Services
 
-We use Google AdSense to display advertisements. Google may use cookies to serve ads based on your prior visits to our website or other websites. For more information, see [Google's Privacy Policy](https://policies.google.com/privacy).
+We use the following third-party services:
+
+- **Google AdSense**: We use Google AdSense to display advertisements. Google may use cookies to serve ads based on your prior visits to our website or other websites. For more information, see [Google's Privacy Policy](https://policies.google.com/privacy).
+
+- **AWS CloudWatch RUM (Real User Monitoring)**: We use AWS CloudWatch RUM to monitor website performance and collect telemetry data. This helps us understand how users interact with our website and identify performance issues. AWS may collect information about your browser, device, and page interactions. For more information, see [AWS Privacy Policy](https://aws.amazon.com/privacy/).
