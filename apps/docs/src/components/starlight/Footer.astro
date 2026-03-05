@@ -14,6 +14,14 @@ import AdSense from '../AdSense.astro';
 	</div>
 	<Pagination />
   <AdSense adSlot="5440083766" />
+	
+	<div class="footer-links sl-flex">
+		<a href="/legal/privacy-policy/">Privacy Policy</a>
+		<a href="/legal/terms-of-service/">Terms of Service</a>
+		<a href="/legal/contact/">Contact</a>
+		<a href="/">Docs</a>
+		<a href="https://github.com/lukeshay/astro-aws" target="_blank" rel="noopener noreferrer">GitHub</a>
+	</div>
 
 	{
 		config.credits && (
@@ -40,6 +48,24 @@ import AdSense from '../AdSense.astro';
 		}
 		.meta > :global(p:only-child) {
 			margin-inline-start: auto;
+		}
+
+		.footer-links {
+			gap: 1.5rem;
+			justify-content: center;
+			flex-wrap: wrap;
+			margin-top: 2rem;
+			font-size: var(--sl-text-sm);
+		}
+		
+		.footer-links a {
+			color: var(--sl-color-gray-3);
+			text-decoration: none;
+			transition: color 0.2s ease;
+		}
+		
+		.footer-links a:hover {
+			color: var(--sl-color-white);
 		}
 
 		.kudos {

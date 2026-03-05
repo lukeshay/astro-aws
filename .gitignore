@@ -7,7 +7,6 @@ apps/docs/src/content/docs/reference/packages/
 cdk.out/
 dist/
 node_modules/
-apps/docs/public/cwr.js
 *.tmp
 coverage/
 .opencode/

@@ -14,10 +14,7 @@ export default defineConfig({
 			},
 			pagination: true,
 			sidebar: [
-				{
-					items: ["start-here/getting-started"],
-					label: "Start Here",
-				},
+				"start-here/getting-started",
 				{
 					autogenerate: {
 						directory: "guides",
@@ -25,9 +22,16 @@ export default defineConfig({
 					label: "Guides",
 				},
 				{
-					autogenerate: {
-						directory: "reference",
-					},
+					items: [
+						"reference/architecture",
+						{
+							label: "Packages",
+							items: [
+								"reference/packages/adapter",
+								"reference/packages/constructs",
+							],
+						},
+					],
 					label: "Reference",
 				},
 			],

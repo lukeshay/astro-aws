@@ -250,6 +250,13 @@ If you need any of these features, consider using SSR instead.
 For static sites, you can configure aggressive caching since content doesn't change frequently:
 
 ```ts
+import {
+	CachePolicy,
+	CacheCookieBehavior,
+	CacheQueryStringBehavior,
+	CacheHeaderBehavior,
+} from "aws-cdk-lib/aws-cloudfront"
+
 const staticCachePolicy = new CachePolicy(this, "StaticCachePolicy", {
 	defaultTtl: Duration.days(365),
 	minTtl: Duration.days(1),

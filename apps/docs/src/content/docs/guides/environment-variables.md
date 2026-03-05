@@ -297,27 +297,28 @@ export async function getSecret(key: string): Promise<string> {
 
 Then use it in your pages or API routes:
 
-```astro
----
-// src/pages/api/data.astro
+```ts
+// src/pages/api/data.ts
 import { getSecret } from "../../utils/secrets"
 
-const apiKey = await getSecret("API_KEY")
+export async function GET() {
+	const apiKey = await getSecret("API_KEY")
 
-// Use the API key to make authenticated requests
-const response = await fetch("https://api.example.com/data", {
-	headers: {
-		Authorization: `Bearer ${apiKey}`,
-	},
-})
+	const response = await fetch("https://api.example.com/data", {
+		headers: {
+			Authorization: `Bearer ${apiKey}`,
+		},
+	})
 
-const data = await response.json()
----
+	const data = await response.json()
 
-<ResponseInit>
-	{ status: 200 }
-</ResponseInit>
-{JSON.stringify(data)}
+	return new Response(JSON.stringify(data), {
+		status: 200,
+		headers: {
+			"Content-Type": "application/json",
+		},
+	})
+}
 ```
 
 > **Note:** Secrets Manager calls add latency to your requests. Consider caching secret values in memory (as shown above) or using a Lambda layer with cached secrets for better performance.
@@ -503,27 +504,29 @@ export class AstroSiteStack extends Stack {
 
 And in your Astro code:
 
-```astro
----
-// src/pages/api/data.astro
+```ts
+// src/pages/api/data.ts
 import { getSecret } from "../../utils/secrets"
 
-const apiUrl = import.meta.env.API_URL
-const apiKey = await getSecret("API_KEY")
+export async function GET() {
+	const apiUrl = import.meta.env.API_URL
+	const apiKey = await getSecret("API_KEY")
 
-const response = await fetch(`${apiUrl}/data`, {
-	headers: {
-		Authorization: `Bearer ${apiKey}`,
-	},
-})
+	const response = await fetch(`${apiUrl}/data`, {
+		headers: {
+			Authorization: `Bearer ${apiKey}`,
+		},
+	})
 
-const data = await response.json()
----
+	const data = await response.json()
 
-<ResponseInit>
-	{ status: 200 }
-</ResponseInit>
-{JSON.stringify(data)}
+	return new Response(JSON.stringify(data), {
+		status: 200,
+		headers: {
+			"Content-Type": "application/json",
+		},
+	})
+}
 ```
 
 ## Next Steps
