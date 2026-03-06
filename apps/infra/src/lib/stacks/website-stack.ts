@@ -110,7 +110,7 @@ class WebsiteStack extends Stack {
 								securityHeadersBehavior: {
 									contentSecurityPolicy: {
 										contentSecurityPolicy:
-											"default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' pagead2.googlesyndication.com googleads.g.doubleclick.net adservice.google.com; connect-src 'self' cognito-identity.us-east-1.amazonaws.com dataplane.rum.us-east-1.amazonaws.com; upgrade-insecure-requests",
+											"default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' *.googlesyndication.com *.doubleclick.net *.google.com *.adtrafficquality.google; img-src 'self' data: *.googlesyndication.com *.doubleclick.net *.adtrafficquality.google; frame-src 'self' *.googlesyndication.com *.doubleclick.net *.google.com *.adtrafficquality.google; connect-src 'self' cognito-identity.us-east-1.amazonaws.com cognito-identity.us-west-2.amazonaws.com dataplane.rum.us-east-1.amazonaws.com dataplane.rum.us-west-2.amazonaws.com *.googlesyndication.com *.google.com *.adtrafficquality.google *.gstatic.com; upgrade-insecure-requests",
 										override: true,
 									},
 								},
