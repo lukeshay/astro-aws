@@ -22,39 +22,31 @@
 	"exports": {
 		".": {
 			"import": "./dist/index.js",
-			"types": "./dist/index.d.ts"
-		},
-		"./powertools": {
-			"import": "./dist/powertools.js",
-			"types": "./dist/powertools.d.ts"
-		},
-		"./powertools.js": {
-			"import": "./dist/powertools.js",
-			"types": "./dist/powertools.d.ts"
+			"types": "./dist/src/index.d.ts"
 		},
 		"./lambda/handlers/ssr": {
 			"import": "./dist/lambda/handlers/ssr.js",
-			"types": "./dist/lambda/handlers/ssr.d.ts"
+			"types": "./dist/src/lambda/handlers/ssr.d.ts"
 		},
 		"./lambda/handlers/ssr.js": {
 			"import": "./dist/lambda/handlers/ssr.js",
-			"types": "./dist/lambda/handlers/ssr.d.ts"
+			"types": "./dist/src/lambda/handlers/ssr.d.ts"
 		},
 		"./lambda/handlers/ssr-stream": {
 			"import": "./dist/lambda/handlers/ssr-stream.js",
-			"types": "./dist/lambda/handlers/ssr-stream.d.ts"
+			"types": "./dist/src/lambda/handlers/ssr-stream.d.ts"
 		},
 		"./lambda/handlers/ssr-stream.js": {
 			"import": "./dist/lambda/handlers/ssr-stream.js",
-			"types": "./dist/lambda/handlers/ssr-stream.d.ts"
+			"types": "./dist/src/lambda/handlers/ssr-stream.d.ts"
 		},
 		"./lambda/handlers/edge": {
 			"import": "./dist/lambda/handlers/edge.js",
-			"types": "./dist/lambda/handlers/edge.d.ts"
+			"types": "./dist/src/lambda/handlers/edge.d.ts"
 		},
 		"./lambda/handlers/edge.js": {
 			"import": "./dist/lambda/handlers/edge.js",
-			"types": "./dist/lambda/handlers/edge.d.ts"
+			"types": "./dist/src/lambda/handlers/edge.d.ts"
 		}
 	},
 	"files": [
