@@ -272,7 +272,7 @@ const createExports = (manifest: SSRManifest, args: Args) => {
 			}
 		}
 
-		let locals = args.locals || {}
+		let locals = { ...(args.locals || {}) }
 		if (args.includeRequestIdInLocals && requestId) {
 			locals = {
 				...locals,
