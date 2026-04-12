@@ -96,7 +96,7 @@ const createExports = (
 			return def
 		}
 
-		let locals = args.locals || {}
+		let locals = structuredClone(args.locals || {})
 		if (args.includeRequestIdInLocals) {
 			locals = {
 				...locals,
