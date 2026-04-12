@@ -39,5 +39,5 @@ jobs:
         env:
           AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
           AWS_REGION: us-west-2
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

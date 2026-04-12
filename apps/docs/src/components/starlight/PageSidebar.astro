@@ -14,7 +14,9 @@ import AdSense from "../AdSense.astro"
 				<div class="sl-container">
 					<TableOfContents />
 				</div>
-        <AdSense adSlot="2800440574" />
+				<div class="sl-container ad-container">
+					<AdSense adSlot="2800440574" />
+				</div>
 			</div>
 		</>
 	)
@@ -57,6 +59,10 @@ import AdSense from "../AdSense.astro"
 					)
 				);
 			}
+		}
+
+		.ad-container {
+			padding-top: 1rem;
 		}
 	}
 </style>
