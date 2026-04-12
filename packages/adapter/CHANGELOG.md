@@ -1,5 +1,12 @@
 # @astro-aws/adapter
 
+## 0.13.1
+
+### Patch Changes
+
+- 0be05ab: Fix build
+- 6003a6a: Locals no longer persist between invocations and renders
+
 ## 0.13.0
 
 ### Minor Changes
