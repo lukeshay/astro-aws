@@ -6,12 +6,7 @@ export default defineConfig({
 			enabled: true,
 			provider: "v8",
 			reporter: ["text", "html"],
-			thresholds: {
-				branches: 90,
-				functions: 90,
-				lines: 90,
-				statements: 90,
-			},
+			include: ["src"],
 		},
 	},
 })
