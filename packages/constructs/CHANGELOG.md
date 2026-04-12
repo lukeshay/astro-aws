@@ -1,5 +1,11 @@
 # @astro-aws/constructs
 
+## 0.13.1
+
+### Patch Changes
+
+- 0be05ab: Fix build
+
 ## 0.13.0
 
 ### Minor Changes
