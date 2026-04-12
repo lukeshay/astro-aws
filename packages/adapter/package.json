@@ -24,14 +24,6 @@
 			"import": "./dist/index.js",
 			"types": "./dist/index.d.ts"
 		},
-		"./powertools": {
-			"import": "./dist/powertools.js",
-			"types": "./dist/powertools.d.ts"
-		},
-		"./powertools.js": {
-			"import": "./dist/powertools.js",
-			"types": "./dist/powertools.d.ts"
-		},
 		"./lambda/handlers/ssr": {
 			"import": "./dist/lambda/handlers/ssr.js",
 			"types": "./dist/lambda/handlers/ssr.d.ts"
