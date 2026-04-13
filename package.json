@@ -41,7 +41,8 @@
 		"@lshay/prettier-config": "^0.7.0",
 		"prettier": "^3.7.4",
 		"turbo": "^2.7.2",
-		"typescript": "^5.9.3"
+		"typescript": "^5.9.3",
+		"@astro-aws/scripts": "workspace:*"
 	},
 	"engines": {
 		"node": "20.x || 22.x || 24.x"

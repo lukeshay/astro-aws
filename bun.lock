@@ -5,6 +5,7 @@
     "": {
       "name": "@astro-aws/root",
       "dependencies": {
+        "@astro-aws/scripts": "workspace:*",
         "@changesets/changelog-git": "^0.2.1",
         "@changesets/changelog-github": "^0.5.2",
         "@changesets/cli": "^2.29.8",
@@ -82,7 +83,7 @@
     },
     "packages/adapter": {
       "name": "@astro-aws/adapter",
-      "version": "0.12.0",
+      "version": "0.13.1",
       "dependencies": {
         "@astrojs/webapi": "^3.0.0",
         "@middy/core": "^6.4.5",
@@ -108,7 +109,7 @@
     },
     "packages/constructs": {
       "name": "@astro-aws/constructs",
-      "version": "0.12.0",
+      "version": "0.13.1",
       "dependencies": {
         "flatted": "^3.3.3",
       },
