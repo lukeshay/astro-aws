@@ -31,6 +31,7 @@ const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 		...args,
 	},
 	exports: ["handler"],
+	entrypointResolution: "explicit",
 	name: ADAPTER_NAME,
 	serverEntrypoint: `${ADAPTER_NAME}/lambda/handlers/${
 		args.mode ?? DEFAULT_ARGS.mode

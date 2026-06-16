@@ -4,13 +4,13 @@ import { createExports } from "../../../src/lambda/handlers/ssr.js"
 const mockRender = vi.fn()
 const mockMatch = vi.fn()
 
-vi.mock("astro/app/node", () => ({
-	NodeApp: class {
-		getAdapterLogger = () => ({ info: vi.fn(), warn: vi.fn(), error: vi.fn() })
-		match = mockMatch
-		render = mockRender
-		setCookieHeaders = () => []
-	},
+vi.mock("astro/app/entrypoint", () => ({
+	createApp: vi.fn(() => ({
+		adapterLogger: () => ({ info: vi.fn(), warn: vi.fn(), error: vi.fn() }),
+		match: mockMatch,
+		render: mockRender,
+		setCookieHeaders: () => [],
+	})),
 }))
 
 type SSRManifest = Parameters<typeof createExports>[0]

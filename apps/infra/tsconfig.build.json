@@ -1,7 +1,8 @@
 {
 	"compilerOptions": {
 		"inlineSourceMap": true,
-		"outDir": "dist"
+		"outDir": "dist",
+		"rootDir": "./src"
 	},
 	"extends": "../../tsconfig.base.json",
 	"include": ["src/**/*"]

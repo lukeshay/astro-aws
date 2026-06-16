@@ -47,6 +47,7 @@ describe("index.ts", () => {
 						mode: "ssr",
 					},
 					exports: ["handler"],
+					entrypointResolution: "explicit",
 					name: ADAPTER_NAME,
 					serverEntrypoint: `${ADAPTER_NAME}/lambda/handlers/ssr.js`,
 					supportedAstroFeatures: {
@@ -75,6 +76,7 @@ describe("index.ts", () => {
 						mode: "ssr",
 					},
 					exports: ["handler"],
+					entrypointResolution: "explicit",
 					name: ADAPTER_NAME,
 					serverEntrypoint: `${ADAPTER_NAME}/lambda/handlers/ssr.js`,
 					supportedAstroFeatures: {
