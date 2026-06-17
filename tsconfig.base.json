@@ -17,7 +17,7 @@
 		"noUncheckedIndexedAccess": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
-		"rootDir": "./src",
+		"rootDir": "./",
 		"skipLibCheck": true,
 		"strict": true,
 		"target": "ES2022",

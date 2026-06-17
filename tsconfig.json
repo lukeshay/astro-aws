@@ -5,8 +5,7 @@
 		"paths": {
 			"@astro-aws/adapter": ["./packages/adapter/src/index.ts"],
 			"@astro-aws/constructs": ["./packages/constructs/src/index.ts"]
-		},
-		"rootDir": "./src"
+		}
 	},
 	"extends": "./tsconfig.base.json"
 }
