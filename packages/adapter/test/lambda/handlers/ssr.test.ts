@@ -6,7 +6,7 @@ const mockMatch = vi.fn()
 
 vi.mock("astro/app/entrypoint", () => ({
 	createApp: vi.fn(() => ({
-		adapterLogger: () => ({ info: vi.fn(), warn: vi.fn(), error: vi.fn() }),
+		adapterLogger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 		match: mockMatch,
 		render: mockRender,
 		setCookieHeaders: () => [],
