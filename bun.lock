@@ -104,7 +104,7 @@
         "vitest": "^4.1.9",
       },
       "peerDependencies": {
-        "astro": ">=4",
+        "astro": ">=6",
       },
     },
     "packages/constructs": {
@@ -123,8 +123,8 @@
         "vitest": "^4.1.9",
       },
       "peerDependencies": {
-        "aws-cdk-lib": "^2.94.0",
-        "constructs": "^10.1.0",
+        "aws-cdk-lib": "^2.259.0",
+        "constructs": "^10.6.0",
       },
     },
     "scripts": {

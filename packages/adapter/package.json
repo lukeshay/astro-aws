@@ -76,7 +76,7 @@
 		"vitest": "^4.1.9"
 	},
 	"peerDependencies": {
-		"astro": ">=4"
+		"astro": ">=6"
 	},
 	"engines": {
 		"node": "22.x || 24.x"

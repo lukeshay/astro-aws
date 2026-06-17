@@ -39,8 +39,8 @@
 		"vitest": "^4.1.9"
 	},
 	"peerDependencies": {
-		"aws-cdk-lib": "^2.94.0",
-		"constructs": "^10.1.0"
+		"aws-cdk-lib": "^2.259.0",
+		"constructs": "^10.6.0"
 	},
 	"engines": {
 		"node": "22.x || 24.x"

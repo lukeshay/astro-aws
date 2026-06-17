@@ -41,7 +41,7 @@
 		"typescript": "^6.0.3"
 	},
 	"peerDependencies": {
-		"typescript": "^5.2.2"
+		"typescript": "^6.0.3"
 	},
 	"engines": {
 		"node": "22.x || 24.x"
