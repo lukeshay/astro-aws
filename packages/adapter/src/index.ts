@@ -42,7 +42,7 @@ const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 		hybridOutput: "stable",
 		serverOutput: "stable",
 		staticOutput: "unsupported",
-		envGetSecret: "unsupported",
+		envGetSecret: "stable",
 	},
 })
 
