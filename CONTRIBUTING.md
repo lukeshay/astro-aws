@@ -17,8 +17,8 @@ Thank you for your interest in contributing to astro-aws! This document provides
 
 ### Prerequisites
 
-- **Node.js**: Version 20.x or 22.x
-- **Bun**: Version 1.2.23 (specified in `package.json`)
+- **Node.js**: Version 22.x or 24.x
+- **Bun**: Version 1.3.5 (specified in `package.json`)
 - **Git**: For version control
 - **AWS Account**: For testing infrastructure deployments (optional, but recommended)
 

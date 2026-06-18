@@ -11,7 +11,7 @@ const DEFAULT_CONFIG: BuildOptions = {
 	platform: "node",
 	sourcemap: false,
 	sourcesContent: false,
-	target: "node14",
+	target: "node22",
 }
 
 type CreateConfigOptions = {
