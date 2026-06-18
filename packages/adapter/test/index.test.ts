@@ -54,7 +54,6 @@ describe("index.ts", () => {
 						hybridOutput: "stable",
 						serverOutput: "stable",
 						staticOutput: "unsupported",
-						envGetSecret: "stable",
 						sharpImageService: "stable",
 					},
 				})
@@ -84,7 +83,6 @@ describe("index.ts", () => {
 						serverOutput: "stable",
 						sharpImageService: "stable",
 						staticOutput: "unsupported",
-						envGetSecret: "stable",
 					},
 				})
 			})
@@ -175,6 +173,11 @@ describe("index.ts", () => {
 						image: {
 							service: {
 								entrypoint: "astro/assets/services/sharp",
+							},
+						},
+						vite: {
+							ssr: {
+								external: ["sharp"],
 							},
 						},
 					})

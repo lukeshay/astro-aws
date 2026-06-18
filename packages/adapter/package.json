@@ -68,7 +68,7 @@
 		"@astro-aws/scripts": "workspace:*",
 		"@faker-js/faker": "^10.4.0",
 		"@types/aws-lambda": "^8.10.162",
-		"@types/node": "^25.9.3",
+		"@types/node": "^22.19.21",
 		"astro": "^6.4.7",
 		"aws-lambda": "^1.0.7",
 		"prettier": "^3.8.4",
@@ -76,7 +76,7 @@
 		"vitest": "^4.1.9"
 	},
 	"peerDependencies": {
-		"astro": ">=6"
+		"astro": "^6.0.0"
 	},
 	"engines": {
 		"node": "22.x || 24.x"

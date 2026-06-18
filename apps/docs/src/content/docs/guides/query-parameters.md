@@ -5,7 +5,7 @@ description: Describes how to access query parameters on the server.
 
 ## Setup
 
-Follow the [getting started guide](/start-here/getting-started) to create a new Astro project with the Astro AWS adapter.
+Follow the [getting started guide](/start-here/getting-started/) to create a new Astro project with the Astro AWS adapter.
 
 ## Allowing Query Parameters
 

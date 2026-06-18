@@ -91,6 +91,7 @@ const createExports = (
 	const handleRequest = async (
 		request: Request,
 		def: CloudFrontRequestResult | CloudFrontResponseResult,
+		clientAddress: string,
 		requestId: string,
 		readOnlyHeaders: Array<RegExp>,
 	): Promise<CloudFrontRequestResult | CloudFrontResponseResult> => {
@@ -108,6 +109,7 @@ const createExports = (
 			}
 		}
 		const response = await app.render(request, {
+			clientAddress,
 			locals,
 			routeData,
 		})
@@ -172,6 +174,7 @@ const createExports = (
 				return handleRequest(
 					request,
 					record.response,
+					record.request.clientIp,
 					requestId,
 					READ_ONLY_ORIGIN_REQUEST_HEADERS,
 				)
@@ -207,6 +210,7 @@ const createExports = (
 		return handleRequest(
 			request,
 			cloudFrontRequest,
+			cloudFrontRequest.clientIp,
 			requestId,
 			READ_ONLY_ORIGIN_REQUEST_HEADERS,
 		)

@@ -5,7 +5,7 @@ This directory stores versioned Sharp layer zip files used by `apps/infra` websi
 Build a layer zip:
 
 ```sh
-bash ./scripts/build-sharp-layer.sh 0.34.0
+bash ./scripts/build-sharp-layer.sh 0.34.5
 ```
 
 The command generates `apps/infra/layers/sharp/sharp-v<version>.zip`.

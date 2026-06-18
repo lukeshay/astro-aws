@@ -24,16 +24,16 @@
 		"start": "astro dev"
 	},
 	"dependencies": {
-		"@astrojs/starlight": "^0.37.1",
-		"astro": "^5.16.6",
+		"@astrojs/starlight": "^0.38.0",
+		"astro": "^6.4.7",
 		"sharp": "^0.34.5"
 	},
 	"devDependencies": {
 		"@astro-aws/adapter": "workspace:^",
-		"@types/node": "^20",
+		"@types/node": "^22.19.21",
 		"prettier": "^3.7.4",
 		"rimraf": "^6.1.2",
-		"starlight-links-validator": "^0.19.2"
+		"starlight-links-validator": "^0.24.1"
 	},
 	"engines": {
 		"node": "22.x || 24.x"

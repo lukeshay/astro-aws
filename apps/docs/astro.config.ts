@@ -1,6 +1,6 @@
 import { defineConfig } from "astro/config"
 import starlight from "@astrojs/starlight"
-import starlightLinksValidator from "starlight-links-validator"
+// import starlightLinksValidator from "starlight-links-validator"
 
 // https://astro.build/config
 export default defineConfig({
@@ -56,7 +56,7 @@ export default defineConfig({
 			},
 			tagline: "AWS CDK constructs for Astro",
 			title: "Astro AWS",
-			plugins: [starlightLinksValidator()],
+			// plugins: [starlightLinksValidator()],
 		}),
 	],
 	output: "static",

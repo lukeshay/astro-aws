@@ -42,7 +42,6 @@ const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 		hybridOutput: "stable",
 		serverOutput: "stable",
 		staticOutput: "unsupported",
-		envGetSecret: "stable",
 	},
 })
 
@@ -73,6 +72,11 @@ const astroAWSFunctions = (args: Partial<Args> = {}): AstroIntegration => {
 								image: {
 									service: {
 										entrypoint: "astro/assets/services/sharp",
+									},
+								},
+								vite: {
+									ssr: {
+										external: ["sharp"],
 									},
 								},
 							}),

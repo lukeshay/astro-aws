@@ -284,6 +284,7 @@ const createExports = (manifest: SSRManifest, args: Args) => {
 			}
 		}
 		const response = await app.render(request, {
+			clientAddress: event.requestContext.http.sourceIp,
 			locals,
 			routeData,
 		})
