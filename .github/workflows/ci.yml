@@ -30,7 +30,6 @@ jobs:
           - build
           - test
           - format
-          - synth
     steps:
       - uses: actions/checkout@v3
       - uses: oven-sh/setup-bun@v1
@@ -39,5 +38,31 @@ jobs:
           node-version: ${{ matrix.node_version }}
       - run: bun install
       - run: bun run ${{ matrix.cmd }}
+
+  synth:
+    name: npm run synth - ${{ matrix.node_version }}
+    if: github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        node_version:
+          - 20
+          - 22
+          - 24
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-west-2
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+      - uses: actions/checkout@v3
+      - uses: oven-sh/setup-bun@v1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node_version }}
+      - run: bun install
+      - run: bun run synth
         env:
           AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
+          AWS_REGION: us-west-2
