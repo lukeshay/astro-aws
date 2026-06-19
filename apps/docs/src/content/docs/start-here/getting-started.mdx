@@ -15,7 +15,7 @@ Astro AWS is an [Astro](https://astro.build/) SSR adapter and AWS CDK constructs
 
 Before you begin, make sure you have the following:
 
-- **Node.js** 20.x or higher
+- **Node.js** 22.x or higher
 - **AWS Account** with appropriate permissions
 - **AWS CLI** installed and configured with your credentials
 - **AWS CDK CLI** (we'll install this in the guide)
@@ -194,10 +194,12 @@ cdk deploy
 
 The deployment process will:
 
-1. Create a Lambda function with your Astro application
-2. Set up a CloudFront distribution
-3. Configure the necessary IAM roles and permissions
-4. Output the CloudFront distribution URL
+1. Create an S3 bucket to host static assets
+2. Create a Lambda function with your Astro application (SSR only)
+3. Set up a CloudFront distribution
+4. Configure Origin Access Control (OAC) to restrict S3 access to CloudFront only
+5. Configure the necessary IAM roles and permissions
+6. Output the CloudFront distribution URL
 
 After deployment completes, you'll see the CloudFront distribution URL in the output. Your Astro application is now live on AWS!
 

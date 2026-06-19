@@ -57,4 +57,16 @@ describe("shared.ts", () => {
 		expect(config.banner.js).toContain("createRequire")
 		expect(config.banner.js).toContain("const require")
 	})
+
+	test("uses node22 as default esbuild target when no target override provided", async () => {
+		await bundleEntry("/tmp/entry.mjs", "/tmp/out", {
+			esBuildOptions: {},
+		})
+
+		expect(build).toHaveBeenCalledWith(
+			expect.objectContaining({
+				target: "node22",
+			}),
+		)
+	})
 })
