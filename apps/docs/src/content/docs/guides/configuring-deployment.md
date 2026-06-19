@@ -10,7 +10,7 @@ The `AstroAWS` construct creates all the necessary AWS resources for your Astro 
 - **S3 bucket** to host static website assets
 - **Lambda function** to handle server-side rendering (if SSR is enabled)
 - **CloudFront distribution** to serve your website globally
-- **Origin access identity** to secure access to the S3 bucket
+- **Origin access control** to secure access to the S3 bucket
 
 All resources can be customized through the `cdk` prop, which allows you to configure:
 
