@@ -5,7 +5,6 @@ import {
 	type BucketProps,
 } from "aws-cdk-lib/aws-s3"
 import { type Construct } from "constructs"
-import { type OriginAccessIdentity } from "aws-cdk-lib/aws-cloudfront"
 
 import {
 	AstroAWSBaseConstruct,
@@ -21,12 +20,6 @@ type AstroAWSS3BucketProps = AstroAWSBaseConstructProps & {
 }
 
 type AstroAWSS3BucketCdk = {
-	/**
-	 * @deprecated Origin Access Identity is no longer used. CloudFront Origin Access Control (OAC)
-	 * is now used instead. This field always returns `undefined` and will be removed in a future
-	 * major version.
-	 */
-	originAccessIdentity: OriginAccessIdentity | undefined
 	s3Bucket: Bucket
 }
 
@@ -53,7 +46,6 @@ class AstroAWSS3Bucket extends AstroAWSBaseConstruct<
 
 	public get cdk() {
 		return {
-			originAccessIdentity: undefined as OriginAccessIdentity | undefined,
 			s3Bucket: this.#s3Bucket,
 		}
 	}

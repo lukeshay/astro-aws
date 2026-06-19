@@ -8,7 +8,6 @@ import {
 } from "aws-cdk-lib/aws-lambda"
 import {
 	type IOrigin,
-	type OriginAccessIdentity,
 } from "aws-cdk-lib/aws-cloudfront"
 import { type Bucket } from "aws-cdk-lib/aws-s3"
 import {
@@ -36,11 +35,6 @@ type AstroAWSOriginCdkProps = {
 type AstroAWSOriginProps = AstroAWSBaseConstructProps & {
 	lambdaFunction?: Function
 	s3Bucket: Bucket
-	/**
-	 * @deprecated Origin Access Identity is no longer used. CloudFront Origin Access Control (OAC)
-	 * is now used instead. This prop is ignored and will be removed in a future major version.
-	 */
-	originAccessIdentity?: OriginAccessIdentity
 	cdk?: AstroAWSOriginCdkProps
 }
 
