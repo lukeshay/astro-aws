@@ -62,6 +62,11 @@ describe("AstroAWS", () => {
 		expect(astro.cdk.lambdaFunction).toBeUndefined()
 		template.resourceCountIs("AWS::CloudFront::Distribution", 1)
 		template.resourceCountIs("AWS::Lambda::Url", 0)
+		template.resourceCountIs("AWS::CloudFront::OriginAccessControl", 1)
+		template.resourceCountIs(
+			"AWS::CloudFront::CloudFrontOriginAccessIdentity",
+			0,
+		)
 	})
 
 	test("creates ssr lambda and configures origin group", () => {

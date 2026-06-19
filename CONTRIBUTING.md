@@ -164,15 +164,20 @@ To test infrastructure changes, you'll need AWS credentials configured:
 ```bash
 # Set AWS environment variables
 export AWS_ACCOUNT=your-account-id
-export AWS_REGION=us-east-1
+export AWS_REGION=us-east-1  # us-east-1 is recommended; us-west-2 may be restricted by SCPs in some accounts
 export AWS_PROFILE=your-profile
 
-# Synthesize CDK stack
-bun run synth
+# Build the infra package first
+bun run build:one @astro-aws/infra
 
-# Deploy (use with caution)
-bun run deploy:one @astro-aws/infra
+# Synthesize CDK stacks (PERSONAL environment targets your account with no custom domain)
+AWS_PROFILE=$AWS_PROFILE AWS_ACCOUNT=$AWS_ACCOUNT AWS_REGION=$AWS_REGION npx cdk synth "AstroAWS-PERSONAL-*" --app "node --enable-source-maps dist/bin/infra.js"
+
+# Deploy a specific stack (use with caution)
+AWS_PROFILE=$AWS_PROFILE AWS_ACCOUNT=$AWS_ACCOUNT AWS_REGION=$AWS_REGION npx cdk deploy "AstroAWS-PERSONAL-Website-nodejs24-ssr" --require-approval never
 ```
+
+> **Note:** The `PERSONAL` environment deploys without custom domains or hosted zones, making it safe for sandbox/personal account testing. CDK must be bootstrapped in your target account and region first (`npx cdk bootstrap`).
 
 ## Code Style
 
