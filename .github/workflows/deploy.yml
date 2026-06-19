@@ -7,7 +7,7 @@ on:
         description: The version of node to use
         required: false
         type: string
-        default: "20"
+        default: "22"
       stack_environment:
         description: The stack environment to deploy
         required: true

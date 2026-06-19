@@ -23,7 +23,7 @@ describe("shared.ts", () => {
 				banner: {
 					js: "console.log(\'banner\')",
 				},
-				target: "node20",
+				target: "node22",
 			},
 		}
 
@@ -43,7 +43,7 @@ describe("shared.ts", () => {
 				},
 				outdir: "/tmp/out",
 				platform: "node",
-				target: "node20",
+				target: "node22",
 			}),
 		)
 	})

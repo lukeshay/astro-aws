@@ -1,7 +1,6 @@
 import { Buffer } from "node:buffer"
 import { readFile } from "node:fs/promises"
 
-import { NodeApp } from "astro/app/node"
 import type {
 	APIGatewayProxyEventV2,
 	APIGatewayProxyHandlerV2,
@@ -20,6 +19,8 @@ import {
 import { withLogger } from "../middleware.js"
 import { KNOWN_BINARY_MEDIA_TYPES } from "../constants.js"
 import { type CloudfrontResult } from "../types.js"
+import { createApp } from "astro/app/entrypoint"
+import { BaseApp, AppPipeline } from "astro/app"
 
 polyfill(globalThis, {
 	exclude: "window document",
@@ -78,7 +79,7 @@ globalThis.fetch = async (input, init) => {
 const isAsciiStringPattern = /^[\x00-\xFF]*$/
 
 const createLambdaFunctionHeaders = (
-	app: NodeApp,
+	app: BaseApp<AppPipeline>,
 	response: Response,
 	knownBinaryMediaTypes: Set<string>,
 ) => {
@@ -114,7 +115,7 @@ const createAPIGatewayProxyEventV2ResponseBody = async (
 }
 
 const createLambdaFunctionResponse = async (
-	app: NodeApp,
+	app: BaseApp<AppPipeline>,
 	response: Response,
 	knownBinaryMediaTypes: Set<string>,
 	shouldStream: boolean,
@@ -174,9 +175,12 @@ const createExports = (manifest: SSRManifest, args: Args) => {
 		buildClientDir: new URL("./client/", import.meta.url),
 	}
 
-	const app = new NodeApp(manifestForLambdaRuntime, shouldStream)
+	const app = createApp({
+		streaming: shouldStream,
+	})
+	app.manifest = manifestForLambdaRuntime
 
-	const logger = app.getAdapterLogger()
+	const logger = app.adapterLogger
 
 	const knownBinaryMediaTypes = new Set([
 		...KNOWN_BINARY_MEDIA_TYPES,
@@ -280,6 +284,7 @@ const createExports = (manifest: SSRManifest, args: Args) => {
 			}
 		}
 		const response = await app.render(request, {
+			clientAddress: event.requestContext.http.sourceIp,
 			locals,
 			routeData,
 		})

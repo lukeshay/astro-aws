@@ -1,4 +1,3 @@
-import { NodeApp } from "astro/app/node"
 import type {
 	CloudFrontHeaders,
 	CloudFrontRequest,
@@ -18,17 +17,22 @@ import {
 	READ_ONLY_ORIGIN_REQUEST_HEADERS,
 } from "../constants.js"
 import { withLogger } from "../middleware.js"
+import { createApp } from "astro/app/entrypoint"
 
 polyfill(globalThis, {
 	exclude: "window document",
 })
+
+const app = createApp({
+	streaming: false,
+})
+
 const createExports = (
 	manifest: SSRManifest,
 	args: Args,
 ): { handler: CloudFrontRequestHandler } => {
-	const app = new NodeApp(manifest, false)
-
-	const logger = app.getAdapterLogger()
+	app.manifest = manifest
+	const logger = app.adapterLogger
 
 	const knownBinaryMediaTypes = new Set([
 		...KNOWN_BINARY_MEDIA_TYPES,
@@ -87,6 +91,7 @@ const createExports = (
 	const handleRequest = async (
 		request: Request,
 		def: CloudFrontRequestResult | CloudFrontResponseResult,
+		clientAddress: string,
 		requestId: string,
 		readOnlyHeaders: Array<RegExp>,
 	): Promise<CloudFrontRequestResult | CloudFrontResponseResult> => {
@@ -104,6 +109,7 @@ const createExports = (
 			}
 		}
 		const response = await app.render(request, {
+			clientAddress,
 			locals,
 			routeData,
 		})
@@ -168,6 +174,7 @@ const createExports = (
 				return handleRequest(
 					request,
 					record.response,
+					record.request.clientIp,
 					requestId,
 					READ_ONLY_ORIGIN_REQUEST_HEADERS,
 				)
@@ -203,6 +210,7 @@ const createExports = (
 		return handleRequest(
 			request,
 			cloudFrontRequest,
+			cloudFrontRequest.clientIp,
 			requestId,
 			READ_ONLY_ORIGIN_REQUEST_HEADERS,
 		)

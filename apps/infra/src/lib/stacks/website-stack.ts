@@ -47,7 +47,7 @@ type WebsiteStackProps = AstroAWSStackProps &
 		cloudwatchDashboard?: Dashboard
 	}
 
-const SHARP_LAYER_VERSION = "0.34.0"
+const SHARP_LAYER_VERSION = "0.34.5"
 
 class WebsiteStack extends Stack {
 	public readonly astroAWS: AstroAWS

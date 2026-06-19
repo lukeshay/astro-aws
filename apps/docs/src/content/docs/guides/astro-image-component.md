@@ -5,7 +5,9 @@ description: Add a Sharp Lambda layer to AstroAWS so the Astro Image component w
 
 ## Overview
 
-When you use Astro's Image component in SSR mode, Sharp must be available in the Lambda runtime. The easiest way to provide it is with a Lambda layer and attach that layer to the function created by `AstroAWS`.
+When you use Astro's Image component in SSR mode, Sharp must be available in the Lambda runtime. The `@astro-aws/adapter` externalizes Sharp during the SSR build so the handler loads it from a Lambda layer at runtime instead of bundling native binaries into the deployment package.
+
+The easiest way to provide Sharp is with a Lambda layer attached to the function created by `AstroAWS`.
 
 > **Important:** This approach does not work with `mode: "edge"` (Lambda@Edge).
 
@@ -32,7 +34,7 @@ Create `layers/sharp/nodejs/package.json`:
 ```json
 {
 	"dependencies": {
-		"sharp": "^0.34.0"
+		"sharp": "^0.34.5"
 	},
 	"name": "sharp-layer",
 	"private": true

@@ -7,7 +7,7 @@ INFRA_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 LAYER_DIR="${INFRA_DIR}/layers/sharp"
 BUILD_DIR="${LAYER_DIR}/.build"
 
-SHARP_VERSION="${1:-0.34.0}"
+SHARP_VERSION="${1:-0.34.5}"
 ZIP_PATH="${LAYER_DIR}/sharp-v${SHARP_VERSION}.zip"
 
 mkdir -p "${BUILD_DIR}/nodejs"

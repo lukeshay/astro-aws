@@ -31,6 +31,7 @@ const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 		...args,
 	},
 	exports: ["handler"],
+	entrypointResolution: "explicit",
 	name: ADAPTER_NAME,
 	serverEntrypoint: `${ADAPTER_NAME}/lambda/handlers/${
 		args.mode ?? DEFAULT_ARGS.mode
@@ -41,7 +42,6 @@ const getAdapter = (args: Partial<Args> = {}): AstroAdapter => ({
 		hybridOutput: "stable",
 		serverOutput: "stable",
 		staticOutput: "unsupported",
-		envGetSecret: "unsupported",
 	},
 })
 
@@ -72,6 +72,11 @@ const astroAWSFunctions = (args: Partial<Args> = {}): AstroIntegration => {
 								image: {
 									service: {
 										entrypoint: "astro/assets/services/sharp",
+									},
+								},
+								vite: {
+									ssr: {
+										external: ["sharp"],
 									},
 								},
 							}),

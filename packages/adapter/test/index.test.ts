@@ -47,13 +47,13 @@ describe("index.ts", () => {
 						mode: "ssr",
 					},
 					exports: ["handler"],
+					entrypointResolution: "explicit",
 					name: ADAPTER_NAME,
 					serverEntrypoint: `${ADAPTER_NAME}/lambda/handlers/ssr.js`,
 					supportedAstroFeatures: {
 						hybridOutput: "stable",
 						serverOutput: "stable",
 						staticOutput: "unsupported",
-						envGetSecret: "unsupported",
 						sharpImageService: "stable",
 					},
 				})
@@ -75,6 +75,7 @@ describe("index.ts", () => {
 						mode: "ssr",
 					},
 					exports: ["handler"],
+					entrypointResolution: "explicit",
 					name: ADAPTER_NAME,
 					serverEntrypoint: `${ADAPTER_NAME}/lambda/handlers/ssr.js`,
 					supportedAstroFeatures: {
@@ -82,7 +83,6 @@ describe("index.ts", () => {
 						serverOutput: "stable",
 						sharpImageService: "stable",
 						staticOutput: "unsupported",
-						envGetSecret: "unsupported",
 					},
 				})
 			})
@@ -173,6 +173,11 @@ describe("index.ts", () => {
 						image: {
 							service: {
 								entrypoint: "astro/assets/services/sharp",
+							},
+						},
+						vite: {
+							ssr: {
+								external: ["sharp"],
 							},
 						},
 					})

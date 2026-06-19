@@ -4,13 +4,13 @@ import { createExports } from "../../../src/lambda/handlers/ssr.js"
 const mockRender = vi.fn()
 const mockMatch = vi.fn()
 
-vi.mock("astro/app/node", () => ({
-	NodeApp: class {
-		getAdapterLogger = () => ({ info: vi.fn(), warn: vi.fn(), error: vi.fn() })
-		match = mockMatch
-		render = mockRender
-		setCookieHeaders = () => []
-	},
+vi.mock("astro/app/entrypoint", () => ({
+	createApp: vi.fn(() => ({
+		adapterLogger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
+		match: mockMatch,
+		render: mockRender,
+		setCookieHeaders: () => [],
+	})),
 }))
 
 type SSRManifest = Parameters<typeof createExports>[0]
@@ -24,7 +24,7 @@ const createMockEvent = () => ({
 	rawQueryString: "",
 	requestContext: {
 		domainName: "example.com",
-		http: { method: "GET" },
+		http: { method: "GET", sourceIp: "203.0.113.10" },
 		requestId: "req-001",
 	},
 })
@@ -92,6 +92,31 @@ describe("ssr", () => {
 			await (handler as Function)(createMockEvent(), {})
 
 			expect(originalLocals).toEqual({ role: "admin" })
+		})
+	})
+
+	describe("clientAddress", () => {
+		test("passes API Gateway source IP to Astro render options", async () => {
+			mockMatch.mockReturnValue({ route: "/test" })
+			mockRender.mockResolvedValue(
+				new Response("OK", {
+					headers: { "content-type": "text/html" },
+					status: 200,
+				}),
+			)
+
+			const { handler } = createExports({} as SSRManifest, {
+				mode: "ssr",
+			})
+
+			await (handler as Function)(createMockEvent(), {})
+
+			expect(mockRender).toHaveBeenCalledWith(
+				expect.any(Request),
+				expect.objectContaining({
+					clientAddress: "203.0.113.10",
+				}),
+			)
 		})
 	})
 })
