@@ -1,5 +1,5 @@
 {
-	"changesets": ["finish-astro-v6"],
+	"changesets": ["odd-planets-film"],
 	"initialVersions": {
 		"@astro-aws/adapter": "0.13.1",
 		"@astro-aws/constructs": "0.13.1",
