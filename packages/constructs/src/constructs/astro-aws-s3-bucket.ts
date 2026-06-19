@@ -5,8 +5,7 @@ import {
 	type BucketProps,
 } from "aws-cdk-lib/aws-s3"
 import { type Construct } from "constructs"
-import { OriginAccessIdentity } from "aws-cdk-lib/aws-cloudfront"
-import { CanonicalUserPrincipal, PolicyStatement } from "aws-cdk-lib/aws-iam"
+import { type OriginAccessIdentity } from "aws-cdk-lib/aws-cloudfront"
 
 import {
 	AstroAWSBaseConstruct,
@@ -22,7 +21,12 @@ type AstroAWSS3BucketProps = AstroAWSBaseConstructProps & {
 }
 
 type AstroAWSS3BucketCdk = {
-	originAccessIdentity: OriginAccessIdentity
+	/**
+	 * @deprecated Origin Access Identity is no longer used. CloudFront Origin Access Control (OAC)
+	 * is now used instead. This field always returns `undefined` and will be removed in a future
+	 * major version.
+	 */
+	originAccessIdentity: OriginAccessIdentity | undefined
 	s3Bucket: Bucket
 }
 
@@ -31,7 +35,6 @@ class AstroAWSS3Bucket extends AstroAWSBaseConstruct<
 	AstroAWSS3BucketCdk
 > {
 	#s3Bucket: Bucket
-	#originAccessIdentity: OriginAccessIdentity
 
 	public constructor(
 		scope: Construct,
@@ -46,28 +49,11 @@ class AstroAWSS3Bucket extends AstroAWSBaseConstruct<
 			enforceSSL: true,
 			...props.cdk?.s3Bucket,
 		})
-
-		this.#originAccessIdentity = new OriginAccessIdentity(this, "S3BucketOAI", {
-			comment: `OAI for ${id}`,
-		})
-
-		this.#s3Bucket.addToResourcePolicy(
-			new PolicyStatement({
-				actions: ["s3:GetObject"],
-				principals: [
-					new CanonicalUserPrincipal(
-						this.#originAccessIdentity
-							.cloudFrontOriginAccessIdentityS3CanonicalUserId,
-					).grantPrincipal,
-				],
-				resources: [this.#s3Bucket.arnForObjects("*")],
-			}),
-		)
 	}
 
 	public get cdk() {
 		return {
-			originAccessIdentity: this.#originAccessIdentity,
+			originAccessIdentity: undefined as OriginAccessIdentity | undefined,
 			s3Bucket: this.#s3Bucket,
 		}
 	}

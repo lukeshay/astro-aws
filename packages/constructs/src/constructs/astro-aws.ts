@@ -60,7 +60,7 @@ type AstroAWSCdk = AstroAWSCloudfrontDistributionCdk &
  * - S3 bucket to host the website assets
  * - Lambda function to handle the requests (if "server" output)
  * - CloudFront distribution to serve the website
- * - Origin access identity to restrict access to the S3 bucket
+ * - Origin Access Control (OAC) to restrict access to the S3 bucket
  *
  * If "server" output is selected, this works by routing requests to the Lambda function. If the Lambda function returns
  * a 404 response, the Cloudfront distribution falls back to the S3 bucket.
@@ -88,7 +88,6 @@ class AstroAWS extends AstroAWSBaseConstruct<AstroAWSProps, AstroAWSCdk> {
 		this.#astroAWSOrigin = new AstroAWSOrigin(this, "AstroAWSOrigin", {
 			...this.props,
 			lambdaFunction: this.#lambdaFunction,
-			originAccessIdentity: this.#astroAWSS3Bucket.cdk.originAccessIdentity,
 			s3Bucket: this.#astroAWSS3Bucket.cdk.s3Bucket,
 		})
 

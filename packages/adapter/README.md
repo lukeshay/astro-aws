@@ -2,6 +2,10 @@
 
 An [Astro](https://astro.build) adapter for building an SSR application and deploying it to AWS Lambda.
 
+## Compatibility
+
+Requires **Astro 6+** and **Node.js 22+**.
+
 ## Install
 
 ```sh
