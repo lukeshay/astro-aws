@@ -19,6 +19,7 @@ Before you begin, make sure you have the following:
 - **AWS Account** with appropriate permissions
 - **AWS CLI** installed and configured with your credentials
 - **AWS CDK CLI** (we'll install this in the guide)
+- **AWS Region** that supports [Lambda function URLs](https://docs.aws.amazon.com/lambda/latest/dg/urls-configuration.html)
 
 ## Step 1: Create your Astro project
 
@@ -175,6 +176,8 @@ export class AstroSiteStack extends Stack {
 > **Note:** Update `websiteDir` to point to the relative path of your Astro project from the CDK project directory. The construct will look for the `dist` directory inside this path.
 
 ## Step 4: Bootstrap AWS CDK (first time only)
+
+Before bootstrapping, confirm that your configured AWS region supports Lambda function URLs. Deployments to unsupported regions fail with an `Unrecognized resource types: [AWS::Lambda::Url]` error.
 
 If this is your first time using AWS CDK in this account and region, you need to bootstrap it:
 
