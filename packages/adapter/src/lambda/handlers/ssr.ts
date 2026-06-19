@@ -6,20 +6,28 @@ import type {
 	APIGatewayProxyHandlerV2,
 } from "aws-lambda"
 import middy, { MiddyfiedHandler } from "@middy/core"
-import { type SSRManifest } from "astro"
+import { setGetEnv } from "astro/env/setup"
+import { createApp } from "astro/app/entrypoint"
 
-import type { Args } from "../../args.js"
 import {
 	createReadableStream,
 	createRequestBody,
+	getClientAddress,
 	parseContentType,
 	validateURL,
 } from "../helpers.js"
 import { withLogger } from "../middleware.js"
 import { KNOWN_BINARY_MEDIA_TYPES } from "../constants.js"
 import { type CloudfrontResult } from "../types.js"
-import { createApp } from "astro/app/entrypoint"
-import { BaseApp, AppPipeline } from "astro/app"
+import {
+	binaryMediaTypes,
+	includeRequestIdInLocals,
+	locals as configuredLocals,
+	logger as loggerOptions,
+	mode,
+} from "../../load-runtime-config.js"
+
+setGetEnv((key) => process.env[key])
 
 const originalFetch = globalThis.fetch.bind(globalThis)
 
@@ -45,7 +53,6 @@ globalThis.fetch = async (input, init) => {
 				: new URL(input.url, "http://localhost")
 
 	if (inputUrl.pathname.startsWith("/_astro/")) {
-		// Prevent path traversal attacks
 		if (inputUrl.pathname.includes("..")) {
 			return new Response("Forbidden", { status: 403 })
 		}
@@ -72,9 +79,24 @@ globalThis.fetch = async (input, init) => {
 }
 
 const isAsciiStringPattern = /^[\x00-\xFF]*$/
+const shouldStream = mode === "ssr-stream"
+
+const app = createApp({
+	streaming: shouldStream,
+})
+app.manifest = {
+	...app.manifest,
+	buildClientDir: new URL("./client/", import.meta.url),
+}
+
+const adapterLogger = app.adapterLogger
+
+const knownBinaryMediaTypes = new Set([
+	...KNOWN_BINARY_MEDIA_TYPES,
+	...(binaryMediaTypes ?? []),
+])
 
 const createLambdaFunctionHeaders = (
-	app: BaseApp<AppPipeline>,
 	response: Response,
 	knownBinaryMediaTypes: Set<string>,
 ) => {
@@ -110,13 +132,11 @@ const createAPIGatewayProxyEventV2ResponseBody = async (
 }
 
 const createLambdaFunctionResponse = async (
-	app: BaseApp<AppPipeline>,
 	response: Response,
 	knownBinaryMediaTypes: Set<string>,
 	shouldStream: boolean,
 ): Promise<CloudfrontResult> => {
 	const { cookies, headers, isBase64Encoded } = createLambdaFunctionHeaders(
-		app,
 		response,
 		knownBinaryMediaTypes,
 	)
@@ -162,141 +182,119 @@ const getDomainName = (
 	return fallbackDomainName
 }
 
-const createExports = (manifest: SSRManifest, args: Args) => {
-	const shouldStream = args.mode === "ssr-stream"
+const lambdaHandler: APIGatewayProxyHandlerV2<CloudfrontResult> = async (
+	event: APIGatewayProxyEventV2,
+) => {
+	const headers = new Headers()
 
-	const manifestForLambdaRuntime: SSRManifest = {
-		...manifest,
-		buildClientDir: new URL("./client/", import.meta.url),
+	for (const [k, v] of Object.entries(event.headers)) {
+		if (!v) continue
+		try {
+			headers.set(k, v)
+		} catch (err) {
+			adapterLogger.warn(
+				`Could not set header "${k}" with value "${v}". Skipping. ${JSON.stringify(err)}`,
+			)
+		}
 	}
 
-	const app = createApp({
-		streaming: shouldStream,
-	})
-	app.manifest = manifestForLambdaRuntime
-
-	const logger = app.adapterLogger
-
-	const knownBinaryMediaTypes = new Set([
-		...KNOWN_BINARY_MEDIA_TYPES,
-		...(args.binaryMediaTypes ?? []),
-	])
-
-	const handler: APIGatewayProxyHandlerV2<CloudfrontResult> = async (
-		event: APIGatewayProxyEventV2,
-	) => {
-		const headers = new Headers()
-
-		for (const [k, v] of Object.entries(event.headers)) {
-			if (!v) continue
-			try {
-				headers.set(k, v)
-			} catch (err) {
-				logger.warn(
-					`Could not set header "${k}" with value "${v}". Skipping. ${JSON.stringify(err)}`,
-				)
-			}
-		}
-
-		if (event.cookies) {
-			headers.set(
-				"cookie",
-				event.cookies
-					.filter((cookie) => cookie && isAsciiStringPattern.test(cookie))
-					.join("; "),
-			)
-		}
-
-		const requestId = event.requestContext.requestId
-		const domainName = getDomainName(
-			headers,
-			event.requestContext.domainName,
-			event.rawPath,
+	if (event.cookies) {
+		headers.set(
+			"cookie",
+			event.cookies
+				.filter((cookie) => cookie && isAsciiStringPattern.test(cookie))
+				.join("; "),
 		)
-		const qs = event.rawQueryString.length ? `?${event.rawQueryString}` : ""
+	}
 
-		let url: URL
-		try {
-			url = new URL(
-				`${event.rawPath.replace(/\/?index\.html$/u, "")}${qs}`,
-				`https://${domainName}`,
-			)
-			validateURL(url)
-		} catch {
-			const response400 = new Response("Bad Request", { status: 400 })
-			return createLambdaFunctionResponse(
-				app,
-				response400,
-				knownBinaryMediaTypes,
-				shouldStream,
-			)
-		}
+	const requestId = event.requestContext.requestId
+	const domainName = getDomainName(
+		headers,
+		event.requestContext.domainName,
+		event.rawPath,
+	)
+	const qs = event.rawQueryString.length ? `?${event.rawQueryString}` : ""
 
-		const request = new Request(url, {
-			body: createRequestBody(
-				event.requestContext.http.method,
-				event.body,
-				event.isBase64Encoded,
-			),
-			headers,
-			method: event.requestContext.http.method,
-		})
-
-		let routeData = app.match(request)
-
-		if (!routeData) {
-			const request404 = new Request(
-				new URL(`404${qs}`, `https://${domainName}`),
-				{
-					body: createRequestBody(
-						event.requestContext.http.method,
-						event.body,
-						event.isBase64Encoded,
-					),
-					headers,
-					method: event.requestContext.http.method,
-				},
-			)
-
-			routeData = app.match(request404)
-
-			if (!routeData) {
-				return {
-					body: shouldStream ? createReadableStream("Not found") : "Not found",
-					headers: {
-						"content-type": "text/plain",
-					},
-					statusCode: 404,
-				}
-			}
-		}
-
-		let locals = structuredClone(args.locals || {})
-		if (args.includeRequestIdInLocals && requestId) {
-			locals = {
-				...locals,
-				requestId,
-			}
-		}
-		const response = await app.render(request, {
-			clientAddress: event.requestContext.http.sourceIp,
-			locals,
-			routeData,
-		})
-
+	let url: URL
+	try {
+		url = new URL(
+			`${event.rawPath.replace(/\/?index\.html$/u, "")}${qs}`,
+			`https://${domainName}`,
+		)
+		validateURL(url)
+	} catch {
+		const response400 = new Response("Bad Request", { status: 400 })
 		return createLambdaFunctionResponse(
-			app,
-			response,
+			response400,
 			knownBinaryMediaTypes,
 			shouldStream,
 		)
 	}
 
-	return {
-		handler: middy({ streamifyResponse: shouldStream }).handler(
-			withLogger(logger, args.logger, handler) as MiddyfiedHandler,
+	const request = new Request(url, {
+		body: createRequestBody(
+			event.requestContext.http.method,
+			event.body,
+			event.isBase64Encoded,
 		),
+		headers,
+		method: event.requestContext.http.method,
+	})
+
+	let routeData = app.match(request)
+
+	if (!routeData) {
+		const request404 = new Request(
+			new URL(`404${qs}`, `https://${domainName}`),
+			{
+				body: createRequestBody(
+					event.requestContext.http.method,
+					event.body,
+					event.isBase64Encoded,
+				),
+				headers,
+				method: event.requestContext.http.method,
+			},
+		)
+
+		routeData = app.match(request404)
+
+		if (!routeData) {
+			return {
+				body: shouldStream ? createReadableStream("Not found") : "Not found",
+				headers: {
+					"content-type": "text/plain",
+				},
+				statusCode: 404,
+			}
+		}
 	}
+
+	let locals = structuredClone(configuredLocals || {})
+	if (includeRequestIdInLocals && requestId) {
+		locals = {
+			...locals,
+			requestId,
+		}
+	}
+	const response = await app.render(request, {
+		clientAddress: getClientAddress(
+			headers,
+			event.requestContext.http.sourceIp,
+		),
+		locals,
+		routeData,
+	})
+
+	return createLambdaFunctionResponse(
+		response,
+		knownBinaryMediaTypes,
+		shouldStream,
+	)
 }
 
-export { createExports }
+const handler = middy({ streamifyResponse: shouldStream }).handler(
+	withLogger(adapterLogger, loggerOptions, lambdaHandler) as MiddyfiedHandler,
+)
+
+export { handler }

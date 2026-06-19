@@ -38,19 +38,13 @@ describe("index.ts", () => {
 
 				expect(result).toStrictEqual({
 					adapterFeatures: {
-						edgeMiddleware: false,
+						middlewareMode: "classic",
 					},
-					args: {
-						...args,
-						esBuildOptions: {},
-						locals: {},
-						mode: "ssr",
-					},
-					exports: ["handler"],
-					entrypointResolution: "explicit",
+					entrypointResolution: "auto",
 					name: ADAPTER_NAME,
 					serverEntrypoint: `${ADAPTER_NAME}/lambda/handlers/ssr.js`,
 					supportedAstroFeatures: {
+						envGetSecret: "stable",
 						hybridOutput: "stable",
 						serverOutput: "stable",
 						staticOutput: "unsupported",
@@ -66,25 +60,36 @@ describe("index.ts", () => {
 
 				expect(result).toStrictEqual({
 					adapterFeatures: {
-						edgeMiddleware: false,
+						middlewareMode: "classic",
 					},
-					args: {
-						binaryMediaTypes: [],
-						esBuildOptions: {},
-						locals: {},
-						mode: "ssr",
-					},
-					exports: ["handler"],
-					entrypointResolution: "explicit",
+					entrypointResolution: "auto",
 					name: ADAPTER_NAME,
 					serverEntrypoint: `${ADAPTER_NAME}/lambda/handlers/ssr.js`,
 					supportedAstroFeatures: {
+						envGetSecret: "stable",
 						hybridOutput: "stable",
 						serverOutput: "stable",
 						sharpImageService: "stable",
 						staticOutput: "unsupported",
 					},
 				})
+			})
+		})
+
+		describe("when mode is edge", () => {
+			test("should mark sharp and secrets unsupported", () => {
+				const result = getAdapter({ mode: "edge" })
+
+				expect(result.supportedAstroFeatures).toStrictEqual({
+					envGetSecret: "unsupported",
+					hybridOutput: "stable",
+					serverOutput: "stable",
+					sharpImageService: "unsupported",
+					staticOutput: "unsupported",
+				})
+				expect(result.serverEntrypoint).toBe(
+					`${ADAPTER_NAME}/lambda/handlers/edge.js`,
+				)
 			})
 		})
 	})
@@ -164,23 +169,31 @@ describe("index.ts", () => {
 					} as unknown as Parameters<typeof astroConfigSetup>[0])
 
 					expect(updateConfig).toHaveBeenCalledTimes(1)
-					expect(updateConfig).toHaveBeenCalledWith({
-						build: {
-							client: new URL("client/", config.outDir),
-							server: new URL("server/", config.outDir),
-							serverEntry: "entry.mjs",
-						},
-						image: {
-							service: {
-								entrypoint: "astro/assets/services/sharp",
+					expect(updateConfig).toHaveBeenCalledWith(
+						expect.objectContaining({
+							build: {
+								client: new URL("client/", config.outDir),
+								server: new URL("server/", config.outDir),
+								serverEntry: "entry.mjs",
 							},
-						},
-						vite: {
-							ssr: {
-								external: ["sharp"],
+							image: {
+								service: {
+									entrypoint: "astro/assets/services/sharp",
+								},
 							},
-						},
-					})
+							vite: expect.objectContaining({
+								plugins: expect.arrayContaining([
+									expect.objectContaining({
+										name: "@astro-aws/adapter-config",
+									}),
+								]),
+								ssr: {
+									external: ["sharp"],
+									noExternal: ["@astro-aws/adapter", "flatted"],
+								},
+							}),
+						}),
+					)
 				})
 
 				test("should not configure image service for edge mode", async () => {
@@ -194,13 +207,25 @@ describe("index.ts", () => {
 					} as unknown as Parameters<typeof edgeSetup>[0])
 
 					expect(edgeUpdateConfig).toHaveBeenCalledTimes(1)
-					expect(edgeUpdateConfig).toHaveBeenCalledWith({
-						build: {
-							client: new URL("client/", config.outDir),
-							server: new URL("server/", config.outDir),
-							serverEntry: "entry.mjs",
-						},
-					})
+					expect(edgeUpdateConfig).toHaveBeenCalledWith(
+						expect.objectContaining({
+							build: {
+								client: new URL("client/", config.outDir),
+								server: new URL("server/", config.outDir),
+								serverEntry: "entry.mjs",
+							},
+							vite: expect.objectContaining({
+								plugins: expect.arrayContaining([
+									expect.objectContaining({
+										name: "@astro-aws/adapter-config",
+									}),
+								]),
+								ssr: {
+									noExternal: ["@astro-aws/adapter", "flatted"],
+								},
+							}),
+						}),
+					)
 				})
 			})
 

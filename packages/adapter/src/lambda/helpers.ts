@@ -30,9 +30,24 @@ const validateURL = (url: URL) => {
 	decodeURI(url.toString())
 }
 
+const getClientAddress = (headers: Headers, sourceIp: string) => {
+	const forwardedFor = headers.get("x-forwarded-for")
+
+	if (forwardedFor) {
+		const clientIp = forwardedFor.split(",")[0]?.trim()
+
+		if (clientIp) {
+			return clientIp
+		}
+	}
+
+	return sourceIp
+}
+
 export {
 	parseContentType,
 	createRequestBody,
 	createReadableStream,
+	getClientAddress,
 	validateURL,
 }
