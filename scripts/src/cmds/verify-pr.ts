@@ -112,14 +112,24 @@ const getIssueNotReadyMessage = (issue: IssueSchema) => {
 	return notReady ? `#${issue.number}: \`${notReady.name}\`` : undefined
 }
 
+type VerifyPROptions = {
+	since: string
+}
+
 const verifyPRCommand = new Command("verify-pr")
 	.description(
 		"Verifies a pull request is linked to an issue and has a changeset if required.",
 	)
 	.argument("[prNumber]", "Pull request number to verify.", "123")
+	.option(
+		"--since <ref>",
+		"Git ref to compare changesets since (defaults to main).",
+		"main",
+	)
 	.action(async (prNumber: string) => {
+		const { since } = verifyPRCommand.opts<VerifyPROptions>()
 		const tempFile = "diff.tmp"
-		await $`bunx changeset status --since main --output ${tempFile}`
+		await $`bunx changeset status --since ${since} --output ${tempFile}`
 		const changesetStatus = v.parse(
 			ChangesetStatusSchema,
 			await file(tempFile).json(),
