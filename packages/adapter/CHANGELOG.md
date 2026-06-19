@@ -1,5 +1,20 @@
 # @astro-aws/adapter
 
+## 1.0.0-RC.1
+
+### Minor Changes
+
+- 73be8c9: Complete the Astro v6 adapter contract.
+
+  The adapter migrates to `entrypointResolution: "auto"` with a virtual runtime config
+  module, wires `envGetSecret` for SSR and SSR-stream modes via `setGetEnv()`, uses
+  `middlewareMode: "classic"`, and passes `clientAddress` from AWS request metadata.
+  Lambda@Edge does not support Astro secrets.
+
+### Patch Changes
+
+- 0efe63a: Remove @astrojs/webapi polyfill
+
 ## 1.0.0-RC.0
 
 ### Major Changes
