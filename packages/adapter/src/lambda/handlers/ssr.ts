@@ -13,6 +13,7 @@ import { createApp } from "astro/app/entrypoint"
 import {
 	createReadableStream,
 	createRequestBody,
+	getClientAddress,
 	parseContentType,
 	validateURL,
 } from "../helpers.js"
@@ -282,7 +283,10 @@ const lambdaHandler: APIGatewayProxyHandlerV2<CloudfrontResult> = async (
 		}
 	}
 	const response = await app.render(request, {
-		clientAddress: event.requestContext.http.sourceIp,
+		clientAddress: getClientAddress(
+			headers,
+			event.requestContext.http.sourceIp,
+		),
 		locals,
 		routeData,
 	})

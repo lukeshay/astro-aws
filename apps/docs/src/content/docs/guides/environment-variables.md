@@ -358,9 +358,31 @@ export async function GET() {
 }
 ```
 
-Wire the secret in CDK with `cdk.lambdaFunction.environment`, then deploy. The
-adapter registers `setGetEnv()` so `getSecret()` reads from `process.env` at
-runtime.
+Set the secret in **both** places:
+
+1. **Build time** — Astro validates `access: "secret"` fields during `astro build`
+   whenever `astro:env/server` is imported. Provide the value in your build
+   environment (for example a local `.env` file, CI secret, or `API_KEY=... astro
+build`). Without it, the build fails even if CDK is configured correctly.
+2. **Deploy time** — wire the same variable in CDK with
+   `cdk.lambdaFunction.environment` so Lambda has it at runtime.
+
+```ts
+// lib/astro-site-stack.ts
+new AstroAWS(this, "AstroAWS", {
+	websiteDir: "../my-astro-project",
+	cdk: {
+		lambdaFunction: {
+			environment: {
+				API_KEY: process.env.API_KEY!, // same value used during astro build
+			},
+		},
+	},
+})
+```
+
+At runtime, the adapter registers `setGetEnv()` so `getSecret()` reads from
+`process.env`.
 
 ## Edge Mode Limitations
 

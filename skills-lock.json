@@ -1,26 +1,26 @@
 {
-  "version": 1,
-  "skills": {
-    "domain-modeling": {
-      "source": "mattpocock/skills",
-      "ref": "main",
-      "sourceType": "github",
-      "skillPath": "skills/engineering/domain-modeling/SKILL.md",
-      "computedHash": "67343881f5def98487d56243155716110afbcbf22ec92421c882d532b941cb17"
-    },
-    "grill-with-docs": {
-      "source": "mattpocock/skills",
-      "ref": "main",
-      "sourceType": "github",
-      "skillPath": "skills/engineering/grill-with-docs/SKILL.md",
-      "computedHash": "e7ef25bbee50cda2eb7b3a8ef541db0a0396dad7d369f7d14fb610671dd1864b"
-    },
-    "grilling": {
-      "source": "mattpocock/skills",
-      "ref": "main",
-      "sourceType": "github",
-      "skillPath": "skills/productivity/grilling/SKILL.md",
-      "computedHash": "ef685a6fa0bbe73b05bbd8dc1ec97258191587f07c6aa7dbc9006675ceb8f90f"
-    }
-  }
+	"skills": {
+		"domain-modeling": {
+			"computedHash": "67343881f5def98487d56243155716110afbcbf22ec92421c882d532b941cb17",
+			"ref": "main",
+			"skillPath": "skills/engineering/domain-modeling/SKILL.md",
+			"source": "mattpocock/skills",
+			"sourceType": "github"
+		},
+		"grill-with-docs": {
+			"computedHash": "e7ef25bbee50cda2eb7b3a8ef541db0a0396dad7d369f7d14fb610671dd1864b",
+			"ref": "main",
+			"skillPath": "skills/engineering/grill-with-docs/SKILL.md",
+			"source": "mattpocock/skills",
+			"sourceType": "github"
+		},
+		"grilling": {
+			"computedHash": "ef685a6fa0bbe73b05bbd8dc1ec97258191587f07c6aa7dbc9006675ceb8f90f",
+			"ref": "main",
+			"skillPath": "skills/productivity/grilling/SKILL.md",
+			"source": "mattpocock/skills",
+			"sourceType": "github"
+		}
+	},
+	"version": 1
 }

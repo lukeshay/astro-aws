@@ -1,21 +1,40 @@
 import { beforeEach, describe, expect, test, vi } from "vitest"
 
-const { mockMatch, mockRender, mockSetGetEnv } = vi.hoisted(() => ({
-	mockMatch: vi.fn(),
-	mockRender: vi.fn(),
-	mockSetGetEnv: vi.fn(),
-}))
+const { mockMatch, mockRender, mockSetGetEnv, runtimeConfig } = vi.hoisted(
+	() => ({
+		mockMatch: vi.fn(),
+		mockRender: vi.fn(),
+		mockSetGetEnv: vi.fn(),
+		runtimeConfig: {
+			binaryMediaTypes: [] as string[],
+			includeRequestIdInLocals: false,
+			locals: {} as Record<string, unknown>,
+			logger: undefined,
+			mode: "ssr" as const,
+		},
+	}),
+)
 
 vi.mock("astro/env/setup", () => ({
 	setGetEnv: mockSetGetEnv,
 }))
 
 vi.mock("../../../src/load-runtime-config.js", () => ({
-	binaryMediaTypes: [],
-	includeRequestIdInLocals: false,
-	locals: {},
-	logger: undefined,
-	mode: "ssr",
+	get binaryMediaTypes() {
+		return runtimeConfig.binaryMediaTypes
+	},
+	get includeRequestIdInLocals() {
+		return runtimeConfig.includeRequestIdInLocals
+	},
+	get locals() {
+		return runtimeConfig.locals
+	},
+	get logger() {
+		return runtimeConfig.logger
+	},
+	get mode() {
+		return runtimeConfig.mode
+	},
 }))
 
 vi.mock("astro/app/entrypoint", () => ({
@@ -63,6 +82,7 @@ describe("ssr", () => {
 		describe("locals", () => {
 			beforeEach(() => {
 				mockMatch.mockReturnValue({ route: "/test" })
+				runtimeConfig.locals = { userId: "user-123" }
 			})
 
 			test("**not** leak state between handler invocations", async () => {
@@ -87,7 +107,29 @@ describe("ssr", () => {
 				await (handler as Function)(event, {})
 				await (handler as Function)(event, {})
 
-				expect(localsSnapshots[1]).toEqual({})
+				expect(localsSnapshots[1]).toEqual({ userId: "user-123" })
+			})
+
+			test("**not** mutate configured locals during render", async () => {
+				const originalLocals = { role: "admin" }
+				runtimeConfig.locals = originalLocals
+
+				mockRender.mockImplementation(
+					async (
+						_request: unknown,
+						options: { locals: Record<string, unknown> },
+					) => {
+						options.locals.addedByMiddleware = "leaked"
+						return new Response("OK", {
+							headers: { "content-type": "text/html" },
+							status: 200,
+						})
+					},
+				)
+
+				await (handler as Function)(createMockEvent(), {})
+
+				expect(originalLocals).toEqual({ role: "admin" })
 			})
 		})
 
@@ -107,6 +149,58 @@ describe("ssr", () => {
 					expect.any(Request),
 					expect.objectContaining({
 						clientAddress: "203.0.113.10",
+					}),
+				)
+			})
+
+			test("prefers x-forwarded-for over source IP for CloudFront SSR", async () => {
+				mockMatch.mockReturnValue({ route: "/test" })
+				mockRender.mockResolvedValue(
+					new Response("OK", {
+						headers: { "content-type": "text/html" },
+						status: 200,
+					}),
+				)
+
+				await (handler as Function)(
+					{
+						...createMockEvent(),
+						headers: { "x-forwarded-for": "203.0.113.20" },
+					},
+					{},
+				)
+
+				expect(mockRender).toHaveBeenCalledWith(
+					expect.any(Request),
+					expect.objectContaining({
+						clientAddress: "203.0.113.20",
+					}),
+				)
+			})
+
+			test("uses the leftmost x-forwarded-for address", async () => {
+				mockMatch.mockReturnValue({ route: "/test" })
+				mockRender.mockResolvedValue(
+					new Response("OK", {
+						headers: { "content-type": "text/html" },
+						status: 200,
+					}),
+				)
+
+				await (handler as Function)(
+					{
+						...createMockEvent(),
+						headers: {
+							"x-forwarded-for": "203.0.113.20, 198.51.100.5, 192.0.2.1",
+						},
+					},
+					{},
+				)
+
+				expect(mockRender).toHaveBeenCalledWith(
+					expect.any(Request),
+					expect.objectContaining({
+						clientAddress: "203.0.113.20",
 					}),
 				)
 			})

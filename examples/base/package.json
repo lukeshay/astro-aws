@@ -15,9 +15,7 @@
 	],
 	"scripts": {
 		"build:edge": "MODE=edge astro build",
-		"build:edge:static": "MODE=edge OUTPUT=static astro build",
 		"build:ssr": "MODE=ssr astro build",
-		"build:ssr:static": "MODE=ssr OUTPUT=static astro build",
 		"build:ssr-stream": "MODE=ssr-stream astro build",
 		"astro": "astro",
 		"build": "bun run clean && run-p build:*",
