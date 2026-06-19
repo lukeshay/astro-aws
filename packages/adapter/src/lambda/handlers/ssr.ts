@@ -7,7 +7,6 @@ import type {
 } from "aws-lambda"
 import middy, { MiddyfiedHandler } from "@middy/core"
 import { type SSRManifest } from "astro"
-import { polyfill } from "@astrojs/webapi"
 
 import type { Args } from "../../args.js"
 import {
@@ -21,10 +20,6 @@ import { KNOWN_BINARY_MEDIA_TYPES } from "../constants.js"
 import { type CloudfrontResult } from "../types.js"
 import { createApp } from "astro/app/entrypoint"
 import { BaseApp, AppPipeline } from "astro/app"
-
-polyfill(globalThis, {
-	exclude: "window document",
-})
 
 const originalFetch = globalThis.fetch.bind(globalThis)
 
