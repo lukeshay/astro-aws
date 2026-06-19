@@ -57,7 +57,6 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
-		"@astrojs/webapi": "^3.0.0",
 		"@middy/core": "^6.4.5",
 		"esbuild": "^0.28.1",
 		"flatted": "^3.4.2",

@@ -8,7 +8,6 @@ import type {
 	CloudFrontResponseResult,
 } from "aws-lambda"
 import { type SSRManifest } from "astro"
-import { polyfill } from "@astrojs/webapi"
 
 import type { Args } from "../../args.js"
 import { createRequestBody, parseContentType, validateURL } from "../helpers.js"
@@ -18,10 +17,6 @@ import {
 } from "../constants.js"
 import { withLogger } from "../middleware.js"
 import { createApp } from "astro/app/entrypoint"
-
-polyfill(globalThis, {
-	exclude: "window document",
-})
 
 const app = createApp({
 	streaming: false,
