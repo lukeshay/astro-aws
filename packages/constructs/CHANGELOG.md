@@ -1,5 +1,24 @@
 # @astro-aws/constructs
 
+## 1.0.0-RC.1
+
+### Major Changes
+
+- 7ce3ac0: Migrate CloudFront S3 origin from Origin Access Identity (OAI) to Origin Access Control (OAC).
+
+  - Switch from `S3BucketOrigin.withOriginAccessIdentity` to `S3BucketOrigin.withOriginAccessControl` — the AWS-recommended approach with distribution-scoped bucket policies and SSE-KMS support.
+  - Remove manual S3 bucket policy (CDK now manages this automatically via OAC).
+  - **Breaking**: `originAccessIdentity` has been removed from `AstroAWSOriginProps` and `AstroAWSS3BucketCdk`. Remove any references to this field from your code.
+
+### Minor Changes
+
+- 73be8c9: Complete the Astro v6 adapter contract.
+
+  The adapter migrates to `entrypointResolution: "auto"` with a virtual runtime config
+  module, wires `envGetSecret` for SSR and SSR-stream modes via `setGetEnv()`, uses
+  `middlewareMode: "classic"`, and passes `clientAddress` from AWS request metadata.
+  Lambda@Edge does not support Astro secrets.
+
 ## 1.0.0-RC.0
 
 ### Major Changes
