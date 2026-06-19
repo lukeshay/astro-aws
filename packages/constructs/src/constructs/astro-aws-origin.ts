@@ -6,9 +6,7 @@ import {
 	type FunctionUrlOptions,
 	type Function,
 } from "aws-cdk-lib/aws-lambda"
-import {
-	type IOrigin,
-} from "aws-cdk-lib/aws-cloudfront"
+import { type IOrigin } from "aws-cdk-lib/aws-cloudfront"
 import { type Bucket } from "aws-cdk-lib/aws-s3"
 import {
 	HttpOrigin,
