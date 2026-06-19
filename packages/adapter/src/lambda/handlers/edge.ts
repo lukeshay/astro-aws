@@ -7,7 +7,6 @@ import type {
 	CloudFrontResponseEvent,
 	CloudFrontResponseResult,
 } from "aws-lambda"
-import { polyfill } from "@astrojs/webapi"
 import { createApp } from "astro/app/entrypoint"
 
 import { createRequestBody, parseContentType, validateURL } from "../helpers.js"
@@ -22,10 +21,6 @@ import {
 	locals as configuredLocals,
 	logger as loggerOptions,
 } from "../../load-runtime-config.js"
-
-polyfill(globalThis, {
-	exclude: "window document",
-})
 
 const app = createApp({
 	streaming: false,

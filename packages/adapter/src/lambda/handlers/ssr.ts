@@ -6,7 +6,6 @@ import type {
 	APIGatewayProxyHandlerV2,
 } from "aws-lambda"
 import middy, { MiddyfiedHandler } from "@middy/core"
-import { polyfill } from "@astrojs/webapi"
 import { setGetEnv } from "astro/env/setup"
 import { createApp } from "astro/app/entrypoint"
 
@@ -27,10 +26,6 @@ import {
 	logger as loggerOptions,
 	mode,
 } from "../../load-runtime-config.js"
-
-polyfill(globalThis, {
-	exclude: "window document",
-})
 
 setGetEnv((key) => process.env[key])
 
