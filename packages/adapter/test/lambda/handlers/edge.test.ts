@@ -5,6 +5,14 @@ const { mockMatch, mockRender } = vi.hoisted(() => ({
 	mockRender: vi.fn(),
 }))
 
+vi.mock("../../../src/load-runtime-config.js", () => ({
+	binaryMediaTypes: [],
+	includeRequestIdInLocals: false,
+	locals: {},
+	logger: undefined,
+	mode: "edge",
+}))
+
 vi.mock("astro/app/entrypoint", () => ({
 	createApp: vi.fn(() => ({
 		adapterLogger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() },
@@ -14,9 +22,7 @@ vi.mock("astro/app/entrypoint", () => ({
 	})),
 }))
 
-import { createExports } from "../../../src/lambda/handlers/edge.js"
-
-type EdgeManifest = Parameters<typeof createExports>[0]
+import { handler } from "../../../src/lambda/handlers/edge.js"
 
 const createMockEvent = () => ({
 	Records: [
@@ -58,10 +64,6 @@ describe("edge", () => {
 					status: 200,
 				}),
 			)
-
-			const { handler } = createExports({} as EdgeManifest, {
-				mode: "edge",
-			})
 
 			await (handler as Function)(createMockEvent(), {})
 

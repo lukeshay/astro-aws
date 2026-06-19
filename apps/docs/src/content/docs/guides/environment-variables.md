@@ -323,6 +323,45 @@ export async function GET() {
 
 > **Note:** Secrets Manager calls add latency to your requests. Consider caching secret values in memory (as shown above) or using a Lambda layer with cached secrets for better performance.
 
+## Astro env secrets in SSR modes
+
+For SSR and SSR-stream deployments, prefer Astro's built-in secret access with
+`astro:env/server` instead of custom Secrets Manager helpers when secrets are
+available as Lambda environment variables.
+
+```ts
+// astro.config.ts
+import { defineConfig, envField } from "astro/config"
+import astroAws from "@astro-aws/adapter"
+
+export default defineConfig({
+	output: "server",
+	adapter: astroAws({ mode: "ssr" }),
+	env: {
+		schema: {
+			API_KEY: envField.string({
+				access: "secret",
+				context: "server",
+			}),
+		},
+	},
+})
+```
+
+```ts
+// src/pages/api/data.ts
+import { getSecret } from "astro:env/server"
+
+export async function GET() {
+	const apiKey = await getSecret("API_KEY")
+	// ...
+}
+```
+
+Wire the secret in CDK with `cdk.lambdaFunction.environment`, then deploy. The
+adapter registers `setGetEnv()` so `getSecret()` reads from `process.env` at
+runtime.
+
 ## Edge Mode Limitations
 
 **Important:** Environment variables are **not supported** in Lambda@Edge mode due to AWS limitations.

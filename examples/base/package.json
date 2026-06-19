@@ -15,7 +15,9 @@
 	],
 	"scripts": {
 		"build:edge": "MODE=edge astro build",
+		"build:edge:static": "MODE=edge OUTPUT=static astro build",
 		"build:ssr": "MODE=ssr astro build",
+		"build:ssr:static": "MODE=ssr OUTPUT=static astro build",
 		"build:ssr-stream": "MODE=ssr-stream astro build",
 		"astro": "astro",
 		"build": "bun run clean && run-p build:*",
@@ -31,6 +33,7 @@
 		"astro": "^6.4.7",
 		"daisyui": "^5.5.23",
 		"http-status-codes": "^2.3.0",
+		"sharp": "^0.34.5",
 		"tailwindcss": "^4.3.1"
 	},
 	"devDependencies": {
