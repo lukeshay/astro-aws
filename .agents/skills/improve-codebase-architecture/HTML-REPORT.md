@@ -7,35 +7,39 @@ The architectural review is rendered as a single self-contained HTML file in the
 ```html
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Architecture review — {{repo name}}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script type="module">
-      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
-      mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
-    </script>
-    <style>
-      /* small custom layer for things Tailwind doesn't cover cleanly:
+	<head>
+		<meta charset="utf-8" />
+		<title>Architecture review — {{repo name}}</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script type="module">
+			import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"
+			mermaid.initialize({
+				startOnLoad: true,
+				theme: "neutral",
+				securityLevel: "loose",
+			})
+		</script>
+		<style>
+			/* small custom layer for things Tailwind doesn't cover cleanly:
          dashed seam lines, hand-drawn-feeling arrow heads, etc. */
-      .seam {
-        stroke-dasharray: 4 4;
-      }
-      .leak {
-        stroke: #dc2626;
-      }
-      .deep {
-        background: linear-gradient(135deg, #0f172a, #1e293b);
-      }
-    </style>
-  </head>
-  <body class="bg-stone-50 text-slate-900 font-sans">
-    <main class="max-w-5xl mx-auto px-6 py-12 space-y-12">
-      <header>...</header>
-      <section id="candidates" class="space-y-10">...</section>
-      <section id="top-recommendation">...</section>
-    </main>
-  </body>
+			.seam {
+				stroke-dasharray: 4 4;
+			}
+			.leak {
+				stroke: #dc2626;
+			}
+			.deep {
+				background: linear-gradient(135deg, #0f172a, #1e293b);
+			}
+		</style>
+	</head>
+	<body class="bg-stone-50 text-slate-900 font-sans">
+		<main class="max-w-5xl mx-auto px-6 py-12 space-y-12">
+			<header>...</header>
+			<section id="candidates" class="space-y-10">...</section>
+			<section id="top-recommendation">...</section>
+		</main>
+	</body>
 </html>
 ```
 
@@ -70,7 +74,7 @@ Use a Mermaid `flowchart` or `graph` when the point is "X calls Y calls Z, and l
 
 ```html
 <div class="rounded-lg border border-slate-200 bg-white p-4">
-  <pre class="mermaid">
+	<pre class="mermaid">
     flowchart LR
       A[OrderHandler] --> B[OrderValidator]
       B --> C[OrderRepo]

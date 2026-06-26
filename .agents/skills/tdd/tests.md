@@ -7,11 +7,11 @@
 ```typescript
 // GOOD: Tests observable behavior
 test("user can checkout with valid cart", async () => {
-  const cart = createCart();
-  cart.add(product);
-  const result = await checkout(cart, paymentMethod);
-  expect(result.status).toBe("confirmed");
-});
+	const cart = createCart()
+	cart.add(product)
+	const result = await checkout(cart, paymentMethod)
+	expect(result.status).toBe("confirmed")
+})
 ```
 
 Characteristics:
@@ -29,10 +29,10 @@ Characteristics:
 ```typescript
 // BAD: Tests implementation details
 test("checkout calls paymentService.process", async () => {
-  const mockPayment = jest.mock(paymentService);
-  await checkout(cart, payment);
-  expect(mockPayment.process).toHaveBeenCalledWith(cart.total);
-});
+	const mockPayment = jest.mock(paymentService)
+	await checkout(cart, payment)
+	expect(mockPayment.process).toHaveBeenCalledWith(cart.total)
+})
 ```
 
 Red flags:
@@ -47,15 +47,15 @@ Red flags:
 ```typescript
 // BAD: Bypasses interface to verify
 test("createUser saves to database", async () => {
-  await createUser({ name: "Alice" });
-  const row = await db.query("SELECT * FROM users WHERE name = ?", ["Alice"]);
-  expect(row).toBeDefined();
-});
+	await createUser({ name: "Alice" })
+	const row = await db.query("SELECT * FROM users WHERE name = ?", ["Alice"])
+	expect(row).toBeDefined()
+})
 
 // GOOD: Verifies through interface
 test("createUser makes user retrievable", async () => {
-  const user = await createUser({ name: "Alice" });
-  const retrieved = await getUser(user.id);
-  expect(retrieved.name).toBe("Alice");
-});
+	const user = await createUser({ name: "Alice" })
+	const retrieved = await getUser(user.id)
+	expect(retrieved.name).toBe("Alice")
+})
 ```

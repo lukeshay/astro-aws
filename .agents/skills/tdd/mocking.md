@@ -24,13 +24,13 @@ Pass external dependencies in rather than creating them internally:
 ```typescript
 // Easy to mock
 function processPayment(order, paymentClient) {
-  return paymentClient.charge(order.total);
+	return paymentClient.charge(order.total)
 }
 
 // Hard to mock
 function processPayment(order) {
-  const client = new StripeClient(process.env.STRIPE_KEY);
-  return client.charge(order.total);
+	const client = new StripeClient(process.env.STRIPE_KEY)
+	return client.charge(order.total)
 }
 ```
 
@@ -41,15 +41,15 @@ Create specific functions for each external operation instead of one generic fun
 ```typescript
 // GOOD: Each function is independently mockable
 const api = {
-  getUser: (id) => fetch(`/users/${id}`),
-  getOrders: (userId) => fetch(`/users/${userId}/orders`),
-  createOrder: (data) => fetch("/orders", { method: "POST", body: data }),
-};
+	getUser: (id) => fetch(`/users/${id}`),
+	getOrders: (userId) => fetch(`/users/${userId}/orders`),
+	createOrder: (data) => fetch("/orders", { method: "POST", body: data }),
+}
 
 // BAD: Mocking requires conditional logic inside the mock
 const api = {
-  fetch: (endpoint, options) => fetch(endpoint, options),
-};
+	fetch: (endpoint, options) => fetch(endpoint, options),
+}
 ```
 
 The SDK approach means:

@@ -76,7 +76,7 @@ Good interfaces make testing natural:
 
    // Hard to test
    function processOrder(order) {
-     const gateway = new StripeGateway();
+   	const gateway = new StripeGateway()
    }
    ```
 
@@ -88,7 +88,7 @@ Good interfaces make testing natural:
 
    // Hard to test
    function applyDiscount(cart): void {
-     cart.total -= discount;
+   	cart.total -= discount
    }
    ```
 
