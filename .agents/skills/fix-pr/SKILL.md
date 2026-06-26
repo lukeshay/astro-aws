@@ -1,11 +1,11 @@
 ---
-name: address-pr-comments
+name: fix-pr
 description: >-
   Triage and address unresolved GitHub PR review comments and fix failing CI
   checks: validate feedback (do not assume comments are correct), mark with
   eyes, thumbs up/down for address vs push back, implement fixes, commit and
   push. Use when the user asks to address PR comments, triage review feedback,
-  fix failing checks, respond to PR review, or invokes /address-pr-comments.
+  fix failing checks, respond to PR review, or invokes /fix-pr.
 ---
 
 # Address PR Comments & CI
