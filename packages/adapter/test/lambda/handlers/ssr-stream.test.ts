@@ -27,13 +27,19 @@ const { mockFrom, mockStreamifyResponse } = vi.hoisted(() => {
 				cookies?: string[]
 			},
 		) => {
+			const chunks: unknown[] = []
 			const httpResponseStream = new Writable({
-				write(_chunk, _encoding, callback) {
+				write(chunk, _encoding, callback) {
+					chunks.push(chunk)
 					callback()
 				},
 			})
 
-			Object.assign(httpResponseStream, { metadata, responseStream })
+			Object.assign(httpResponseStream, {
+				chunks,
+				metadata,
+				responseStream,
+			})
 
 			return httpResponseStream
 		},
@@ -146,9 +152,41 @@ describe("ssr-stream", () => {
 				statusCode: 200,
 			}),
 		)
+
+		const httpResponseStream = mockFrom.mock.results[0]?.value as Writable & {
+			chunks: unknown[]
+		}
+		expect(httpResponseStream.chunks[0]?.toString()).toBe("")
 	})
 
-	test("writes string bodies when the handler returns a non-readable body", async () => {
+	test("writes a prelude chunk for empty bodies so metadata is flushed", async () => {
+		mockRender.mockResolvedValue(
+			new Response(null, {
+				headers: { location: "https://example.com/" },
+				status: 302,
+			}),
+		)
+
+		const { handler } = await import("../../../src/lambda/handlers/ssr.js")
+
+		await (handler as Function)(createMockEvent(), {})
+
+		expect(mockFrom).toHaveBeenCalledWith(
+			expect.any(Writable),
+			expect.objectContaining({
+				headers: { location: "https://example.com/" },
+				statusCode: 302,
+			}),
+		)
+
+		const httpResponseStream = mockFrom.mock.results[0]?.value as Writable & {
+			chunks: unknown[]
+		}
+		expect(httpResponseStream.chunks.length).toBeGreaterThan(0)
+		expect(httpResponseStream.chunks[0]?.toString()).toBe("")
+	})
+
+	test("streams 404 responses with a prelude write", async () => {
 		mockMatch.mockReturnValue(undefined)
 
 		const { handler } = await import("../../../src/lambda/handlers/ssr.js")
@@ -162,6 +200,11 @@ describe("ssr-stream", () => {
 				statusCode: 404,
 			}),
 		)
+
+		const httpResponseStream = mockFrom.mock.results[0]?.value as Writable & {
+			chunks: unknown[]
+		}
+		expect(httpResponseStream.chunks[0]?.toString()).toBe("")
 	})
 
 	test("enables Astro streaming when mode is ssr-stream", async () => {
