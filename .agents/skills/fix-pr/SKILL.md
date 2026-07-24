@@ -275,13 +275,14 @@ For each failing check from step 1c:
    Read only the failing step output — not the full log unless needed.
 
 2. **Reproduce locally** — map check name to project commands (adjust per repo):
-   | Check pattern | Local command |
-   | ------------------ | -------------------- |
-   | lint | `pnpm run lint` |
-   | format | `pnpm run format` |
-   | test | `pnpm run test` |
-   | build | `pnpm run build` |
-   | unknown | read CI workflow YAML |
+
+   | Check pattern | Local command         |
+   | ------------- | --------------------- |
+   | lint          | `pnpm run lint`       |
+   | format        | `pnpm run format`     |
+   | test          | `pnpm run test`       |
+   | build         | `pnpm run build`      |
+   | unknown       | read CI workflow YAML |
 
 3. **Fix root cause** — minimal diff in PR scope. Do not weaken assertions, skip tests, or edit workflow files to silence failures.
 
