@@ -38,7 +38,7 @@ const createLambdaEdgeFunctionResponse = async (
 	knownBinaryMediaTypes: Set<string>,
 	readOnlyHeaders: Array<RegExp>,
 ): Promise<CloudFrontRequestResult | CloudFrontResponseResult> => {
-	const cookies = [...app.setCookieHeaders(response)]
+	const cookies = response.headers.getSetCookie()
 
 	const responseHeadersObj = Object.fromEntries(response.headers.entries())
 
@@ -47,6 +47,7 @@ const createLambdaEdgeFunctionResponse = async (
 			Object.entries(responseHeadersObj)
 				.filter(
 					([key]) =>
+						key.toLowerCase() !== "set-cookie" &&
 						!readOnlyHeaders.some((reg) => reg.test(key.toLowerCase())),
 				)
 				.map(([key, value]) => [
@@ -103,6 +104,7 @@ const handleRequest = async (
 		}
 	}
 	const response = await app.render(request, {
+		addCookieHeader: true,
 		clientAddress,
 		locals,
 		routeData,
