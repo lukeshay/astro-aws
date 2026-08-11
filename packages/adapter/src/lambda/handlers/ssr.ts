@@ -100,7 +100,7 @@ const createLambdaFunctionHeaders = (
 	response: Response,
 	knownBinaryMediaTypes: Set<string>,
 ) => {
-	const cookies = [...app.setCookieHeaders(response)]
+	const cookies = response.headers.getSetCookie()
 	const intermediateHeaders = new Headers(response.headers)
 
 	intermediateHeaders.delete("set-cookie")
@@ -278,6 +278,7 @@ const lambdaHandler: APIGatewayProxyHandlerV2<CloudfrontResult> = async (
 		}
 	}
 	const response = await app.render(request, {
+		addCookieHeader: true,
 		clientAddress: getClientAddress(
 			headers,
 			event.requestContext.http.sourceIp,

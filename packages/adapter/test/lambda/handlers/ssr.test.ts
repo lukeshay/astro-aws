@@ -1,19 +1,24 @@
 import { beforeEach, describe, expect, test, vi } from "vitest"
 
-const { mockMatch, mockRender, mockSetGetEnv, runtimeConfig } = vi.hoisted(
-	() => ({
-		mockMatch: vi.fn(),
-		mockRender: vi.fn(),
-		mockSetGetEnv: vi.fn(),
-		runtimeConfig: {
-			binaryMediaTypes: [] as string[],
-			includeRequestIdInLocals: false,
-			locals: {} as Record<string, unknown>,
-			logger: undefined,
-			mode: "ssr" as const,
-		},
-	}),
-)
+const {
+	mockMatch,
+	mockRender,
+	mockSetCookieHeaders,
+	mockSetGetEnv,
+	runtimeConfig,
+} = vi.hoisted(() => ({
+	mockMatch: vi.fn(),
+	mockRender: vi.fn(),
+	mockSetCookieHeaders: vi.fn((): string[] => []),
+	mockSetGetEnv: vi.fn(),
+	runtimeConfig: {
+		binaryMediaTypes: [] as string[],
+		includeRequestIdInLocals: false,
+		locals: {} as Record<string, unknown>,
+		logger: undefined,
+		mode: "ssr" as const,
+	},
+}))
 
 vi.mock("astro/env/setup", () => ({
 	setGetEnv: mockSetGetEnv,
@@ -43,7 +48,7 @@ vi.mock("astro/app/entrypoint", () => ({
 		manifest: {},
 		match: mockMatch,
 		render: mockRender,
-		setCookieHeaders: () => [],
+		setCookieHeaders: mockSetCookieHeaders,
 	})),
 }))
 
@@ -130,6 +135,94 @@ describe("ssr", () => {
 				await (handler as Function)(createMockEvent(), {})
 
 				expect(originalLocals).toEqual({ role: "admin" })
+			})
+		})
+
+		describe("cookies", () => {
+			beforeEach(() => {
+				mockMatch.mockReturnValue({ route: "/test" })
+			})
+
+			test("exposes every set-cookie response header as a separate cookie", async () => {
+				mockRender.mockResolvedValue(
+					new Response("OK", {
+						headers: [
+							["content-type", "text/html"],
+							["set-cookie", "a=1"],
+							["set-cookie", "b=2"],
+						],
+						status: 200,
+					}),
+				)
+
+				const result = await (handler as Function)(createMockEvent(), {})
+
+				expect(result.cookies).toEqual(["a=1", "b=2"])
+			})
+
+			test("renders with addCookieHeader so Astro.cookies are merged into headers", async () => {
+				mockRender.mockResolvedValue(
+					new Response("OK", {
+						headers: { "content-type": "text/html" },
+						status: 200,
+					}),
+				)
+
+				await (handler as Function)(createMockEvent(), {})
+
+				expect(mockRender).toHaveBeenCalledWith(
+					expect.any(Request),
+					expect.objectContaining({ addCookieHeader: true }),
+				)
+			})
+
+			test("returns no cookies when the response sets none", async () => {
+				mockRender.mockResolvedValue(
+					new Response("OK", {
+						headers: { "content-type": "text/html" },
+						status: 200,
+					}),
+				)
+
+				const result = await (handler as Function)(createMockEvent(), {})
+
+				expect(result.cookies).toEqual([])
+			})
+
+			test("**not** emit setCookieHeaders cookies a second time", async () => {
+				// addCookieHeader: true already merges Astro.cookies into the
+				// response headers, so reading setCookieHeaders as well would
+				// duplicate every cookie set via Astro.cookies.set().
+				mockSetCookieHeaders.mockReturnValueOnce(["sentinel=1"])
+				mockRender.mockResolvedValue(
+					new Response("OK", {
+						headers: [
+							["content-type", "text/html"],
+							["set-cookie", "a=1"],
+						],
+						status: 200,
+					}),
+				)
+
+				const result = await (handler as Function)(createMockEvent(), {})
+
+				expect(result.cookies).toEqual(["a=1"])
+			})
+
+			test("**not** duplicate cookies into the headers object", async () => {
+				mockRender.mockResolvedValue(
+					new Response("OK", {
+						headers: [
+							["content-type", "text/html"],
+							["set-cookie", "a=1"],
+						],
+						status: 200,
+					}),
+				)
+
+				const result = await (handler as Function)(createMockEvent(), {})
+
+				expect(result.headers).not.toHaveProperty("set-cookie")
 			})
 		})
 
