@@ -27,19 +27,19 @@
 		"@astro-aws/constructs": "workspace:^",
 		"@astro-aws/docs": "workspace:^",
 		"@astro-aws/examples-base": "workspace:^",
-		"@aws-sdk/client-acm": "^3.958.0",
-		"@trautonen/cdk-dns-validated-certificate": "^0.1.35",
-		"aws-cdk": "^2.1128.0",
-		"aws-cdk-lib": "^2.260.0",
-		"constructs": "^10.6.0",
-		"prettier": "^3.7.4",
+		"@aws-sdk/client-acm": "^3.1094.0",
+		"@trautonen/cdk-dns-validated-certificate": "^0.1.57",
+		"aws-cdk": "^2.1133.0",
+		"aws-cdk-lib": "^2.262.0",
+		"constructs": "^10.7.1",
+		"prettier": "^3.9.6",
 		"typescript": "^6.0.3",
-		"workspace-tools": "^0.40.2"
+		"workspace-tools": "^0.40.4"
 	},
 	"devDependencies": {
 		"@astro-aws/scripts": "workspace:*",
-		"@types/aws-lambda": "^8.10.159",
-		"@types/node": "^22.19.21"
+		"@types/aws-lambda": "^8.10.162",
+		"@types/node": "^22.20.1"
 	},
 	"engines": {
 		"node": "22.x || 24.x"
