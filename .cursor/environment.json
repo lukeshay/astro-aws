@@ -1,15 +1,18 @@
 {
-	"name": "astro-aws",
 	"install": "./.cursor/install.sh",
+	"name": "astro-aws",
+	"ports": [
+		{ "name": "example", "port": 4321 },
+		{ "name": "docs", "port": 4322 }
+	],
 	"terminals": [
 		{
-			"name": "example-dev",
-			"command": "cd examples/base && MODE=ssr bunx astro dev --host --port 4321"
+			"command": "cd examples/base && MODE=ssr bunx astro dev --host --port 4321",
+			"name": "example-dev"
 		},
 		{
-			"name": "docs-dev",
-			"command": "cd apps/docs && bunx astro dev --host --port 4322"
+			"command": "cd apps/docs && bunx astro dev --host --port 4322",
+			"name": "docs-dev"
 		}
-	],
-	"ports": [4321, 4322]
+	]
 }
