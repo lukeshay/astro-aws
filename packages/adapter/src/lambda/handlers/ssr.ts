@@ -5,7 +5,6 @@ import type {
 	APIGatewayProxyEventV2,
 	APIGatewayProxyHandlerV2,
 } from "aws-lambda"
-import middy, { MiddyfiedHandler } from "@middy/core"
 import { setGetEnv } from "astro/env/setup"
 import { createApp } from "astro/app/entrypoint"
 
@@ -17,6 +16,7 @@ import {
 	validateURL,
 } from "../helpers.js"
 import { withLogger } from "../middleware.js"
+import { streamifyResponse, type CloudfrontHandler } from "../streamify-response.js"
 import { KNOWN_BINARY_MEDIA_TYPES } from "../constants.js"
 import { type CloudfrontResult } from "../types.js"
 import {
@@ -294,8 +294,14 @@ const lambdaHandler: APIGatewayProxyHandlerV2<CloudfrontResult> = async (
 	)
 }
 
-const handler = middy({ streamifyResponse: shouldStream }).handler(
-	withLogger(adapterLogger, loggerOptions, lambdaHandler) as MiddyfiedHandler,
+const loggedHandler = withLogger(
+	adapterLogger,
+	loggerOptions,
+	lambdaHandler,
 )
+
+const handler = shouldStream
+	? streamifyResponse(loggedHandler as CloudfrontHandler)
+	: loggedHandler
 
 export { handler }

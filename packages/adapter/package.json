@@ -57,7 +57,6 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
-		"@middy/core": "^6.4.5",
 		"esbuild": "^0.28.1",
 		"flatted": "^3.4.2",
 		"http-status-codes": "^2.3.0",
