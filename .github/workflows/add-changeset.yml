@@ -1,0 +1,123 @@
+name: Add Changeset
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number to add the changeset to
+        required: true
+        type: string
+      packages:
+        description: Comma-separated package names (e.g. @astro-aws/adapter,@astro-aws/constructs)
+        required: true
+        type: string
+      change_level:
+        description: Semver bump level for the listed packages
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      description:
+        description: Changeset summary shown in the changelog
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  add-changeset:
+    name: Add changeset to PR
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Prefer a PAT so pushes work for maintainer workflows and fork PRs when configured
+          token: ${{ secrets.GH_PAT || github.token }}
+
+      - name: Checkout pull request branch
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || github.token }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: gh pr checkout "$PR_NUMBER"
+
+      - name: Create changeset
+        id: changeset
+        env:
+          PACKAGES: ${{ inputs.packages }}
+          CHANGE_LEVEL: ${{ inputs.change_level }}
+          DESCRIPTION: ${{ inputs.description }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: |
+          set -euo pipefail
+
+          case "$CHANGE_LEVEL" in
+            major|minor|patch) ;;
+            *)
+              echo "::error::change_level must be major, minor, or patch (got: $CHANGE_LEVEL)"
+              exit 1
+              ;;
+          esac
+
+          if [[ -z "${PACKAGES//[[:space:]]/}" ]]; then
+            echo "::error::packages input must not be empty"
+            exit 1
+          fi
+
+          if [[ -z "${DESCRIPTION//[[:space:]]/}" ]]; then
+            echo "::error::description input must not be empty"
+            exit 1
+          fi
+
+          filename="pr-${PR_NUMBER}-$(openssl rand -hex 4)"
+          filepath=".changeset/${filename}.md"
+
+          {
+            echo "---"
+            IFS=',' read -ra PACKAGE_LIST <<< "$PACKAGES"
+            for raw in "${PACKAGE_LIST[@]}"; do
+              pkg="$(echo "$raw" | xargs)"
+              if [[ -z "$pkg" ]]; then
+                continue
+              fi
+
+              # Allow short names like "adapter" in addition to scoped names
+              if [[ "$pkg" != @*/* ]]; then
+                pkg="@astro-aws/${pkg#@astro-aws/}"
+              fi
+
+              printf '"%s": %s\n' "$pkg" "$CHANGE_LEVEL"
+            done
+            echo "---"
+            echo ""
+            printf '%s\n' "$DESCRIPTION"
+          } > "$filepath"
+
+          if ! grep -q '^"' "$filepath"; then
+            echo "::error::No valid packages were provided"
+            exit 1
+          fi
+
+          echo "Created $filepath:"
+          cat "$filepath"
+
+          echo "filepath=$filepath" >> "$GITHUB_OUTPUT"
+          echo "filename=$filename" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and push changeset
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || github.token }}
+          FILEPATH: ${{ steps.changeset.outputs.filepath }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add "$FILEPATH"
+          git commit -m "Add changeset for PR #${PR_NUMBER}"
+          git push
