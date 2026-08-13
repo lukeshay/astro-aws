@@ -1,0 +1,165 @@
+name: Add Changeset
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number to add the changeset to
+        required: true
+        type: string
+      packages:
+        description: Comma-separated package names (e.g. @astro-aws/adapter,@astro-aws/constructs)
+        required: true
+        type: string
+      change_level:
+        description: Semver bump level for the listed packages
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      description:
+        description: Changeset summary shown in the changelog
+        required: true
+        type: string
+
+# Serialize dispatches that target the same PR so the second job checks out
+# the first job's commit instead of racing to a non-fast-forward push.
+concurrency:
+  group: add-changeset-${{ inputs.pr_number }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  add-changeset:
+    name: Add changeset to PR
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Require GH_PAT
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${GH_PAT}" ]]; then
+            echo "::error::GH_PAT is required. Pushes with github.token do not trigger pull_request checks (ci.yml / pr.yml)."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Checkout pull request branch
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: gh pr checkout "$PR_NUMBER"
+
+      - name: Create changeset
+        id: changeset
+        env:
+          PACKAGES: ${{ inputs.packages }}
+          CHANGE_LEVEL: ${{ inputs.change_level }}
+          DESCRIPTION: ${{ inputs.description }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          import json
+          import os
+          import pathlib
+          import re
+          import sys
+
+          change_level = os.environ["CHANGE_LEVEL"]
+          packages_raw = os.environ["PACKAGES"]
+          description = os.environ["DESCRIPTION"]
+          pr_number = os.environ["PR_NUMBER"]
+
+          if change_level not in {"major", "minor", "patch"}:
+              print(
+                  f"::error::change_level must be major, minor, or patch (got: {change_level})",
+                  file=sys.stderr,
+              )
+              sys.exit(1)
+
+          if not description.strip():
+              print("::error::description input must not be empty", file=sys.stderr)
+              sys.exit(1)
+
+          config = json.loads(pathlib.Path(".changeset/config.json").read_text())
+          ignored = set(config.get("ignore") or [])
+
+          package_manifests = [
+              *pathlib.Path(".").glob("packages/*/package.json"),
+              *pathlib.Path(".").glob("apps/*/package.json"),
+              *pathlib.Path(".").glob("examples/*/package.json"),
+          ]
+          scripts_manifest = pathlib.Path("scripts/package.json")
+          if scripts_manifest.exists():
+              package_manifests.append(scripts_manifest)
+
+          managed = {
+              json.loads(path.read_text())["name"]
+              for path in package_manifests
+              if json.loads(path.read_text())["name"] not in ignored
+          }
+
+          name_re = re.compile(r"^@[a-z0-9-]+/[a-z0-9-]+$")
+          resolved: list[str] = []
+          seen: set[str] = set()
+
+          for raw in packages_raw.split(","):
+              pkg = raw.strip()
+              if not pkg:
+                  continue
+              if "/" not in pkg:
+                  pkg = f"@astro-aws/{pkg.removeprefix('@astro-aws/')}"
+              if not name_re.fullmatch(pkg):
+                  print(f"::error::Invalid package name: {pkg}", file=sys.stderr)
+                  sys.exit(1)
+              if pkg not in managed:
+                  allowed = ", ".join(sorted(managed)) or "(none)"
+                  print(
+                      f"::error::{pkg} is not a managed package. Allowed: {allowed}",
+                      file=sys.stderr,
+                  )
+                  sys.exit(1)
+              if pkg not in seen:
+                  resolved.append(pkg)
+                  seen.add(pkg)
+
+          if not resolved:
+              print("::error::packages input must not be empty", file=sys.stderr)
+              sys.exit(1)
+
+          filename = f"pr-{pr_number}-{os.urandom(4).hex()}"
+          filepath = pathlib.Path(".changeset") / f"{filename}.md"
+          frontmatter = "\n".join(f'"{pkg}": {change_level}' for pkg in resolved)
+          filepath.write_text(f"---\n{frontmatter}\n---\n\n{description.rstrip()}\n")
+
+          print(f"Created {filepath}:")
+          print(filepath.read_text())
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              print(f"filepath={filepath}", file=output)
+              print(f"filename={filename}", file=output)
+          PY
+
+      - name: Commit and push changeset
+        env:
+          FILEPATH: ${{ steps.changeset.outputs.filepath }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add "$FILEPATH"
+          git commit -m "Add changeset for PR #${PR_NUMBER}"
+          git push
