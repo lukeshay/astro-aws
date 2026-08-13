@@ -24,6 +24,12 @@ on:
         required: true
         type: string
 
+# Serialize dispatches that target the same PR so the second job checks out
+# the first job's commit instead of racing to a non-fast-forward push.
+concurrency:
+  group: add-changeset-${{ inputs.pr_number }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
   pull-requests: write
@@ -33,14 +39,23 @@ jobs:
     name: Add changeset to PR
     runs-on: ubuntu-22.04
     steps:
+      - name: Require GH_PAT
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${GH_PAT}" ]]; then
+            echo "::error::GH_PAT is required. Pushes with github.token do not trigger pull_request checks (ci.yml / pr.yml)."
+            exit 1
+          fi
+
       - uses: actions/checkout@v4
         with:
-          # Prefer a PAT so pushes work for maintainer workflows and fork PRs when configured
-          token: ${{ secrets.GH_PAT || github.token }}
+          token: ${{ secrets.GH_PAT }}
 
       - name: Checkout pull request branch
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT || github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
           PR_NUMBER: ${{ inputs.pr_number }}
         run: gh pr checkout "$PR_NUMBER"
 
@@ -53,63 +68,90 @@ jobs:
           PR_NUMBER: ${{ inputs.pr_number }}
         run: |
           set -euo pipefail
+          python3 <<'PY'
+          import json
+          import os
+          import pathlib
+          import re
+          import sys
 
-          case "$CHANGE_LEVEL" in
-            major|minor|patch) ;;
-            *)
-              echo "::error::change_level must be major, minor, or patch (got: $CHANGE_LEVEL)"
-              exit 1
-              ;;
-          esac
+          change_level = os.environ["CHANGE_LEVEL"]
+          packages_raw = os.environ["PACKAGES"]
+          description = os.environ["DESCRIPTION"]
+          pr_number = os.environ["PR_NUMBER"]
 
-          if [[ -z "${PACKAGES//[[:space:]]/}" ]]; then
-            echo "::error::packages input must not be empty"
-            exit 1
-          fi
+          if change_level not in {"major", "minor", "patch"}:
+              print(
+                  f"::error::change_level must be major, minor, or patch (got: {change_level})",
+                  file=sys.stderr,
+              )
+              sys.exit(1)
 
-          if [[ -z "${DESCRIPTION//[[:space:]]/}" ]]; then
-            echo "::error::description input must not be empty"
-            exit 1
-          fi
+          if not description.strip():
+              print("::error::description input must not be empty", file=sys.stderr)
+              sys.exit(1)
 
-          filename="pr-${PR_NUMBER}-$(openssl rand -hex 4)"
-          filepath=".changeset/${filename}.md"
+          config = json.loads(pathlib.Path(".changeset/config.json").read_text())
+          ignored = set(config.get("ignore") or [])
 
-          {
-            echo "---"
-            IFS=',' read -ra PACKAGE_LIST <<< "$PACKAGES"
-            for raw in "${PACKAGE_LIST[@]}"; do
-              pkg="$(echo "$raw" | xargs)"
-              if [[ -z "$pkg" ]]; then
-                continue
-              fi
+          package_manifests = [
+              *pathlib.Path(".").glob("packages/*/package.json"),
+              *pathlib.Path(".").glob("apps/*/package.json"),
+              *pathlib.Path(".").glob("examples/*/package.json"),
+          ]
+          scripts_manifest = pathlib.Path("scripts/package.json")
+          if scripts_manifest.exists():
+              package_manifests.append(scripts_manifest)
 
-              # Allow short names like "adapter" in addition to scoped names
-              if [[ "$pkg" != @*/* ]]; then
-                pkg="@astro-aws/${pkg#@astro-aws/}"
-              fi
+          managed = {
+              json.loads(path.read_text())["name"]
+              for path in package_manifests
+              if json.loads(path.read_text())["name"] not in ignored
+          }
 
-              printf '"%s": %s\n' "$pkg" "$CHANGE_LEVEL"
-            done
-            echo "---"
-            echo ""
-            printf '%s\n' "$DESCRIPTION"
-          } > "$filepath"
+          name_re = re.compile(r"^@[a-z0-9-]+/[a-z0-9-]+$")
+          resolved: list[str] = []
+          seen: set[str] = set()
 
-          if ! grep -q '^"' "$filepath"; then
-            echo "::error::No valid packages were provided"
-            exit 1
-          fi
+          for raw in packages_raw.split(","):
+              pkg = raw.strip()
+              if not pkg:
+                  continue
+              if "/" not in pkg:
+                  pkg = f"@astro-aws/{pkg.removeprefix('@astro-aws/')}"
+              if not name_re.fullmatch(pkg):
+                  print(f"::error::Invalid package name: {pkg}", file=sys.stderr)
+                  sys.exit(1)
+              if pkg not in managed:
+                  allowed = ", ".join(sorted(managed)) or "(none)"
+                  print(
+                      f"::error::{pkg} is not a managed package. Allowed: {allowed}",
+                      file=sys.stderr,
+                  )
+                  sys.exit(1)
+              if pkg not in seen:
+                  resolved.append(pkg)
+                  seen.add(pkg)
 
-          echo "Created $filepath:"
-          cat "$filepath"
+          if not resolved:
+              print("::error::packages input must not be empty", file=sys.stderr)
+              sys.exit(1)
 
-          echo "filepath=$filepath" >> "$GITHUB_OUTPUT"
-          echo "filename=$filename" >> "$GITHUB_OUTPUT"
+          filename = f"pr-{pr_number}-{os.urandom(4).hex()}"
+          filepath = pathlib.Path(".changeset") / f"{filename}.md"
+          frontmatter = "\n".join(f'"{pkg}": {change_level}' for pkg in resolved)
+          filepath.write_text(f"---\n{frontmatter}\n---\n\n{description.rstrip()}\n")
+
+          print(f"Created {filepath}:")
+          print(filepath.read_text())
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              print(f"filepath={filepath}", file=output)
+              print(f"filename={filename}", file=output)
+          PY
 
       - name: Commit and push changeset
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT || github.token }}
           FILEPATH: ${{ steps.changeset.outputs.filepath }}
           PR_NUMBER: ${{ inputs.pr_number }}
         run: |
