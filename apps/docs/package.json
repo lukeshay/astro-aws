@@ -26,7 +26,7 @@
 	"dependencies": {
 		"@astrojs/starlight": "^0.41.4",
 		"astro": "^7.1.3",
-		"sharp": "^0.34.5"
+		"sharp": "^0.35.4"
 	},
 	"devDependencies": {
 		"@astro-aws/adapter": "workspace:^",
