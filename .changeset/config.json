@@ -4,13 +4,13 @@
 	"baseBranch": "main",
 	"changelog": ["@changesets/changelog-git", { "repo": "lukeshay/astro-aws" }],
 	"commit": false,
-	"fixed": [],
+	"fixed": [["@astro-aws/adapter", "@astro-aws/constructs"]],
 	"ignore": [
 		"@astro-aws/infra",
 		"@astro-aws/docs",
 		"@astro-aws/examples-base",
 		"@astro-aws/scripts"
 	],
-	"linked": [["@astro-aws/adapter", "@astro-aws/constructs"]],
+	"linked": [],
 	"updateInternalDependencies": "patch"
 }
