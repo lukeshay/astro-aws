@@ -1,5 +1,11 @@
 # @astro-aws/constructs
 
+## 2.0.0
+
+### Major Changes
+
+- Version aligned with `@astro-aws/adapter` 2.0.0.
+
 ## 1.0.0
 
 ### Major Changes

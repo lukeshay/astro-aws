@@ -1,5 +1,15 @@
 # @astro-aws/adapter
 
+## 2.0.0
+
+### Major Changes
+
+- 00bb7d1: Add support for Astro v7 and drop support for v6
+
+### Patch Changes
+
+- edd07d1: Emit every set-cookie header from lambda and edge responses. Previously, cookies set directly on the response headers (rather than via `Astro.cookies`) were ignored.
+
 ## 1.0.0
 
 ### Major Changes
